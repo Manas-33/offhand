@@ -1,0 +1,33 @@
+# Model weights and compiled binaries — never commit
+*.gguf
+*.bin
+*.onnx
+*.safetensors
+*.serialized
+models/
+genie_bundle/
+context_binaries/
+
+# Qualcomm SDK payloads (pull at build time, license forbids redistribution)
+qairt/
+*.so
+
+# Flutter / Android
+.dart_tool/
+.gradle/
+build/
+.flutter-plugins*
+local.properties
+*.keystore
+
+# Python
+__pycache__/
+.venv/
+*.egg-info/
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+
+*.local.md
