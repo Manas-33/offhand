@@ -1,0 +1,48 @@
+{"id": "alarm_01", "category": "single", "query": "Set an alarm for 7am tomorrow.", "gold": {"name": "set_alarm", "arguments": {"time": ["07:00", "7:00", "7:00 am", "7 am", "7am"]}}}
+{"id": "alarm_02", "category": "single", "query": "Wake me up at 6:30 in the morning.", "gold": {"name": "set_alarm", "arguments": {"time": ["06:30", "6:30", "6:30 am", "6 30"]}}}
+{"id": "alarm_03", "category": "single", "query": "Can you set an alarm for 5 PM?", "gold": {"name": "set_alarm", "arguments": {"time": ["17:00", "5:00 pm", "5 pm", "5pm"]}}}
+{"id": "alarm_04", "category": "single", "query": "Set an alarm for quarter past eight tonight.", "gold": {"name": "set_alarm", "arguments": {"time": ["20:15", "8:15 pm", "8:15", "8 15 pm"]}}}
+{"id": "timer_01", "category": "single", "query": "Start a 10 minute timer.", "gold": {"name": "set_timer", "arguments": {"duration_minutes": ["10", "10.0"]}}}
+{"id": "timer_02", "category": "single", "query": "Set a timer for half an hour.", "gold": {"name": "set_timer", "arguments": {"duration_minutes": ["30", "30.0"]}}}
+{"id": "timer_03", "category": "single", "query": "Give me a timer for 45 minutes.", "gold": {"name": "set_timer", "arguments": {"duration_minutes": ["45", "45.0"]}}}
+{"id": "timer_04", "category": "single", "query": "I need a two hour timer.", "gold": {"name": "set_timer", "arguments": {"duration_minutes": ["120", "120.0"]}}}
+{"id": "cal_01", "category": "single", "query": "Add a dentist appointment to my calendar for Friday at 2pm.", "gold": {"name": "create_calendar_event", "arguments": {"title": {"contains": "dentist"}}}}
+{"id": "cal_02", "category": "single", "query": "Schedule a team meeting tomorrow at 10am.", "gold": {"name": "create_calendar_event", "arguments": {"title": {"contains": "team meeting"}}}}
+{"id": "cal_03", "category": "single", "query": "Put 'Lunch with Sam' on my calendar for noon today.", "gold": {"name": "create_calendar_event", "arguments": {"title": {"contains": "lunch with sam"}}}}
+{"id": "cal_04", "category": "single", "query": "Create a calendar event called Project Review next Monday at 9am.", "gold": {"name": "create_calendar_event", "arguments": {"title": {"contains": "project review"}}}}
+{"id": "settings_01", "category": "single", "query": "Open wifi settings.", "gold": {"name": "open_settings", "arguments": {"panel": ["wifi"]}}}
+{"id": "settings_02", "category": "single", "query": "Open the bluetooth settings for me.", "gold": {"name": "open_settings", "arguments": {"panel": ["bluetooth"]}}}
+{"id": "settings_03", "category": "single", "query": "I need to adjust the screen brightness.", "gold": {"name": "open_settings", "arguments": {"panel": ["display"]}}}
+{"id": "settings_04", "category": "single", "query": "Take me to the sound settings.", "gold": {"name": "open_settings", "arguments": {"panel": ["sound"]}}}
+{"id": "sms_01", "category": "single", "query": "Text Mom that I'll be home late.", "gold": {"name": "draft_sms", "arguments": {"recipient": ["mom"]}}}
+{"id": "sms_02", "category": "single", "query": "Send a text to John saying happy birthday.", "gold": {"name": "draft_sms", "arguments": {"recipient": ["john"]}}}
+{"id": "sms_03", "category": "single", "query": "Draft an SMS to Sarah: running five minutes behind.", "gold": {"name": "draft_sms", "arguments": {"recipient": ["sarah"]}}}
+{"id": "sms_04", "category": "single", "query": "Message Dad and tell him the flight landed.", "gold": {"name": "draft_sms", "arguments": {"recipient": ["dad"]}}}
+{"id": "email_01", "category": "single", "query": "Draft an email to alex@work.com about the quarterly report.", "gold": {"name": "draft_email", "arguments": {"to": ["alex@work.com"]}}}
+{"id": "email_02", "category": "single", "query": "Write an email to my boss asking for tomorrow off.", "gold": {"name": "draft_email", "arguments": {"to": ["my boss", "boss"]}}}
+{"id": "email_03", "category": "single", "query": "Compose an email to the team with the subject Release Notes.", "gold": {"name": "draft_email", "arguments": {"to": ["the team", "team"]}}}
+{"id": "email_04", "category": "single", "query": "Email jane about the lunch plans.", "gold": {"name": "draft_email", "arguments": {"to": ["jane"]}}}
+{"id": "music_01", "category": "single", "query": "Play some jazz.", "gold": {"name": "play_music", "arguments": {"query": {"contains": "jazz"}}}}
+{"id": "music_02", "category": "single", "query": "Play Bohemian Rhapsody.", "gold": {"name": "play_music", "arguments": {"query": {"contains": "bohemian rhapsody"}}}}
+{"id": "music_03", "category": "single", "query": "Pause the music.", "gold": {"name": "play_music", "arguments": {"action": ["pause"]}}}
+{"id": "music_04", "category": "single", "query": "Skip to the next song.", "gold": {"name": "play_music", "arguments": {"action": ["next"]}}}
+{"id": "flash_01", "category": "single", "query": "Turn on the flashlight.", "gold": {"name": "toggle_flashlight", "arguments": {"state": ["on"]}}}
+{"id": "flash_02", "category": "single", "query": "Turn off the torch.", "gold": {"name": "toggle_flashlight", "arguments": {"state": ["off"]}}}
+{"id": "flash_03", "category": "single", "query": "Switch on my flashlight please.", "gold": {"name": "toggle_flashlight", "arguments": {"state": ["on"]}}}
+{"id": "flash_04", "category": "single", "query": "Kill the flashlight.", "gold": {"name": "toggle_flashlight", "arguments": {"state": ["off"]}}}
+{"id": "note_01", "category": "single", "query": "Make a note to buy milk.", "gold": {"name": "create_note", "arguments": {"content": {"contains": "milk"}}}}
+{"id": "note_02", "category": "single", "query": "Note down: call the plumber.", "gold": {"name": "create_note", "arguments": {"content": {"contains": "plumber"}}}}
+{"id": "note_03", "category": "single", "query": "Take a note that the spare key is under the mat.", "gold": {"name": "create_note", "arguments": {"content": {"contains": "spare key"}}}}
+{"id": "note_04", "category": "single", "query": "Jot down the meeting notes: ship the beta on Thursday.", "gold": {"name": "create_note", "arguments": {"content": {"contains": "beta"}}}}
+{"id": "remind_01", "category": "single", "query": "Remind me to take out the trash at 8pm.", "gold": {"name": "set_reminder", "arguments": {"text": {"contains": "trash"}}}}
+{"id": "remind_02", "category": "single", "query": "Set a reminder to call the dentist tomorrow.", "gold": {"name": "set_reminder", "arguments": {"text": {"contains": "dentist"}}}}
+{"id": "remind_03", "category": "single", "query": "Remind me to water the plants this evening.", "gold": {"name": "set_reminder", "arguments": {"text": {"contains": "water the plants"}}}}
+{"id": "remind_04", "category": "single", "query": "Can you remind me about the meeting in an hour?", "gold": {"name": "set_reminder", "arguments": {"text": {"contains": "meeting"}}}}
+{"id": "irr_01", "category": "irrelevance", "query": "What's the capital of France?", "gold": {"no_call": true}}
+{"id": "irr_02", "category": "irrelevance", "query": "Tell me a joke.", "gold": {"no_call": true}}
+{"id": "irr_03", "category": "irrelevance", "query": "How tall is Mount Everest?", "gold": {"no_call": true}}
+{"id": "irr_04", "category": "irrelevance", "query": "What is 15 percent of 240?", "gold": {"no_call": true}}
+{"id": "irr_05", "category": "irrelevance", "query": "Who won the World Cup in 2018?", "gold": {"no_call": true}}
+{"id": "irr_06", "category": "irrelevance", "query": "Explain how photosynthesis works.", "gold": {"no_call": true}}
+{"id": "irr_07", "category": "irrelevance", "query": "What's the weather going to be like this weekend?", "gold": {"no_call": true}}
+{"id": "irr_08", "category": "irrelevance", "query": "Translate 'hello' into Spanish.", "gold": {"no_call": true}}

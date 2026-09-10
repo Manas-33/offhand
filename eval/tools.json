@@ -1,0 +1,161 @@
+[
+  {
+    "type": "function",
+    "function": {
+      "name": "set_alarm",
+      "description": "Set an alarm that goes off at a specific clock time.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "time": { "type": "string", "description": "Clock time in 24-hour HH:MM format, e.g. 07:00 or 18:30." },
+          "label": { "type": "string", "description": "Optional label for the alarm." }
+        },
+        "required": ["time"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "set_timer",
+      "description": "Start a countdown timer for a given number of minutes.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "duration_minutes": { "type": "number", "description": "Timer length in minutes." },
+          "label": { "type": "string", "description": "Optional label for the timer." }
+        },
+        "required": ["duration_minutes"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "create_calendar_event",
+      "description": "Add an event to the user's calendar.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "title": { "type": "string", "description": "Event title." },
+          "start_datetime": { "type": "string", "description": "Start time in ISO 8601 or natural form." },
+          "end_datetime": { "type": "string", "description": "Optional end time." },
+          "location": { "type": "string", "description": "Optional location." }
+        },
+        "required": ["title", "start_datetime"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "open_settings",
+      "description": "Open a specific Android system settings panel.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "panel": {
+            "type": "string",
+            "description": "Which settings panel to open.",
+            "enum": ["wifi", "bluetooth", "display", "sound", "battery", "location"]
+          }
+        },
+        "required": ["panel"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "draft_sms",
+      "description": "Draft a text message for the user to review before sending.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "recipient": { "type": "string", "description": "Contact name or phone number." },
+          "body": { "type": "string", "description": "Message text." }
+        },
+        "required": ["recipient", "body"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "draft_email",
+      "description": "Draft an email for the user to review before sending.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "to": { "type": "string", "description": "Recipient email address or contact name." },
+          "subject": { "type": "string", "description": "Optional subject line." },
+          "body": { "type": "string", "description": "Email body." }
+        },
+        "required": ["to", "body"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "play_music",
+      "description": "Control music playback. Provide a search query to play something specific, or an action to control the current track.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "query": { "type": "string", "description": "Song, artist, album, or genre to play." },
+          "action": {
+            "type": "string",
+            "description": "Playback control.",
+            "enum": ["play", "pause", "next", "previous"]
+          }
+        },
+        "required": []
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "toggle_flashlight",
+      "description": "Turn the device flashlight on or off.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "state": { "type": "string", "description": "Desired flashlight state.", "enum": ["on", "off"] }
+        },
+        "required": ["state"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "create_note",
+      "description": "Create a note in the notes app.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "content": { "type": "string", "description": "Note body text." },
+          "title": { "type": "string", "description": "Optional note title." }
+        },
+        "required": ["content"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "set_reminder",
+      "description": "Create a reminder, optionally at a specific time.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "text": { "type": "string", "description": "What to be reminded about." },
+          "time": { "type": "string", "description": "Optional time in 24-hour HH:MM or natural form." }
+        },
+        "required": ["text"]
+      }
+    }
+  }
+]
