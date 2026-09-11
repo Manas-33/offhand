@@ -3,48 +3,56 @@
 A living record of what this study can assert and what evidence each claim still
 owes. Updated as runs land.
 
-Numbers below are from the pilot (48 items, one greedy pass per config), so
-single-config deltas are noisy: the 95 percent interval at 40 call items is
-about 9 points. Treat size effects (tens of points) as real and precision
-effects (a few points) as not yet established.
+Two evidence sets so far:
+- Pilot: 48 phone-tool items, one greedy pass per config. Deltas are noisy (the
+  95 percent interval is about 9 points at 40 call items).
+- BFCL: 840 items (400 simple + 200 multiple + 240 irrelevance), one greedy pass
+  per config, with bootstrap CIs over items.
 
 ## Claims
 
 ### 1. Capability floor around 1.7B
-- Status: established (pilot), consistent with external work (TinyLLM, 2025).
-- Evidence: fp16 call accuracy 0.55 (0.6B) vs 0.875 (1.7B) vs 0.925 (4B). The 0.6B gap is far outside the noise band.
-- Kill criterion: if constrained decoding lifts 0.6B close to 1.7B, this was a format floor, not a capability floor, and the claim is reworded.
-- Still owed: larger n; decide whether the floor is capability or format (needs the audit and the constrained-decoding run).
+- Status: established (BFCL + pilot), consistent with TinyLLM (2025).
+- Evidence: BFCL fp16 call accuracy 0.807 [.775,.838] (0.6B) to 0.910 [.887,.932] (1.7B) to 0.908 [.885,.932] (4B). The 0.6B and 1.7B intervals do not overlap (a real ~10-point jump), and 1.7B to 4B is flat.
+- Kill criterion: constrained decoding lifting 0.6B close to 1.7B would recast this as a format floor, not a capability floor.
+- Still owed: the phone-eval constrained-decoding run settles format-vs-capability at the low end.
 
-### 2. Memory Pareto: a 4-bit larger model dominates an fp16 smaller one
-- Status: established for nf4.
-- Evidence: 4B-nf4 (about 2.3 GB) matches 1.7B-fp16 (about 3.4 GB) on accuracy (0.90 vs 0.875, inside noise) at roughly two-thirds the memory.
-- Kill criterion: the real W4A16 or W4A8 contract dropping 4B below 1.7B-fp16.
-- Still owed: re-check under the on-device contract, not nf4.
+### 2. Memory Pareto: 1.7B owns the frontier, 4B is not worth it
+- Status: REVISED by BFCL. The pilot's "quantized-4B dominates fp16-1.7B" did not survive at scale.
+- Evidence (accuracy vs weights memory): frontier is 1.7B-nf4 (0.85 GB, 0.872) and 1.7B-fp16 (3.4 GB, 0.910). 4B-nf4 (2.0 GB, 0.880) is beaten by 1.7B-nf4, and 4B-fp16 (8 GB, 0.908) by 1.7B-fp16. 4B buys no accuracy over 1.7B on this task.
+- Kill criterion: a task where 4B separates from 1.7B (multi-step chains) would restore a reason to pay for 4B.
+- Still owed: check whether chains re-open a 4B advantage.
 
-### 3. Small-model failures are format-dominated, not reasoning-dominated
-- Status: directional (pilot), to confirm by audit.
-- Evidence: 0.6B schema-valid 0.625 while right-tool 0.60, so most misses are malformed or absent calls, not wrong tools. Same pattern at 4B-nf4 (correct intent emitted as `.create_note {...}`).
-- Kill criterion: audit showing most small-model misses are wrong-tool or wrong-arg rather than format.
-- Still owed: the failure-taxonomy audit across all sizes.
+### 3. Small-model failures are format-dominated on phone tools, not on BFCL
+- Status: split result.
+- Evidence: on the phone-tool pilot, small/quantized failures were mostly malformed calls (name outside JSON). On BFCL, format_break = 0 across all six runs; failures are wrong-arg or wrong-tool, not format.
+- Reading: format brittleness is distribution-specific (the phone setup: 10 tools, free-text bodies), not a property of the models on standard function calling.
+- Still owed: quantify the phone-tool format gap at larger n.
 
 ### 4. 4-bit weight quantization is nearly free for tool calling
-- Status: open.
-- Evidence: flat fp16-vs-nf4 at every size, but nf4 is a gentle proxy (float4 weights, fp16 activations), not the on-device contract.
-- Kill criterion: a real cliff appearing under W4A16 round-to-nearest or lower.
-- Still owed: AIMET W4A16, then SeqMSE, then SpinQuant, and pushing to W4A8 / int8 KV.
+- Status: supported (nf4 proxy).
+- Evidence: BFCL nf4 vs fp16 costs 2 to 4 points per size, CIs mostly overlapping (borderline only at 1.7B: 0.910 vs 0.872).
+- Kill criterion: a real cliff under the on-device W4A16 contract.
+- Still owed: AIMET W4A16 (round-to-nearest, then SeqMSE, then SpinQuant), and W4A8 / int8 KV, to replace the nf4 proxy with the real numerics.
 
 ### 5. Constrained decoding recovers the format gap
-- Status: open.
-- Evidence: none yet; the strict-vs-lenient split sizes the opportunity (lenient recovers the name-outside-JSON cases).
-- Kill criterion: lenient parse recovering little over strict, meaning the failures are semantic, not format.
-- Still owed: implement constrained decoding, measure recovery per size and precision.
+- Status: open, rescoped to the phone-tool eval.
+- Evidence: BFCL is format-clean, so there is nothing to recover there. The gap exists only on the phone-tool distribution.
+- Kill criterion: little strict-vs-lenient gap even on the phone eval, meaning failures are semantic, not format.
+- Still owed: build constrained decoding, run it on a larger phone-tool eval, measure recovery.
 
 ### 6. The GPU proxy predicts on-device behavior
-- Status: open.
-- Evidence: none; the study is GPU-simulated so far.
-- Kill criterion: on-device W4A16 numbers diverging from the GPU proxy on a shared subset.
-- Still owed: run a subset through the real AI Hub bundle on the 8 Elite.
+- Status: open (device runs, accuracy not yet compared).
+- Evidence: device proof passed (Qwen3-4B W4A16 on the 8 Elite NPU: ~73ms TTFT, ~22 tps decode), but on-device accuracy is not yet compared to the GPU proxy.
+- Still owed: run a subset through the on-device runtime and correlate.
+
+### 7. Irrelevance / over-triggering
+- Status: measured (BFCL).
+- Evidence: irrelevance accuracy 0.80 to 0.87 across models (13 to 20 percent false tool calls on 240 hard negatives), slightly worse when smaller. A safety metric for an agent with side effects.
+- Still owed: whether constrained decoding or a stricter prompt cuts false triggers without hurting call accuracy.
+
+## Decisions forced by the data
+- App model: 1.7B (nf4 ~0.85 GB, or fp16 ~3.4 GB), not 4B. 4B was memory-marginal on the S25's 12 GB in the device proof and gives no accuracy gain here.
 
 ## Prior art this updates
 
