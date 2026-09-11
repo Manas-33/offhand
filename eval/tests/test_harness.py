@@ -143,6 +143,55 @@ def test_convert_bfcl_and_score():
     assert s.schema_valid and s.right_tool and s.right_args
 
 
+def test_bootstrap_ci():
+    from offhand_eval.stats import bootstrap_ci
+
+    assert bootstrap_ci([]) == (None, None, None)
+    m, lo, hi = bootstrap_ci([1, 1, 1, 1], n_boot=200)
+    assert m == 1.0 and lo == 1.0 and hi == 1.0
+    m, lo, hi = bootstrap_ci([1, 0] * 50, n_boot=500)
+    assert 0.35 < m < 0.65 and lo <= m <= hi
+
+
+def test_parse_label_and_memory():
+    import report
+
+    assert report.parse_label("bfcl_Qwen3-0.6B_fp16") == (0.6, "fp16")
+    assert report.parse_label("bfcl_Qwen3-4B_nf4") == (4.0, "nf4")
+    assert report.memory_gb(0.6, "fp16") == 1.2
+    assert report.memory_gb(4.0, "nf4") == 2.0
+    assert report.memory_gb(1.7, "fp16") == 3.4
+    assert report.memory_gb(None, "fp16") is None
+
+
+def test_summarize_file_synthetic(tmp_path=None):
+    import json
+    import tempfile
+    import report
+
+    item_call = {"id": "c1", "category": "single", "tools": TOOLS,
+                 "gold": {"name": "set_alarm", "arguments": {"time": ["07:00"]}}}
+    item_irr = {"id": "i1", "category": "irrelevance", "gold": {"no_call": True}}
+    gold_by_id = {"c1": item_call, "i1": item_irr}
+
+    results = {
+        "label": "bfcl_Qwen3-0.6B_fp16", "model": "Qwen/Qwen3-0.6B",
+        "results": [
+            {"id": "c1", "raw": '<tool_call>{"name":"set_alarm","arguments":{"time":"07:00"}}</tool_call>'},
+            {"id": "i1", "raw": "The capital of France is Paris."},
+        ],
+    }
+    with tempfile.NamedTemporaryFile("w", suffix=".json", delete=False) as fh:
+        json.dump(results, fh)
+        path = fh.name
+
+    row = report.summarize_file(path, gold_by_id, TOOLS, n_boot=200)
+    assert row["n_call"] == 1 and row["strict_acc"] == 1.0
+    assert row["n_irr"] == 1 and row["irr_acc"] == 1.0
+    assert row["memory_gb"] == 1.2 and row["precision"] == "fp16"
+    assert row["format_gap"] == 0.0
+
+
 def _run_all():
     tests = [v for k, v in sorted(globals().items()) if k.startswith("test_") and callable(v)]
     for test in tests:
