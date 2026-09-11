@@ -93,12 +93,54 @@ def test_score_irrelevance():
 def test_full_mock_run_is_perfect():
     """A mock that echoes the reference-correct call scores 100% strict."""
     items = load_items(HERE / "mini_eval.jsonl")
-    outcome = run_eval(items, BY_NAME, build_mock_runner(items, BY_NAME))
+    outcome = run_eval(items, TOOLS, build_mock_runner(items, BY_NAME))
     strict = outcome["summary"]["strict"]
     assert strict["call_accuracy"] == 1.0, strict
     assert strict["schema_valid_rate"] == 1.0, strict
     assert strict["irrelevance_accuracy"] == 1.0, strict
     assert outcome["summary"]["format_recoverable"] == 0.0
+
+
+def test_optional_arg_omission():
+    # BFCL marks optional args with "" in the accepted list; omitting them is fine.
+    gold = {"base": [10], "height": [5], "unit": ["units", ""]}
+    assert args_match({"base": 10, "height": 5}, gold)              # unit omitted -> ok
+    assert args_match({"base": 10, "height": 5, "unit": "units"}, gold)
+    assert not args_match({"base": 10, "height": 5, "unit": "kg"}, gold)  # present but wrong
+    assert not args_match({"height": 5}, gold)                     # required base missing
+
+
+def test_convert_bfcl_and_score():
+    import convert_bfcl
+
+    q = {
+        "id": "simple_0",
+        "question": [[{"role": "user", "content": "Find the area of a triangle base 10 height 5."}]],
+        "function": [{
+            "name": "calculate_triangle_area",
+            "description": "Area of a triangle.",
+            "parameters": {
+                "type": "dict",
+                "properties": {
+                    "base": {"type": "integer"},
+                    "height": {"type": "integer"},
+                    "unit": {"type": "string"},
+                },
+                "required": ["base", "height"],
+            },
+        }],
+    }
+    gt = {"id": "simple_0", "ground_truth": [{"calculate_triangle_area": {"base": [10], "height": [5], "unit": ["units", ""]}}]}
+
+    item = convert_bfcl.convert_call_item(q, gt)
+    assert item["gold"]["name"] == "calculate_triangle_area"
+    assert item["query"].startswith("Find the area")
+    assert item["tools"][0]["type"] == "function"
+
+    by_name = tools_by_name(item["tools"])
+    call = {"name": "calculate_triangle_area", "arguments": {"base": 10, "height": 5}}
+    s = score_item(item, [call], by_name)
+    assert s.schema_valid and s.right_tool and s.right_args
 
 
 def _run_all():

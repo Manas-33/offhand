@@ -1,43 +1,49 @@
 """Run a runner over the dataset and produce strict + lenient scores.
 
-Every item is scored twice: strict (what an app runtime can execute) and lenient
-(right intent even if the tool-call format is broken). The gap between them,
-``format_recoverable``, is the reliability that grammar-constrained decoding
-should be able to reclaim.
+Each item may carry its own ``tools`` list (as BFCL and xLAM items do); items
+without one fall back to ``default_tools`` (the phone-tool set). Every item is
+scored twice: strict (what an app runtime can execute) and lenient (right intent
+even if the tool-call format is broken). The gap between them,
+``format_recoverable``, is the reliability grammar-constrained decoding should
+be able to reclaim.
 """
 
 from __future__ import annotations
 
 from typing import Any, Callable
 
+from .dataset import tools_by_name
 from .parse import parse_tool_calls, parse_tool_calls_lenient
 from .scoring import ItemScore, aggregate, score_item
 
 
 def run_eval(
     items: list[dict],
-    tools_by_name: dict[str, dict],
+    default_tools: list[dict],
     runner,
     on_item: Callable[[int, int, ItemScore], None] | None = None,
 ) -> dict[str, Any]:
     """Evaluate ``runner`` over ``items``.
 
+    ``default_tools`` is the tool list for items that do not specify their own.
     Returns ``{"summary": {"strict": {...}, "lenient": {...},
-    "format_recoverable": float}, "results": [...]}``. ``on_item(index, total,
-    strict_score)`` is called after each item for progress.
+    "format_recoverable": float}, "results": [...]}``.
     """
-    valid_names = list(tools_by_name.keys())
     results: list[dict] = []
     strict_scores: list[ItemScore] = []
     lenient_scores: list[ItemScore] = []
     total = len(items)
 
     for i, item in enumerate(items):
-        raw = runner.generate(item["query"])
+        tools = item.get("tools") or default_tools
+        by_name = tools_by_name(tools)
+        valid_names = list(by_name.keys())
+
+        raw = runner.generate(item["query"], tools)
         strict_calls = parse_tool_calls(raw)
         lenient_calls = parse_tool_calls_lenient(raw, valid_names)
-        strict_score = score_item(item, strict_calls, tools_by_name)
-        lenient_score = score_item(item, lenient_calls, tools_by_name)
+        strict_score = score_item(item, strict_calls, by_name)
+        lenient_score = score_item(item, lenient_calls, by_name)
         strict_scores.append(strict_score)
         lenient_scores.append(lenient_score)
         results.append(

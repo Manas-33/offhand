@@ -1,12 +1,16 @@
-"""Model runners: turn a user query into raw model text.
+"""Model runners: turn a user query plus a tool set into raw model text.
 
 The rest of the harness only depends on the ``ModelRunner`` protocol, so a new
 backend (an AIMET QuantSim ONNX model, or the on-device Genie/llama.cpp bridge)
 plugs in by implementing ``generate`` and nothing else changes.
 
+``generate`` takes the tools per call, because benchmarks like BFCL give each
+item its own function list. For the phone-tool set every item shares one list,
+which the harness supplies as the default.
+
 ``HFRunner`` (the FP16 / bnb-quantized reference) imports torch + transformers
 lazily so that ``MockRunner`` and the scoring modules stay importable with no
-heavy deps — that is what lets the test suite run on a laptop.
+heavy deps, which is what lets the test suite run on a laptop.
 """
 
 from __future__ import annotations
@@ -22,21 +26,21 @@ DEFAULT_SYSTEM_PROMPT = (
 
 
 class ModelRunner(Protocol):
-    def generate(self, query: str) -> str: ...
+    def generate(self, query: str, tools: list[dict]) -> str: ...
 
 
 class MockRunner:
     """Return canned outputs keyed by query. Used by the test suite.
 
     ``mapping`` maps a query string to the raw text the model would emit;
-    unknown queries return ``default``.
+    unknown queries return ``default``. ``tools`` is accepted and ignored.
     """
 
     def __init__(self, mapping: dict[str, str] | None = None, default: str = ""):
         self.mapping = mapping or {}
         self.default = default
 
-    def generate(self, query: str) -> str:
+    def generate(self, query: str, tools: list[dict] | None = None) -> str:
         return self.mapping.get(query, self.default)
 
 
@@ -44,15 +48,14 @@ class HFRunner:
     """FP16 or bitsandbytes-quantized HuggingFace reference runner.
 
     ``quant`` is one of ``fp16`` | ``int8`` | ``nf4``. The bnb 4-bit / 8-bit
-    paths are quick proxies for the M0c "does the curve exist?" spike; the real
+    paths are quick proxies for the "does the curve exist?" spike; the real
     on-device W4A16 (AIMET QuantSim + SeqMSE/SpinQuant) checkpoints are evaluated
-    in M2 through a separate runner that satisfies this same interface.
+    through a separate runner that satisfies this same interface.
     """
 
     def __init__(
         self,
         model_id: str,
-        tools: list[dict],
         quant: str = "fp16",
         system_prompt: str = DEFAULT_SYSTEM_PROMPT,
         max_new_tokens: int = 256,
@@ -62,7 +65,6 @@ class HFRunner:
         import torch
         from transformers import AutoModelForCausalLM, AutoTokenizer
 
-        self.tools = tools
         self.system_prompt = system_prompt
         self.max_new_tokens = max_new_tokens
         self.enable_thinking = enable_thinking
@@ -98,13 +100,13 @@ class HFRunner:
                     bnb_4bit_compute_dtype=torch.float16,
                 )
             self.model = AutoModelForCausalLM.from_pretrained(
-                model_id, quantization_config=qconfig, torch_dtype="auto", device_map="auto"
+                model_id, quantization_config=qconfig, torch_dtype=torch.float16, device_map="auto"
             )
             self._device = self.model.device
         else:
             raise ValueError(f"unknown quant mode: {quant!r}")
 
-    def generate(self, query: str) -> str:
+    def generate(self, query: str, tools: list[dict]) -> str:
         import torch
 
         messages = [
@@ -113,7 +115,7 @@ class HFRunner:
         ]
         text = self.tokenizer.apply_chat_template(
             messages,
-            tools=self.tools,
+            tools=tools,
             add_generation_prompt=True,
             tokenize=False,
             enable_thinking=self.enable_thinking,

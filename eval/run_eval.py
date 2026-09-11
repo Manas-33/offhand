@@ -45,7 +45,6 @@ def build_runner(args, tools):
 
     return HFRunner(
         model_id=args.model,
-        tools=tools,
         quant=args.config,
         max_new_tokens=args.max_new_tokens,
         device=args.device,
@@ -91,7 +90,7 @@ def main() -> None:
         items = items[: args.limit]
 
     runner = build_runner(args, tools)
-    outcome = run_eval(items, tools_by_name(tools), runner, on_item=progress)
+    outcome = run_eval(items, tools, runner, on_item=progress)
     summary = outcome["summary"]
 
     out_dir = Path(args.out_dir)
