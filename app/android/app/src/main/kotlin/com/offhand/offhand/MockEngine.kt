@@ -50,7 +50,16 @@ class MockEngine : Engine {
         cancelled = true
     }
 
-    private fun mockReplyFor(prompt: String): String =
-        "This is a mock response streaming one token at a time so the Flutter " +
-            "to Kotlin bridge and the UI can be verified before the NPU runtime is wired in."
+    private fun mockReplyFor(prompt: String): String {
+        val p = prompt.lowercase()
+        val call = when {
+            "alarm" in p -> """{"name": "set_alarm", "arguments": {"time": "07:00"}}"""
+            "timer" in p -> """{"name": "set_timer", "arguments": {"duration_minutes": 10}}"""
+            "flashlight" in p || "torch" in p -> """{"name": "toggle_flashlight", "arguments": {"state": "on"}}"""
+            "text" in p || "message" in p -> """{"name": "draft_sms", "arguments": {"recipient": "Mom", "body": "on my way"}}"""
+            else -> """{"name": "create_note", "arguments": {"content": "$prompt"}}"""
+        }
+        // Wrapped so the Dart parser (mirror of parse.py) can extract it.
+        return "<tool_call> $call </tool_call>"
+    }
 }
