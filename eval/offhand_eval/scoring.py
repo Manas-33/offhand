@@ -51,9 +51,16 @@ def is_schema_valid(call: dict, tools_by_name: dict[str, dict]) -> bool:
     return True
 
 
+def _optional(accepted: Any) -> bool:
+    """A BFCL-style arg is optional when omission (an empty accepted value) is OK."""
+    return isinstance(accepted, list) and any(_norm(a) == "" for a in accepted)
+
+
 def args_match(predicted_args: dict, gold_args: dict) -> bool:
     for key, accepted in gold_args.items():
         if key not in predicted_args:
+            if _optional(accepted):  # omitting an optional arg is acceptable
+                continue
             return False
         if not _arg_matches(predicted_args[key], accepted):
             return False
