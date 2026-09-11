@@ -60,6 +60,12 @@ def progress(i: int, total: int, score: ItemScore) -> None:
     print(f"  [{i:>3}/{total}] {mark}  {score.id}", file=sys.stderr)
 
 
+def _print_agg(name: str, agg: dict) -> None:
+    print(f"  [{name}]")
+    for key, value in agg.items():
+        print(f"    {key:<22} {value}")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Offhand M0c tool-calling eval")
     parser.add_argument("--model", default="Qwen/Qwen3-4B", help="HF model id or local path")
@@ -96,8 +102,9 @@ def main() -> None:
 
     print()
     print(f"=== {label}  ({args.model}) ===")
-    for key, value in summary.items():
-        print(f"  {key:<22} {value}")
+    _print_agg("strict", summary["strict"])
+    _print_agg("lenient", summary["lenient"])
+    print(f"  format_recoverable (lenient - strict call_acc): {summary['format_recoverable']}")
     print(f"\nwrote {out_dir / f'{label}.json'}")
 
 

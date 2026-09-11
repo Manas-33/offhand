@@ -14,14 +14,14 @@
 {"id": "settings_02", "category": "single", "query": "Open the bluetooth settings for me.", "gold": {"name": "open_settings", "arguments": {"panel": ["bluetooth"]}}}
 {"id": "settings_03", "category": "single", "query": "I need to adjust the screen brightness.", "gold": {"name": "open_settings", "arguments": {"panel": ["display"]}}}
 {"id": "settings_04", "category": "single", "query": "Take me to the sound settings.", "gold": {"name": "open_settings", "arguments": {"panel": ["sound"]}}}
-{"id": "sms_01", "category": "single", "query": "Text Mom that I'll be home late.", "gold": {"name": "draft_sms", "arguments": {"recipient": ["mom"]}}}
-{"id": "sms_02", "category": "single", "query": "Send a text to John saying happy birthday.", "gold": {"name": "draft_sms", "arguments": {"recipient": ["john"]}}}
-{"id": "sms_03", "category": "single", "query": "Draft an SMS to Sarah: running five minutes behind.", "gold": {"name": "draft_sms", "arguments": {"recipient": ["sarah"]}}}
-{"id": "sms_04", "category": "single", "query": "Message Dad and tell him the flight landed.", "gold": {"name": "draft_sms", "arguments": {"recipient": ["dad"]}}}
-{"id": "email_01", "category": "single", "query": "Draft an email to alex@work.com about the quarterly report.", "gold": {"name": "draft_email", "arguments": {"to": ["alex@work.com"]}}}
-{"id": "email_02", "category": "single", "query": "Write an email to my boss asking for tomorrow off.", "gold": {"name": "draft_email", "arguments": {"to": ["my boss", "boss"]}}}
-{"id": "email_03", "category": "single", "query": "Compose an email to the team with the subject Release Notes.", "gold": {"name": "draft_email", "arguments": {"to": ["the team", "team"]}}}
-{"id": "email_04", "category": "single", "query": "Email jane about the lunch plans.", "gold": {"name": "draft_email", "arguments": {"to": ["jane"]}}}
+{"id": "sms_01", "category": "single", "query": "Text Mom that I'll be home late.", "gold": {"name": "draft_sms", "arguments": {"recipient": {"contains": "mom"}}}}
+{"id": "sms_02", "category": "single", "query": "Send a text to John saying happy birthday.", "gold": {"name": "draft_sms", "arguments": {"recipient": {"contains": "john"}}}}
+{"id": "sms_03", "category": "single", "query": "Draft an SMS to Sarah: running five minutes behind.", "gold": {"name": "draft_sms", "arguments": {"recipient": {"contains": "sarah"}}}}
+{"id": "sms_04", "category": "single", "query": "Message Dad and tell him the flight landed.", "gold": {"name": "draft_sms", "arguments": {"recipient": {"contains": "dad"}}}}
+{"id": "email_01", "category": "single", "query": "Draft an email to alex@work.com about the quarterly report.", "gold": {"name": "draft_email", "arguments": {"to": {"contains": "alex"}}}}
+{"id": "email_02", "category": "single", "query": "Write an email to my boss asking for tomorrow off.", "gold": {"name": "draft_email", "arguments": {"to": {"contains": "boss"}}}}
+{"id": "email_03", "category": "single", "query": "Compose an email to the team with the subject Release Notes.", "gold": {"name": "draft_email", "arguments": {"to": {"contains": "team"}}}}
+{"id": "email_04", "category": "single", "query": "Email jane about the lunch plans.", "gold": {"name": "draft_email", "arguments": {"to": {"contains": "jane"}}}}
 {"id": "music_01", "category": "single", "query": "Play some jazz.", "gold": {"name": "play_music", "arguments": {"query": {"contains": "jazz"}}}}
 {"id": "music_02", "category": "single", "query": "Play Bohemian Rhapsody.", "gold": {"name": "play_music", "arguments": {"query": {"contains": "bohemian rhapsody"}}}}
 {"id": "music_03", "category": "single", "query": "Pause the music.", "gold": {"name": "play_music", "arguments": {"action": ["pause"]}}}

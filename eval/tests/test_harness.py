@@ -1,7 +1,7 @@
 """Harness unit tests — run with no ML deps: `python eval/tests/test_harness.py`.
 
-Exercises parsing, the four scoring signals, and a full mock run over the real
-dataset so the plumbing is trusted before it ever touches a GPU.
+Exercises parsing (strict and lenient), the four scoring signals, and a full
+mock run over the real dataset so the plumbing is trusted before it touches a GPU.
 """
 
 import sys
@@ -12,12 +12,13 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from offhand_eval.dataset import load_items, load_tools, tools_by_name
 from offhand_eval.harness import run_eval
 from offhand_eval.mock import build_mock_runner
-from offhand_eval.parse import parse_tool_calls
+from offhand_eval.parse import parse_tool_calls, parse_tool_calls_lenient
 from offhand_eval.scoring import args_match, is_schema_valid, score_item
 
 HERE = Path(__file__).resolve().parents[1]
 TOOLS = load_tools(HERE / "tools.json")
 BY_NAME = tools_by_name(TOOLS)
+VALID = list(BY_NAME)
 
 
 def test_parse_wrapped_and_bare():
@@ -36,16 +37,28 @@ def test_parse_double_encoded_arguments():
     assert calls[0]["arguments"]["duration_minutes"] == 10
 
 
+def test_lenient_recovers_name_prefixed_calls():
+    # dropped <tool_call> wrapper, name leaked outside the JSON (the nf4 failure)
+    assert parse_tool_calls('.create_note {"content": "buy milk"}') == []  # strict misses it
+    lenient = parse_tool_calls_lenient('.create_note {"content": "buy milk"}', VALID)
+    assert lenient and lenient[0]["name"] == "create_note"
+    assert lenient[0]["arguments"]["content"] == "buy milk"
+
+    lenient2 = parse_tool_calls_lenient('draft_email {"to": "jane", "subject": "Lunch"}', VALID)
+    assert lenient2 and lenient2[0]["name"] == "draft_email"
+
+
+def test_lenient_does_not_invent_calls_from_prose():
+    assert parse_tool_calls_lenient("None of the tools can adjust screen brightness.", VALID) == []
+
+
 def test_schema_validity():
     assert is_schema_valid({"name": "set_alarm", "arguments": {"time": "07:00"}}, BY_NAME)
-    # missing required param
-    assert not is_schema_valid({"name": "set_alarm", "arguments": {"label": "x"}}, BY_NAME)
-    # unknown tool
-    assert not is_schema_valid({"name": "launch_rocket", "arguments": {}}, BY_NAME)
-    # unknown param (strict)
+    assert not is_schema_valid({"name": "set_alarm", "arguments": {"label": "x"}}, BY_NAME)  # missing required
+    assert not is_schema_valid({"name": "launch_rocket", "arguments": {}}, BY_NAME)  # unknown tool
     assert not is_schema_valid(
         {"name": "toggle_flashlight", "arguments": {"state": "on", "color": "red"}}, BY_NAME
-    )
+    )  # unknown param
 
 
 def test_args_match_forms():
@@ -53,6 +66,8 @@ def test_args_match_forms():
     assert args_match({"time": "7 AM"}, {"time": ["07:00", "7 am"]})
     assert args_match({"content": "Buy milk from the store"}, {"content": {"contains": "milk"}})
     assert not args_match({"content": "call the plumber"}, {"content": {"contains": "milk"}})
+    # the recipient fix: a resolved address still matches a contains-gold
+    assert args_match({"to": "boss@example.com"}, {"to": {"contains": "boss"}})
 
 
 def test_score_correct_and_wrong_tool():
@@ -76,13 +91,14 @@ def test_score_irrelevance():
 
 
 def test_full_mock_run_is_perfect():
-    """A mock that echoes the reference-correct call scores 100% on the dataset."""
+    """A mock that echoes the reference-correct call scores 100% strict."""
     items = load_items(HERE / "mini_eval.jsonl")
     outcome = run_eval(items, BY_NAME, build_mock_runner(items, BY_NAME))
-    summary = outcome["summary"]
-    assert summary["call_accuracy"] == 1.0, summary
-    assert summary["schema_valid_rate"] == 1.0, summary
-    assert summary["irrelevance_accuracy"] == 1.0, summary
+    strict = outcome["summary"]["strict"]
+    assert strict["call_accuracy"] == 1.0, strict
+    assert strict["schema_valid_rate"] == 1.0, strict
+    assert strict["irrelevance_accuracy"] == 1.0, strict
+    assert outcome["summary"]["format_recoverable"] == 0.0
 
 
 def _run_all():
