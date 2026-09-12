@@ -47,6 +47,35 @@ def build_prompt(tokenizer, query: str, tools: list[dict]) -> str:
     )
 
 
+# Per-channel weights are the realistic W4A16 setting (one scale per output channel
+# instead of one for the whole matrix). Per-tensor 4-bit collapses an LLM; this is
+# the standard AIMET config with per_channel_quantization on.
+_PER_CHANNEL_CONFIG = {
+    "defaults": {
+        "ops": {"is_output_quantized": "True"},
+        "params": {"is_quantized": "True", "is_symmetric": "True"},
+        "per_channel_quantization": "True",
+    },
+    "params": {"bias": {"is_quantized": "False"}},
+    "op_type": {},
+    "supergroups": [],
+    "model_input": {"is_input_quantized": "True"},
+    "model_output": {},
+}
+
+
+def resolve_config(arg: str) -> str:
+    """'per_channel' -> a generated config path; anything else is passed through."""
+    if arg != "per_channel":
+        return arg
+    import tempfile
+
+    path = tempfile.NamedTemporaryFile("w", suffix=".json", delete=False).name
+    with open(path, "w") as fh:
+        json.dump(_PER_CHANNEL_CONFIG, fh)
+    return path
+
+
 class GenRunner:
     """Cached greedy generation through the (in-place quantized) model.
 
@@ -93,7 +122,8 @@ def main() -> None:
     ap.add_argument("--remedy", choices=["rtn", "spinquant"], default="rtn")
     ap.add_argument("--param-bw", type=int, default=4)
     ap.add_argument("--output-bw", type=int, default=16)
-    ap.add_argument("--config-file", default="default", help="AIMET quant config (HTP/blockwise TBD)")
+    ap.add_argument("--config-file", default="per_channel",
+                    help="'per_channel' (generated), 'default' (per-tensor, collapses W4), or a path/HTP alias")
     ap.add_argument("--quant-scheme", default="min_max", help="min_max is fast; post_training_tf_enhanced is slower")
     ap.add_argument("--max-new-tokens", type=int, default=256)
     ap.add_argument("--out-dir", default=str(HERE / "results"))
@@ -158,7 +188,7 @@ def main() -> None:
         default_param_bw=args.param_bw,
         default_output_bw=args.output_bw,
         quant_scheme=quant_scheme,
-        config_file=args.config_file,
+        config_file=resolve_config(args.config_file),
         in_place=True,  # quantize `base` in place so base.generate() is the quantized model
     )
 
