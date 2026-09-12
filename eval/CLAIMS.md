@@ -3,11 +3,14 @@
 A living record of what this study can assert and what evidence each claim still
 owes. Updated as runs land.
 
-Two evidence sets so far:
+Three evidence sets so far:
 - Pilot: 48 phone-tool items, one greedy pass per config. Deltas are noisy (the
   95 percent interval is about 9 points at 40 call items).
 - BFCL: 840 items (400 simple + 200 multiple + 240 irrelevance), one greedy pass
   per config, with bootstrap CIs over items.
+- Specialist LOTO: the 48-item phone set again, split into 7 trained (seen) tools
+  and 3 held-out (unseen) tools, to score the M1 distilled 0.6B specialist. Same
+  small-n caveat as the pilot.
 
 ## Claims
 
@@ -30,8 +33,8 @@ Two evidence sets so far:
 - Still owed: quantify the phone-tool format gap at larger n.
 
 ### 4. 4-bit weight quantization is nearly free for tool calling
-- Status: supported (nf4 proxy).
-- Evidence: BFCL nf4 vs fp16 costs 2 to 4 points per size, CIs mostly overlapping (borderline only at 1.7B: 0.910 vs 0.872).
+- Status: supported (nf4 proxy), including on the 0.6B specialist.
+- Evidence: BFCL nf4 vs fp16 costs 2 to 4 points per size, CIs mostly overlapping (borderline only at 1.7B: 0.910 vs 0.872). Specialist (0.6B) on the phone LOTO set: nf4 0.925 vs fp16 0.90 call accuracy (a single item at n=48), schema validity and no-call both 1.00 at 4-bit, so the distilled specialist survives 4-bit intact.
 - Kill criterion: a real cliff under the on-device W4A16 contract.
 - Still owed: AIMET W4A16 (round-to-nearest, then SeqMSE, then SpinQuant), and W4A8 / int8 KV, to replace the nf4 proxy with the real numerics.
 
@@ -50,6 +53,13 @@ Two evidence sets so far:
 - Status: measured (BFCL).
 - Evidence: irrelevance accuracy 0.80 to 0.87 across models (13 to 20 percent false tool calls on 240 hard negatives), slightly worse when smaller. A safety metric for an agent with side effects.
 - Still owed: whether constrained decoding or a stricter prompt cuts false triggers without hurting call accuracy.
+
+### 8. A distilled 0.6B specialist clears the tool-calling floor and generalizes to unseen tools
+- Status: established (M1 kill-test on the specialist LOTO set, n=48), pending 4-bit and on-device replays.
+- Evidence: LoRA-distilling the 4B teacher's calls into Qwen3-0.6B lifts phone-tool call accuracy from 0.55 (base) to 0.90 and schema validity from 0.63 to 1.00. Held-out queries: seen tools (7 trained) 0.93, the unseen trio (never trained) 0.83 (gap +0.10), and schema validity is 1.00 even on the unseen tools. No-call abstention 1.00 for both.
+- Reading: refines Claim 1. The ~1.7B floor is for a generalist caller; a 0.6B distilled onto a fixed tool set clears it, and the competence transfers to tools seen only in the prompt (unseen schema 1.00), so the low-end limit here is format/competence, not raw capacity or tool-specific memorization.
+- Kill criterion: 4-bit (nf4, then W4A16) failing to preserve ~0.90, or the gap widening sharply at larger n, puts the floor back on capacity.
+- Still owed: the nf4 replay holds (0.925, schema 1.00, no-call 1.00 at 4-bit); still owed the on-device W4A16 numerics (SpinQuant); widen n beyond 48 (per-tool cells are 4 items); residual misses are confusable siblings (calendar->reminder, sms->email) plus one AM/PM parse.
 
 ## Decisions forced by the data
 - App model: 1.7B (nf4 ~0.85 GB, or fp16 ~3.4 GB), not 4B. 4B was memory-marginal on the S25's 12 GB in the device proof and gives no accuracy gain here.
