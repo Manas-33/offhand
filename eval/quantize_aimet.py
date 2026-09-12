@@ -102,6 +102,18 @@ def _probe_aimet_api() -> None:
             print(f"aimet_torch.{mod}:", [x for x in dir(m) if not x.startswith("_")])
         except Exception as exc:  # noqa: BLE001
             print(f"aimet_torch.{mod}: {exc}")
+    # exact signatures for the remedy entry points (so v2 wires them precisely)
+    try:
+        from aimet_torch.seq_mse import SeqMseParams, apply_seq_mse
+        print("apply_seq_mse:", inspect.signature(apply_seq_mse))
+        print("SeqMseParams:", inspect.signature(SeqMseParams))
+    except Exception as exc:  # noqa: BLE001
+        print("seq_mse sigs:", exc)
+    try:
+        from aimet_torch.experimental.spinquant import apply_spinquant
+        print("apply_spinquant:", inspect.signature(apply_spinquant))
+    except Exception as exc:  # noqa: BLE001
+        print("apply_spinquant sig:", exc)
     print("=== end probe ===\n")
 
 
@@ -132,6 +144,8 @@ def main() -> None:
     if tokenizer.pad_token_id is None:
         tokenizer.pad_token = tokenizer.eos_token
     model = AutoModelForCausalLM.from_pretrained(args.model, dtype=torch.float32).eval().to(device)
+    model.config.return_dict = False  # AIMET's tracer needs tuple/tensor outputs, not ModelOutput
+    model.config.use_cache = False    # cleaner trace; the manual decode loop doesn't use the cache
 
     by_name = tools_by_name(load_tools(args.tools))
     all_tools = load_tools(args.tools)
