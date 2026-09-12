@@ -122,15 +122,25 @@ def main() -> None:
     if tokenizer.pad_token_id is None:
         tokenizer.pad_token = tokenizer.eos_token
     base = AutoModelForCausalLM.from_pretrained(args.model, dtype=torch.float32).eval().to(device)
+
+    by_name = tools_by_name(load_tools(args.tools))
+    all_tools = load_tools(args.tools)
+    eval_items = load_items(args.data)
+
+    # Baseline smoke on the UN-quantized model to isolate a decode-path bug from a
+    # quantization collapse: if this prints a clean tool call but the post-quant
+    # smoke is garbage, the quantization is the problem (e.g. per-tensor 4-bit),
+    # not the generate path.
+    base.config.use_cache = True
+    _smoke = GenRunner(base, tokenizer, device, args.max_new_tokens)
+    print("pre-quant  smoke:", repr(_smoke.generate(eval_items[0]["query"], all_tools)[:100]))
+
     base.config.use_cache = False  # off for the AIMET trace; flipped back on for eval
 
     if args.remedy == "spinquant":
         from aimet_torch.experimental.spinquant import apply_spinquant
         print("applying SpinQuant (R1+R2)...")
         apply_spinquant(base, enable_r1=True, enable_r2=True)
-
-    by_name = tools_by_name(load_tools(args.tools))
-    all_tools = load_tools(args.tools)
 
     calib_items = load_items(args.calib_file)[: args.n_calib]
     calib_inputs = [
@@ -163,8 +173,8 @@ def main() -> None:
     # Eval through the in-place-quantized model's own cached generate.
     base.config.use_cache = True
     runner = GenRunner(base, tokenizer, device, args.max_new_tokens)
-    items = load_items(args.data)
-    print("smoke:", repr(runner.generate(items[0]["query"], all_tools)[:80]))
+    items = eval_items
+    print("post-quant smoke:", repr(runner.generate(items[0]["query"], all_tools)[:100]))
 
     outcome = run_eval(items, all_tools, runner, on_item=progress)
     outcome["loto"] = {"strict": loto_breakdown(items, outcome["results"], HELD_OUT, "strict")}
