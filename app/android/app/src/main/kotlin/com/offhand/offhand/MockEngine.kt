@@ -52,11 +52,27 @@ class MockEngine : Engine {
 
     private fun mockReplyFor(prompt: String): String {
         val p = prompt.lowercase()
+        // A no-call branch, so the irrelevance path is exercised too.
+        if ("weather" in p || "capital" in p || "who " in p || "what is" in p) {
+            return "I can't do that on-device, but I can set alarms, timers, reminders, " +
+                "draft messages, and more."
+        }
         val call = when {
             "alarm" in p -> """{"name": "set_alarm", "arguments": {"time": "07:00"}}"""
             "timer" in p -> """{"name": "set_timer", "arguments": {"duration_minutes": 10}}"""
-            "flashlight" in p || "torch" in p -> """{"name": "toggle_flashlight", "arguments": {"state": "on"}}"""
-            "text" in p || "message" in p -> """{"name": "draft_sms", "arguments": {"recipient": "Mom", "body": "on my way"}}"""
+            "remind" in p -> """{"name": "set_reminder", "arguments": {"text": "call the dentist", "time": "15:00"}}"""
+            "calendar" in p || "meeting" in p || "appointment" in p || "schedule" in p || "event" in p ->
+                """{"name": "create_calendar_event", "arguments": {"title": "Team sync", "start_datetime": "tomorrow 10am"}}"""
+            "wifi" in p || "wi-fi" in p -> """{"name": "open_settings", "arguments": {"panel": "wifi"}}"""
+            "bluetooth" in p -> """{"name": "open_settings", "arguments": {"panel": "bluetooth"}}"""
+            "settings" in p || "display" in p || "brightness" in p -> """{"name": "open_settings", "arguments": {"panel": "display"}}"""
+            "email" in p || "mail" in p -> """{"name": "draft_email", "arguments": {"to": "alex@example.com", "subject": "Lunch", "body": "Want to grab lunch tomorrow?"}}"""
+            "text" in p || "message" in p || "sms" in p -> """{"name": "draft_sms", "arguments": {"recipient": "Mom", "body": "On my way!"}}"""
+            "pause" in p -> """{"name": "play_music", "arguments": {"action": "pause"}}"""
+            "next" in p || "skip" in p -> """{"name": "play_music", "arguments": {"action": "next"}}"""
+            "play" in p || "music" in p || "song" in p -> """{"name": "play_music", "arguments": {"query": "lo-fi beats"}}"""
+            "flashlight" in p || "torch" in p || "light" in p -> """{"name": "toggle_flashlight", "arguments": {"state": "on"}}"""
+            "note" in p -> """{"name": "create_note", "arguments": {"content": "$prompt"}}"""
             else -> """{"name": "create_note", "arguments": {"content": "$prompt"}}"""
         }
         // Wrapped so the Dart parser (mirror of parse.py) can extract it.

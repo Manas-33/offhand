@@ -7,9 +7,11 @@ import '../agent/parser.dart';
 ///
 /// Nothing user-visible should fire without this returning true.
 Future<bool> showApprovalSheet(BuildContext context, ToolCall call) async {
+  final detail = actionDetail(call);
   final approved = await showModalBottomSheet<bool>(
     context: context,
     showDragHandle: true,
+    isScrollControlled: true,
     builder: (context) => SafeArea(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
@@ -29,6 +31,21 @@ Future<bool> showApprovalSheet(BuildContext context, ToolCall call) async {
                 ),
               ],
             ),
+            if (detail != null) ...[
+              const SizedBox(height: 12),
+              Container(
+                width: double.infinity,
+                constraints: const BoxConstraints(maxHeight: 180),
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: SingleChildScrollView(
+                  child: Text(detail, style: Theme.of(context).textTheme.bodyMedium),
+                ),
+              ),
+            ],
             const SizedBox(height: 24),
             Row(
               children: [
