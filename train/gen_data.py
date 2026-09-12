@@ -40,6 +40,12 @@ from offhand_eval.dataset import load_tools, tools_by_name  # noqa: E402
 from offhand_eval.parse import parse_tool_calls  # noqa: E402
 from offhand_eval.scoring import is_schema_valid  # noqa: E402
 
+try:
+    from tqdm.auto import tqdm  # progress + ETA for the long teacher run
+except ImportError:  # optional; degrade to a no-op so the mock run needs nothing
+    def tqdm(iterable, **kwargs):
+        return iterable
+
 # One trivial (flashlight), one argument-heavy (calendar), one entity-referencing (sms).
 HELD_OUT = ("toggle_flashlight", "create_calendar_event", "draft_sms")
 
@@ -224,7 +230,7 @@ def expand_with_paraphrases(seeds: list[dict], teacher: Teacher, k: int, rng: ra
     if k <= 0 or not hasattr(teacher, "paraphrase"):
         return seeds
     out: list[dict] = []
-    for seed in seeds:
+    for seed in tqdm(seeds, desc="paraphrasing"):
         variants = {seed["query"]}
         try:
             for para in teacher.paraphrase(seed["query"], k):
@@ -304,23 +310,35 @@ def main() -> None:
     all_seeds = tool_seeds + no_call_seeds
     rng.shuffle(all_seeds)
 
-    train, heldout = [], []
-    dropped = 0
-    for i, seed in enumerate(all_seeds):
-        item = label_and_validate(seed, by_name, teacher, rng)
-        if item is None:
-            dropped += 1
-            continue
-        item["id"] = f"gen_{i}"
-        (heldout if seed["intended_tool"] in HELD_OUT else train).append(item)
-
     out = Path(args.out_dir)
     out.mkdir(parents=True, exist_ok=True)
-    _write(out / "train.jsonl", train)
-    _write(out / "heldout_eval.jsonl", heldout)
-    n_no_call = sum(1 for t in train if t["intended_tool"] is None)
-    print(f"kept {len(train) + len(heldout)} (dropped {dropped}) -> "
-          f"train={len(train)} (no_call={n_no_call}), heldout={len(heldout)} in {out}")
+
+    # Stream each validated item straight to disk so a long teacher run is
+    # crash-safe: a Colab disconnect leaves the items generated so far, and
+    # writing to a mounted Drive path (--out-dir) makes them survive the VM.
+    n_train = n_heldout = n_no_call = dropped = 0
+    with open(out / "train.jsonl", "w", encoding="utf-8") as ftrain, \
+         open(out / "heldout_eval.jsonl", "w", encoding="utf-8") as fheld:
+        for i, seed in enumerate(tqdm(all_seeds, desc="labeling")):
+            item = label_and_validate(seed, by_name, teacher, rng)
+            if item is None:
+                dropped += 1
+                continue
+            item["id"] = f"gen_{i}"
+            if seed["intended_tool"] in HELD_OUT:
+                fheld.write(json.dumps(item) + "\n")
+                n_heldout += 1
+            else:
+                ftrain.write(json.dumps(item) + "\n")
+                n_train += 1
+                if item["intended_tool"] is None:
+                    n_no_call += 1
+            if (i + 1) % 25 == 0:  # bound how much a crash can lose
+                ftrain.flush()
+                fheld.flush()
+
+    print(f"kept {n_train + n_heldout} (dropped {dropped}) -> "
+          f"train={n_train} (no_call={n_no_call}), heldout={n_heldout} in {out}")
 
 
 if __name__ == "__main__":
