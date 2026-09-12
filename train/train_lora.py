@@ -143,7 +143,7 @@ def main() -> None:
     n_no_call = sum(1 for it in items if it["intended_tool"] is None)
     print(f"built {len(examples)} examples ({n_no_call} no-call) from {args.train_file}")
 
-    model = AutoModelForCausalLM.from_pretrained(args.base_model, torch_dtype=torch.bfloat16)
+    model = AutoModelForCausalLM.from_pretrained(args.base_model, dtype=torch.bfloat16)
     model.config.use_cache = False  # incompatible with training; re-enabled implicitly at inference
     peft_config = LoraConfig(
         r=args.lora_r,
@@ -156,13 +156,17 @@ def main() -> None:
     model = get_peft_model(model, peft_config)
     model.print_trainable_parameters()
 
-    targs = TrainingArguments(
+    # TrainingArguments kwargs drift across transformers versions (e.g. v5.2 drops
+    # warmup_ratio in favor of warmup_steps); keep only what this version accepts.
+    import inspect
+
+    wanted = dict(
         output_dir=str(out / "checkpoints"),
         num_train_epochs=args.epochs,
         per_device_train_batch_size=args.batch_size,
         gradient_accumulation_steps=args.grad_accum,
         learning_rate=args.lr,
-        warmup_ratio=0.03,
+        warmup_steps=10,
         lr_scheduler_type="cosine",
         logging_steps=10,
         save_strategy="no",
@@ -170,6 +174,11 @@ def main() -> None:
         report_to="none",
         seed=args.seed,
     )
+    valid = set(inspect.signature(TrainingArguments.__init__).parameters)
+    dropped = sorted(set(wanted) - valid)
+    if dropped:
+        print(f"note: this transformers ignores unsupported TrainingArguments {dropped}")
+    targs = TrainingArguments(**{k: v for k, v in wanted.items() if k in valid})
     trainer = Trainer(
         model=model,
         args=targs,

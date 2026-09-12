@@ -2,7 +2,9 @@
 # These are only for the HFRunner reference runs (Colab / GPU box).
 torch>=2.3
 transformers>=4.51        # Qwen3 chat-template + tool support
-accelerate>=0.30
+accelerate>=1.1.0        # transformers 5.x Trainer requires >=1.1.0
 bitsandbytes>=0.43        # int8 / nf4 proxy configs for the M0c spike (CUDA only)
 datasets>=2.19           # Dolly no-call seed source for the specialist training set
 peft>=0.11               # LoRA adapters for the specialist training run (train_lora.py)
+# NOTE (Colab): the preinstalled torchao 0.10 makes peft's LoRA injection raise on
+# import; we don't use torchao, so `pip uninstall -y torchao` before train_lora.py.
