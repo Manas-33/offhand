@@ -1,4 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Voice input (Android SpeechRecognizer, via speech_to_text). -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <!-- Required by the clock app to accept ACTION_SET_ALARM / ACTION_SET_TIMER. -->
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
+    <!-- The flashlight tool controls the torch but does not capture; flash is optional. -->
+    <uses-feature android:name="android.hardware.camera.flash" android:required="false"/>
+
     <application
         android:label="offhand"
         android:name="${applicationName}"
@@ -40,6 +47,30 @@
         <intent>
             <action android:name="android.intent.action.PROCESS_TEXT"/>
             <data android:mimeType="text/plain"/>
+        </intent>
+        <!-- Let SpeechRecognizer find an on-device recognizer on Android 11+. -->
+        <intent>
+            <action android:name="android.speech.RecognitionService"/>
+        </intent>
+        <!-- Tools resolve their target apps behind package-visibility filtering. -->
+        <intent>
+            <action android:name="android.intent.action.SENDTO"/>
+            <data android:scheme="smsto"/>
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.SENDTO"/>
+            <data android:scheme="mailto"/>
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.INSERT"/>
+            <data android:mimeType="vnd.android.cursor.dir/event"/>
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.SEND"/>
+            <data android:mimeType="text/plain"/>
+        </intent>
+        <intent>
+            <action android:name="android.media.action.MEDIA_PLAY_FROM_SEARCH"/>
         </intent>
     </queries>
 </manifest>

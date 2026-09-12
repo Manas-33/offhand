@@ -10,9 +10,11 @@ import io.flutter.plugin.common.MethodChannel
 class MainActivity : FlutterActivity() {
     private val controlChannel = "com.offhand/control"
     private val tokenChannel = "com.offhand/tokens"
+    private val toolChannel = "com.offhand/tools"
 
     // Swap MockEngine() for GenieEngine() once the NPU runtime is wired in.
     private val engine: Engine = MockEngine()
+    private val nativeTools: NativeTools by lazy { NativeTools(applicationContext) }
     private var eventSink: EventChannel.EventSink? = null
     private val mainHandler = Handler(Looper.getMainLooper())
 
@@ -50,6 +52,19 @@ class MainActivity : FlutterActivity() {
                     engine.stop()
                     result.success(null)
                 }
+                else -> result.notImplemented()
+            }
+        }
+
+        MethodChannel(messenger, toolChannel).setMethodCallHandler { call, result ->
+            when (call.method) {
+                "setTorch" ->
+                    result.success(nativeTools.setTorch(call.argument<Boolean>("on") ?: false))
+                "mediaKey" -> {
+                    nativeTools.mediaKey(call.argument<String>("action") ?: "play")
+                    result.success(null)
+                }
+                "memoryMb" -> result.success(nativeTools.memoryMb())
                 else -> result.notImplemented()
             }
         }
