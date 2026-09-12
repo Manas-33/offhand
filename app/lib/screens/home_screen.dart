@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 import '../agent/actions.dart';
 import '../agent/parser.dart';
 import '../bridge/bridge.dart';
+import '../services/speech.dart';
 import '../widgets/approval_sheet.dart';
 import '../widgets/metrics_bar.dart';
+import 'benchmark_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -17,6 +19,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final OffhandBridge _bridge = OffhandBridge();
+  final SpeechInput _speech = SpeechInput();
   final TextEditingController _promptController =
       TextEditingController(text: 'Set an alarm for 7am');
   final ScrollController _scrollController = ScrollController();
@@ -25,27 +28,32 @@ class _HomeScreenState extends State<HomeScreen> {
   bool _loaded = false;
   bool _loading = false;
   bool _generating = false;
+  bool _listening = false;
   String _output = '';
   DoneEvent? _metrics;
 
   @override
   void initState() {
     super.initState();
-    _sub = _bridge.events().listen(
-      _onEvent,
-      onError: (Object error) {
-        if (!mounted) return;
-        setState(() {
-          _generating = false;
-          _output += '\n[stream error] $error';
-        });
-      },
-    );
+    _listen();
+  }
+
+  void _listen() {
+    _sub = _bridge.events().listen(_onEvent, onError: _onStreamError);
+  }
+
+  void _onStreamError(Object error) {
+    if (!mounted) return;
+    setState(() {
+      _generating = false;
+      _output += '\n[stream error] $error';
+    });
   }
 
   @override
   void dispose() {
     _sub?.cancel();
+    _speech.dispose();
     _promptController.dispose();
     _scrollController.dispose();
     super.dispose();
@@ -115,10 +123,70 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() => _generating = false);
   }
 
+  /// Toggle voice input. Recognized words flow straight into the prompt field.
+  Future<void> _toggleMic() async {
+    final messenger = ScaffoldMessenger.of(context);
+    if (_listening) {
+      await _speech.stop();
+      if (mounted) setState(() => _listening = false);
+      return;
+    }
+    final started = await _speech.start(
+      onText: (text, isFinal) {
+        if (!mounted) return;
+        setState(() {
+          _promptController.text = text;
+          _promptController.selection =
+              TextSelection.collapsed(offset: text.length);
+          if (isFinal) _listening = false;
+        });
+      },
+      onStatus: (s) {
+        if (mounted && (s == 'done' || s == 'notListening')) {
+          setState(() => _listening = false);
+        }
+      },
+      onError: (e) {
+        if (!mounted) return;
+        setState(() => _listening = false);
+        messenger.showSnackBar(SnackBar(content: Text('Speech error: $e')));
+      },
+    );
+    if (!mounted) return;
+    if (started) {
+      setState(() => _listening = true);
+    } else {
+      messenger.showSnackBar(const SnackBar(
+        content: Text('Speech recognition unavailable (check mic permission)'),
+      ));
+    }
+  }
+
+  /// Open the benchmark screen. It drives the same bridge, so pause our own
+  /// listener to avoid the agent loop firing an approval sheet mid-run.
+  Future<void> _openBenchmark() async {
+    final navigator = Navigator.of(context);
+    await _sub?.cancel();
+    _sub = null;
+    await navigator
+        .push(MaterialPageRoute(builder: (_) => const BenchmarkScreen()));
+    if (!mounted) return;
+    _listen();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Offhand')),
+      appBar: AppBar(
+        title: const Text('Offhand'),
+        actions: [
+          IconButton(
+            tooltip: 'Benchmark',
+            icon: const Icon(Icons.speed),
+            onPressed: _openBenchmark,
+          ),
+        ],
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -138,9 +206,15 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(height: 12),
             TextField(
               controller: _promptController,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 labelText: 'Prompt',
-                border: OutlineInputBorder(),
+                border: const OutlineInputBorder(),
+                suffixIcon: IconButton(
+                  tooltip: _listening ? 'Stop listening' : 'Speak',
+                  icon: Icon(_listening ? Icons.mic : Icons.mic_none),
+                  color: _listening ? Colors.red : null,
+                  onPressed: _toggleMic,
+                ),
               ),
               minLines: 1,
               maxLines: 3,
