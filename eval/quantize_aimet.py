@@ -1,31 +1,29 @@
 #!/usr/bin/env python3
 """Quantize the merged specialist to W4A16 with AIMET and run the LOTO eval on it.
 
-This produces the REAL W4A16 accuracy number: AIMET QuantSim simulates the
-on-device quantized numerics on GPU, which replaces the nf4 bitsandbytes proxy in
-Claims 4 and 8. Runs on the Colab A100 (needs aimet-torch + CUDA). The ONNX-QDQ
-export for the actual device (Genie/QNN) is a later step; this is the accuracy.
+Produces the REAL W4A16 accuracy: AIMET QuantSim simulates the on-device numerics
+on GPU, replacing the nf4 bitsandbytes proxy in Claims 4 and 8. Runs on the Colab
+A100 (needs aimet-torch + CUDA). ONNX-QDQ export for the device is a later step.
 
-Status: v1 does round-to-nearest (RTN) W4A16 using only the confirmed QuantSim
-API, and prints what aimet_torch exposes for seq_mse / spinquant so the next
-version can add those remedy rungs against the installed API instead of guessing.
+Remedy rungs (--remedy):
+  rtn       : round-to-nearest W4A16 (QuantSim + calibration)
+  spinquant : + SpinQuant rotations (R1+R2; R3 is not exposed, which sidesteps the
+              grouped-query-attention shape issue)
 
-Two things to confirm from v1's output before we trust the headline number:
-  1. whether "A16" should be int16 activations (--output-bw 16, the current default)
-     or weight-only int4 with fp16 activations (a different QuantSim config);
-  2. the exact seq_mse / spinquant entry points (printed at startup).
+Speed: the model is quantized IN PLACE, so the eval uses the model's own cached
+``.generate()`` (the same path the fp16/nf4 runs used) instead of a hand-rolled
+decode. Quantization is traced through a thin logits-only wrapper (AIMET wants a
+tensor out; transformers 5.x Qwen3 needs return_dict internally).
 
-Usage (Colab, after `pip install aimet-torch`):
-  python eval/quantize_aimet.py \
-      --model /content/drive/MyDrive/offhand_out/merged \
+Usage (Colab):
+  python eval/quantize_aimet.py --model /content/drive/MyDrive/offhand_out/merged \
       --calib-file /content/drive/MyDrive/offhand_data/train.jsonl \
-      --label specialist_w4a16_rtn
+      --remedy rtn --label specialist_w4a16_rtn
 """
 
 from __future__ import annotations
 
 import argparse
-import inspect
 import json
 import sys
 from pathlib import Path
@@ -40,7 +38,6 @@ from offhand_eval.runners import DEFAULT_SYSTEM_PROMPT  # noqa: E402  (same prom
 
 
 def build_prompt(tokenizer, query: str, tools: list[dict]) -> str:
-    """The exact deployment prompt (matches HFRunner and train_lora)."""
     messages = [
         {"role": "system", "content": DEFAULT_SYSTEM_PROMPT},
         {"role": "user", "content": query},
@@ -50,14 +47,15 @@ def build_prompt(tokenizer, query: str, tools: list[dict]) -> str:
     )
 
 
-class AimetRunner:
-    """Greedy-decode through the QuantSim-wrapped model, same interface as HFRunner.
+class GenRunner:
+    """Cached greedy generation through the (in-place quantized) model.
 
-    A manual argmax loop rather than model.generate(), so it does not depend on the
-    HF generation mixin surviving AIMET's module wrapping.
+    Mirrors HFRunner.generate so the W4A16 numbers are directly comparable to the
+    fp16/nf4 runs: same prompt, same greedy decode, just a KV cache instead of the
+    O(n^2) manual loop.
     """
 
-    def __init__(self, model, tokenizer, device, max_new_tokens: int = 96):
+    def __init__(self, model, tokenizer, device, max_new_tokens: int = 256):
         self.model = model
         self.tokenizer = tokenizer
         self.device = device
@@ -66,75 +64,40 @@ class AimetRunner:
     def generate(self, query: str, tools: list[dict]) -> str:
         import torch
 
-        prompt = build_prompt(self.tokenizer, query, tools)
-        ids = self.tokenizer(prompt, add_special_tokens=False, return_tensors="pt").input_ids.to(self.device)
-        start = ids.shape[1]
-        eos = self.tokenizer.eos_token_id
+        text = build_prompt(self.tokenizer, query, tools)
+        inputs = self.tokenizer(text, return_tensors="pt").to(self.device)
         with torch.no_grad():
-            for _ in range(self.max_new_tokens):
-                out = self.model(ids)
-                if hasattr(out, "logits"):
-                    logits = out.logits
-                elif isinstance(out, (tuple, list)):
-                    logits = out[0]
-                else:
-                    logits = out  # _LogitsWrapper returns the logits tensor directly
-                nxt = logits[:, -1, :].argmax(-1, keepdim=True)
-                ids = torch.cat([ids, nxt], dim=1)
-                if nxt.item() == eos:
-                    break
-        return self.tokenizer.decode(ids[0, start:], skip_special_tokens=True)
+            out = self.model.generate(
+                **inputs, max_new_tokens=self.max_new_tokens, do_sample=False,
+                use_cache=True, pad_token_id=self.tokenizer.pad_token_id,
+            )
+        gen = out[0][inputs["input_ids"].shape[1]:]
+        return self.tokenizer.decode(gen, skip_special_tokens=True)
 
 
-def _probe_aimet_api() -> None:
-    """Print what this aimet_torch build exposes, so we wire the remedies correctly."""
-    import pkgutil
-
-    import aimet_torch
-    from aimet_torch import QuantizationSimModel
-
-    print("=== AIMET API probe ===")
-    print("submodules:", sorted(m.name for m in pkgutil.iter_modules(aimet_torch.__path__)))
-    print("QuantizationSimModel.__init__:", inspect.signature(QuantizationSimModel.__init__))
-    try:
-        from aimet_torch.common.defs import QuantScheme
-        print("QuantScheme:", [x for x in dir(QuantScheme) if not x.startswith("_")])
-    except Exception as exc:  # noqa: BLE001
-        print("QuantScheme import failed:", exc)
-    for mod in ("seq_mse", "spinquant", "experimental.spinquant"):
-        try:
-            m = __import__(f"aimet_torch.{mod}", fromlist=["_"])
-            print(f"aimet_torch.{mod}:", [x for x in dir(m) if not x.startswith("_")])
-        except Exception as exc:  # noqa: BLE001
-            print(f"aimet_torch.{mod}: {exc}")
-    # exact signatures for the remedy entry points (so v2 wires them precisely)
-    try:
-        from aimet_torch.seq_mse import SeqMseParams, apply_seq_mse
-        print("apply_seq_mse:", inspect.signature(apply_seq_mse))
-        print("SeqMseParams:", inspect.signature(SeqMseParams))
-    except Exception as exc:  # noqa: BLE001
-        print("seq_mse sigs:", exc)
-    try:
-        from aimet_torch.experimental.spinquant import apply_spinquant
-        print("apply_spinquant:", inspect.signature(apply_spinquant))
-    except Exception as exc:  # noqa: BLE001
-        print("apply_spinquant sig:", exc)
-    print("=== end probe ===\n")
+def progress(i: int, total: int, score) -> None:
+    if score.expected_call:
+        mark = "ok " if score.right_args else ("tool" if score.right_tool else "MISS")
+    else:
+        mark = "ok " if score.no_call_correct else "MISS"
+    print(f"  [{i:>3}/{total}] {mark} {score.id}", file=sys.stderr)
 
 
 def main() -> None:
-    ap = argparse.ArgumentParser(description="AIMET W4A16 quantize + LOTO eval (v1: RTN)")
-    ap.add_argument("--model", required=True, help="merged specialist path (on Drive)")
+    ap = argparse.ArgumentParser(description="AIMET W4A16 quantize + LOTO eval")
+    ap.add_argument("--model", required=True)
     ap.add_argument("--tools", default=str(HERE / "tools.json"))
     ap.add_argument("--data", default=str(HERE / "mini_eval.jsonl"))
-    ap.add_argument("--calib-file", required=True, help="jsonl of items to calibrate on (train.jsonl)")
-    ap.add_argument("--n-calib", type=int, default=256)
-    ap.add_argument("--param-bw", type=int, default=4, help="weight bitwidth (W4)")
-    ap.add_argument("--output-bw", type=int, default=16, help="activation bitwidth (A16)")
+    ap.add_argument("--calib-file", required=True, help="jsonl to calibrate on (train.jsonl)")
+    ap.add_argument("--n-calib", type=int, default=128)
+    ap.add_argument("--remedy", choices=["rtn", "spinquant"], default="rtn")
+    ap.add_argument("--param-bw", type=int, default=4)
+    ap.add_argument("--output-bw", type=int, default=16)
     ap.add_argument("--config-file", default="default", help="AIMET quant config (HTP/blockwise TBD)")
-    ap.add_argument("--max-new-tokens", type=int, default=96)
+    ap.add_argument("--quant-scheme", default="min_max", help="min_max is fast; post_training_tf_enhanced is slower")
+    ap.add_argument("--max-new-tokens", type=int, default=256)
     ap.add_argument("--out-dir", default=str(HERE / "results"))
-    ap.add_argument("--label", default="specialist_w4a16_rtn")
+    ap.add_argument("--label", default=None)
     args = ap.parse_args()
 
     import torch
@@ -142,14 +105,11 @@ def main() -> None:
     from aimet_torch import QuantizationSimModel
     from aimet_torch.common.defs import QuantScheme
 
-    _probe_aimet_api()
-
+    label = args.label or f"specialist_w4a16_{args.remedy}"
     device = "cuda"
 
     class _LogitsWrapper(torch.nn.Module):
-        """Return just the logits tensor: AIMET's tracer wants a tensor, while the
-        inner HF model keeps return_dict=True (transformers 5.x Qwen3 reads
-        ``outputs.last_hidden_state`` internally, so it cannot run return_dict=False)."""
+        """Logits-only output for AIMET's tracer; inner model keeps return_dict."""
 
         def __init__(self, inner):
             super().__init__()
@@ -162,30 +122,34 @@ def main() -> None:
     if tokenizer.pad_token_id is None:
         tokenizer.pad_token = tokenizer.eos_token
     base = AutoModelForCausalLM.from_pretrained(args.model, dtype=torch.float32).eval().to(device)
-    base.config.use_cache = False  # cleaner trace; the manual decode loop doesn't use the cache
-    model = _LogitsWrapper(base).to(device).eval()
+    base.config.use_cache = False  # off for the AIMET trace; flipped back on for eval
+
+    if args.remedy == "spinquant":
+        from aimet_torch.experimental.spinquant import apply_spinquant
+        print("applying SpinQuant (R1+R2)...")
+        apply_spinquant(base, enable_r1=True, enable_r2=True)
 
     by_name = tools_by_name(load_tools(args.tools))
     all_tools = load_tools(args.tools)
 
-    # Calibration inputs: training prompts in the exact deployment format.
     calib_items = load_items(args.calib_file)[: args.n_calib]
-    calib_inputs = []
-    for it in calib_items:
-        tools = [by_name[n] for n in it["tools_listed"]]
-        text = build_prompt(tokenizer, it["query"], tools)
-        calib_inputs.append(tokenizer(text, add_special_tokens=False, return_tensors="pt").input_ids.to(device))
+    calib_inputs = [
+        tokenizer(build_prompt(tokenizer, it["query"], [by_name[n] for n in it["tools_listed"]]),
+                  return_tensors="pt").input_ids.to(device)
+        for it in calib_items
+    ]
     print(f"calibration set: {len(calib_inputs)} prompts")
 
-    # PTQ scheme (no training); fall back if this build renamed the enum.
-    quant_scheme = getattr(QuantScheme, "post_training_tf_enhanced", None) or getattr(QuantScheme, "min_max")
+    wrapped = _LogitsWrapper(base).to(device).eval()
+    quant_scheme = getattr(QuantScheme, args.quant_scheme)
     sim = QuantizationSimModel(
-        model,
+        wrapped,
         dummy_input=calib_inputs[0],
         default_param_bw=args.param_bw,
         default_output_bw=args.output_bw,
         quant_scheme=quant_scheme,
         config_file=args.config_file,
+        in_place=True,  # quantize `base` in place so base.generate() is the quantized model
     )
 
     def forward_pass(m) -> None:
@@ -193,27 +157,31 @@ def main() -> None:
             for inp in calib_inputs:
                 m(inp)
 
-    print("computing encodings (RTN calibration)...")
+    print(f"computing encodings ({args.remedy}, {args.quant_scheme})...")
     sim.compute_encodings(forward_pass)
 
-    runner = AimetRunner(sim.model, tokenizer, device, args.max_new_tokens)
+    # Eval through the in-place-quantized model's own cached generate.
+    base.config.use_cache = True
+    runner = GenRunner(base, tokenizer, device, args.max_new_tokens)
     items = load_items(args.data)
-    outcome = run_eval(items, all_tools, runner)
+    print("smoke:", repr(runner.generate(items[0]["query"], all_tools)[:80]))
+
+    outcome = run_eval(items, all_tools, runner, on_item=progress)
     outcome["loto"] = {"strict": loto_breakdown(items, outcome["results"], HELD_OUT, "strict")}
 
     out = Path(args.out_dir)
     out.mkdir(parents=True, exist_ok=True)
-    meta = {"label": args.label, "model": args.model,
-            "quant": f"W{args.param_bw}A{args.output_bw}", "remedy": "rtn", "config_file": args.config_file}
-    (out / f"{args.label}.json").write_text(json.dumps({**meta, **outcome}, indent=2))
+    meta = {"label": label, "model": args.model, "quant": f"W{args.param_bw}A{args.output_bw}",
+            "remedy": args.remedy, "config_file": args.config_file, "quant_scheme": args.quant_scheme}
+    (out / f"{label}.json").write_text(json.dumps({**meta, **outcome}, indent=2))
 
     s = outcome["summary"]["strict"]
-    print(f"\n=== {args.label}  (W{args.param_bw}A{args.output_bw} RTN) ===")
+    print(f"\n=== {label}  (W{args.param_bw}A{args.output_bw} {args.remedy}) ===")
     print(f"  call_accuracy {s['call_accuracy']}  schema {s['schema_valid_rate']}  "
           f"right_tool {s['right_tool_rate']}  irrelevance {s['irrelevance_accuracy']}")
     print()
     print(format_loto(outcome["loto"]["strict"]))
-    print(f"\nwrote {out / f'{args.label}.json'}")
+    print(f"\nwrote {out / f'{label}.json'}")
 
 
 if __name__ == "__main__":
