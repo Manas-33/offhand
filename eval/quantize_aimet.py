@@ -73,7 +73,12 @@ class AimetRunner:
         with torch.no_grad():
             for _ in range(self.max_new_tokens):
                 out = self.model(ids)
-                logits = out.logits if hasattr(out, "logits") else out[0]
+                if hasattr(out, "logits"):
+                    logits = out.logits
+                elif isinstance(out, (tuple, list)):
+                    logits = out[0]
+                else:
+                    logits = out  # _LogitsWrapper returns the logits tensor directly
                 nxt = logits[:, -1, :].argmax(-1, keepdim=True)
                 ids = torch.cat([ids, nxt], dim=1)
                 if nxt.item() == eos:
@@ -140,12 +145,25 @@ def main() -> None:
     _probe_aimet_api()
 
     device = "cuda"
+
+    class _LogitsWrapper(torch.nn.Module):
+        """Return just the logits tensor: AIMET's tracer wants a tensor, while the
+        inner HF model keeps return_dict=True (transformers 5.x Qwen3 reads
+        ``outputs.last_hidden_state`` internally, so it cannot run return_dict=False)."""
+
+        def __init__(self, inner):
+            super().__init__()
+            self.inner = inner
+
+        def forward(self, input_ids):
+            return self.inner(input_ids=input_ids).logits
+
     tokenizer = AutoTokenizer.from_pretrained(args.model)
     if tokenizer.pad_token_id is None:
         tokenizer.pad_token = tokenizer.eos_token
-    model = AutoModelForCausalLM.from_pretrained(args.model, dtype=torch.float32).eval().to(device)
-    model.config.return_dict = False  # AIMET's tracer needs tuple/tensor outputs, not ModelOutput
-    model.config.use_cache = False    # cleaner trace; the manual decode loop doesn't use the cache
+    base = AutoModelForCausalLM.from_pretrained(args.model, dtype=torch.float32).eval().to(device)
+    base.config.use_cache = False  # cleaner trace; the manual decode loop doesn't use the cache
+    model = _LogitsWrapper(base).to(device).eval()
 
     by_name = tools_by_name(load_tools(args.tools))
     all_tools = load_tools(args.tools)
