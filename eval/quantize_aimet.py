@@ -192,6 +192,21 @@ def main() -> None:
         in_place=True,  # quantize `base` in place so base.generate() is the quantized model
     )
 
+    # Standard W4A16 carve-out: keep the LM head and token embeddings out of 4-bit.
+    # 4-bit on the vocab projection collapses generation (blank output). Nulling
+    # their param quantizers keeps them full precision.
+    excluded = []
+    for name, module in sim.model.named_modules():
+        if (name.endswith("lm_head") or name.endswith("embed_tokens")) and hasattr(module, "param_quantizers"):
+            for key in list(module.param_quantizers.keys()):
+                module.param_quantizers[key] = None
+            excluded.append(name)
+    if excluded:
+        print("excluded from quant:", excluded)
+    else:
+        cand = [n for n, _ in sim.model.named_modules() if "head" in n.lower() or "embed" in n.lower()]
+        print("excluded NONE; candidate module names:", cand)
+
     def forward_pass(m) -> None:
         with torch.no_grad():
             for inp in calib_inputs:
