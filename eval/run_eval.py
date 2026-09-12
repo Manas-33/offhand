@@ -27,6 +27,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from offhand_eval.dataset import load_items, load_tools, tools_by_name  # noqa: E402
 from offhand_eval.harness import run_eval  # noqa: E402
+from offhand_eval.loto import HELD_OUT, format_loto, loto_breakdown  # noqa: E402
 from offhand_eval.scoring import ItemScore  # noqa: E402
 
 HERE = Path(__file__).resolve().parent
@@ -81,6 +82,10 @@ def main() -> None:
     parser.add_argument("--out-dir", default=str(HERE / "results"))
     parser.add_argument("--dry-run", action="store_true",
                         help="use a mock runner (no model) to verify the harness")
+    parser.add_argument("--loto", action="store_true",
+                        help="also report the seen/unseen (leave-one-tool-out) breakdown")
+    parser.add_argument("--held-out", default=None,
+                        help="comma-separated held-out tools (default: the training held-out trio)")
     args = parser.parse_args()
 
     label = args.label or ("dry-run" if args.dry_run else args.config)
@@ -93,6 +98,13 @@ def main() -> None:
     outcome = run_eval(items, tools, runner, on_item=progress)
     summary = outcome["summary"]
 
+    if args.loto:
+        held_out = tuple(t.strip() for t in args.held_out.split(",")) if args.held_out else HELD_OUT
+        outcome["loto"] = {
+            "strict": loto_breakdown(items, outcome["results"], held_out, "strict"),
+            "lenient": loto_breakdown(items, outcome["results"], held_out, "lenient"),
+        }
+
     out_dir = Path(args.out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
     (out_dir / f"{label}.json").write_text(
@@ -104,6 +116,9 @@ def main() -> None:
     _print_agg("strict", summary["strict"])
     _print_agg("lenient", summary["lenient"])
     print(f"  format_recoverable (lenient - strict call_acc): {summary['format_recoverable']}")
+    if args.loto:
+        print()
+        print(format_loto(outcome["loto"]["strict"]))
     print(f"\nwrote {out_dir / f'{label}.json'}")
 
 
