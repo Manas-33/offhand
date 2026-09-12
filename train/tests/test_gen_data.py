@@ -55,6 +55,46 @@ def test_deployment_condition_and_varied_lists():
             assert item["intended_tool"] in item["tools_listed"]
 
 
+def test_shorten_no_call():
+    s = gen_data.shorten_no_call
+    # a one-sentence answer is left intact
+    assert s("The capital of France is Paris.") == "The capital of France is Paris."
+    # only the first sentence is kept
+    assert s("Paris is the capital. It is in France.") == "Paris is the capital."
+    # newlines never survive into a target
+    assert s("First line.\nSecond line.") == "First line."
+    # a runaway single sentence is capped at a word boundary
+    long_one = "word " * 60 + "end."
+    out = s(long_one)
+    assert len(out) <= gen_data.NO_CALL_MAX_CHARS and " " in out and "\n" not in out
+
+
+def test_paraphrase_scales_up_and_preserves_routing():
+    by_name = gen_data.tools_by_name(gen_data.load_tools(Path(gen_data.HERE).parent / "eval" / "tools.json"))
+    rng = random.Random(0)
+    teacher = gen_data.MockTeacher()
+    seeds = [s for s in gen_data.build_seeds(10, rng) if s["intended_tool"]]
+    expanded = gen_data.expand_with_paraphrases(seeds, teacher, 6, rng)
+    assert len(expanded) > len(seeds)  # paraphrasing multiplied the set
+
+    # the mock's lead-ins must not change which tool a query routes to, so
+    # (almost) every paraphrase should survive labeling against its seed tool
+    kept = [gen_data.label_and_validate(s, by_name, teacher, rng) for s in expanded]
+    kept = [k for k in kept if k]
+    assert len(kept) >= 0.9 * len(expanded), (len(kept), len(expanded))
+    for item in kept:
+        calls = gen_data.parse_tool_calls(item["target"])
+        assert calls and calls[0]["name"] == item["intended_tool"]
+
+
+def test_added_tools_are_trained():
+    # the four newly-templated tools should show up as training targets
+    _, train, _ = _generate()
+    train_tools = {t["intended_tool"] for t in train if t["intended_tool"]}
+    for tool in ("open_settings", "draft_email", "play_music", "set_reminder"):
+        assert tool in train_tools, (tool, train_tools)
+
+
 def _run_all():
     for name, fn in sorted(globals().items()):
         if name.startswith("test_") and callable(fn):

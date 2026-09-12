@@ -15,6 +15,7 @@ heavy deps, which is what lets the test suite run on a laptop.
 
 from __future__ import annotations
 
+import re
 from typing import Protocol
 
 DEFAULT_SYSTEM_PROMPT = (
@@ -129,3 +130,54 @@ class HFRunner:
             )
         generated = output_ids[0][inputs["input_ids"].shape[1] :]
         return self.tokenizer.decode(generated, skip_special_tokens=True)
+
+    def paraphrase(self, query: str, n: int) -> list[str]:
+        """Return up to ``n`` intent-preserving rewrites of ``query``.
+
+        Plain chat, no tools, sampled for diversity (labeling stays greedy).
+        Used to scale a small set of template seeds into varied phrasings before
+        the labeling pass. Junk or meaning-drifting rewrites are cheap to
+        tolerate: the caller re-labels each one and drops any the teacher no
+        longer maps to the intended tool.
+        """
+        import torch
+
+        prompt = (
+            f"Rewrite this phone-assistant voice request in {n} different ways. "
+            "Keep the exact meaning and every specific detail (times, names, "
+            "amounts, places). Vary the wording, length, and politeness so they "
+            "sound like real people speaking. Output ONLY the rewrites, one per "
+            "line, with no numbering and no commentary.\n\n"
+            f"Request: {query}"
+        )
+        messages = [{"role": "user", "content": prompt}]
+        text = self.tokenizer.apply_chat_template(
+            messages,
+            add_generation_prompt=True,
+            tokenize=False,
+            enable_thinking=self.enable_thinking,
+        )
+        inputs = self.tokenizer(text, return_tensors="pt").to(self._device)
+        with torch.no_grad():
+            output_ids = self.model.generate(
+                **inputs,
+                max_new_tokens=256,
+                do_sample=True,
+                temperature=0.9,
+                top_p=0.95,
+            )
+        generated = output_ids[0][inputs["input_ids"].shape[1] :]
+        raw = self.tokenizer.decode(generated, skip_special_tokens=True)
+
+        out: list[str] = []
+        seen: set[str] = set()
+        for line in raw.splitlines():
+            cand = re.sub(r"^\s*\d+[.)]\s*", "", line.strip().lstrip("-*•").strip())
+            low = cand.lower()
+            if not cand or low in seen:
+                continue
+            if any(m in low for m in ("rewrite", "here are", "version", "sure,", "request:")):
+                continue  # drop model preamble/meta lines
+            seen.add(low)
+            out.append(cand)
+        return out[:n]

@@ -4,3 +4,4 @@ torch>=2.3
 transformers>=4.51        # Qwen3 chat-template + tool support
 accelerate>=0.30
 bitsandbytes>=0.43        # int8 / nf4 proxy configs for the M0c spike (CUDA only)
+datasets>=2.19           # Dolly no-call seed source for the specialist training set
