@@ -88,7 +88,7 @@ class _BenchmarkScreenState extends State<BenchmarkScreen> {
       _memoryMb = null;
     });
 
-    await _bridge.loadModel('/data/local/tmp/offhand/qwen3-1.7b');
+    await _bridge.loadModel('models/Qwen3-0.6B-Specialist');
 
     for (var i = 0; i < _benchPrompts.length; i++) {
       if (!mounted) return;

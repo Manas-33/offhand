@@ -12,8 +12,9 @@ class MainActivity : FlutterActivity() {
     private val tokenChannel = "com.offhand/tokens"
     private val toolChannel = "com.offhand/tools"
 
-    // Swap MockEngine() for GenieEngine() once the NPU runtime is wired in.
-    private val engine: Engine = MockEngine()
+    // The NPU runtime. Swap back to MockEngine() to work on the UI without a
+    // seeded model bundle.
+    private val engine: Engine by lazy { GenieEngine(applicationContext) }
     private val nativeTools: NativeTools by lazy { NativeTools(applicationContext) }
     private var eventSink: EventChannel.EventSink? = null
     private val mainHandler = Handler(Looper.getMainLooper())
@@ -38,7 +39,15 @@ class MainActivity : FlutterActivity() {
             when (call.method) {
                 "loadModel" -> {
                     val path = call.argument<String>("modelPath") ?: ""
-                    result.success(engine.loadModel(path))
+                    // Model creation maps ~750MB of context binaries (~3s);
+                    // keep it off the main thread and answer asynchronously.
+                    Thread(
+                        {
+                            val ok = engine.loadModel(path)
+                            mainHandler.post { result.success(ok) }
+                        },
+                        "model-load",
+                    ).start()
                 }
                 "generate" -> {
                     val prompt = call.argument<String>("prompt") ?: ""

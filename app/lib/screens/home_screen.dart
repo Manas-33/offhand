@@ -101,8 +101,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _loadModel() async {
     setState(() => _loading = true);
-    // Placeholder path; the exported bundle is pushed to the device and pointed at here.
-    final ok = await _bridge.loadModel('/data/local/tmp/offhand/qwen3-1.7b');
+    // The seeded specialist bundle, relative to the app's filesDir (the
+    // native side resolves it; seeded via adb run-as per npu_deploy.md).
+    final ok = await _bridge.loadModel('models/Qwen3-0.6B-Specialist');
     setState(() {
       _loaded = ok;
       _loading = false;
