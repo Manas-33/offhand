@@ -4,4 +4,15 @@
          to allow setting breakpoints, to provide hot reload, etc.
     -->
     <uses-permission android:name="android.permission.INTERNET"/>
+
+    <application>
+        <!-- Batch runner for the on-device eval replay, started over adb by
+             eval/run_device_eval.py. Debug builds only; exported so the shell
+             can start it. -->
+        <activity
+            android:name=".EvalActivity"
+            android:exported="true"
+            android:label="Offhand eval"
+            android:theme="@style/NormalTheme" />
+    </application>
 </manifest>
