@@ -1,0 +1,60 @@
+{
+  "label": "specialist_w4a16_seqmse",
+  "model": "/content/drive/MyDrive/offhand_out/merged",
+  "quant": "W4A16",
+  "remedy": "seqmse",
+  "granularity": "lpbq",
+  "block_size": 64,
+  "config_file": "default",
+  "quant_scheme": "min_max",
+  "note": "Reconstructed from the Colab console output (2026-09-13 run, A100): the runtime was released before the JSON was downloaded, and the file was written to VM-local disk, not Drive. Summary and LOTO numbers are verbatim from the run log; the per-item results array (raw generations) was not recoverable. SeqMSE settings: 32 calibration prompts truncated to 426 tokens, 20 candidates.",
+  "summary": {
+    "strict": {
+      "n_total": 48,
+      "n_call_items": 40,
+      "n_irrelevance_items": 8,
+      "schema_valid_rate": 1.0,
+      "right_tool_rate": 0.95,
+      "call_accuracy": 0.925,
+      "irrelevance_accuracy": 1.0
+    }
+  },
+  "item_marks": {
+    "ok": ["alarm_01", "alarm_02", "alarm_03", "timer_01", "timer_02", "timer_03", "timer_04", "cal_01", "cal_02", "cal_03", "cal_04", "settings_01", "settings_02", "settings_04", "sms_02", "sms_03", "sms_04", "email_01", "email_02", "email_03", "email_04", "music_01", "music_02", "music_03", "music_04", "flash_01", "flash_02", "flash_03", "flash_04", "note_01", "note_02", "note_03", "note_04", "remind_01", "remind_02", "remind_03", "remind_04", "irr_01", "irr_02", "irr_03", "irr_04", "irr_05", "irr_06", "irr_07", "irr_08"],
+    "right_tool_wrong_args": ["alarm_04"],
+    "miss": ["settings_03", "sms_01"]
+  },
+  "loto": {
+    "strict": {
+      "which": "strict",
+      "held_out": ["create_calendar_event", "draft_sms", "toggle_flashlight"],
+      "per_tool": {
+        "create_note": {"n": 4, "right_tool": 1.0, "call_accuracy": 1.0, "schema_valid": 1.0},
+        "draft_email": {"n": 4, "right_tool": 1.0, "call_accuracy": 1.0, "schema_valid": 1.0},
+        "open_settings": {"n": 4, "right_tool": 0.75, "call_accuracy": 0.75, "schema_valid": 1.0},
+        "play_music": {"n": 4, "right_tool": 1.0, "call_accuracy": 1.0, "schema_valid": 1.0},
+        "set_alarm": {"n": 4, "right_tool": 1.0, "call_accuracy": 0.75, "schema_valid": 1.0},
+        "set_reminder": {"n": 4, "right_tool": 1.0, "call_accuracy": 1.0, "schema_valid": 1.0},
+        "set_timer": {"n": 4, "right_tool": 1.0, "call_accuracy": 1.0, "schema_valid": 1.0},
+        "create_calendar_event": {"n": 4, "right_tool": 1.0, "call_accuracy": 1.0, "schema_valid": 1.0},
+        "draft_sms": {"n": 4, "right_tool": 0.75, "call_accuracy": 0.75, "schema_valid": 1.0},
+        "toggle_flashlight": {"n": 4, "right_tool": 1.0, "call_accuracy": 1.0, "schema_valid": 1.0}
+      },
+      "seen": {
+        "tools": ["create_note", "draft_email", "open_settings", "play_music", "set_alarm", "set_reminder", "set_timer"],
+        "n": 28,
+        "right_tool": 0.9643,
+        "call_accuracy": 0.9286,
+        "schema_valid": 1.0
+      },
+      "unseen": {
+        "tools": ["create_calendar_event", "draft_sms", "toggle_flashlight"],
+        "n": 12,
+        "right_tool": 0.9167,
+        "call_accuracy": 0.9167,
+        "schema_valid": 1.0
+      },
+      "no_call": {"n": 8, "accuracy": 1.0}
+    }
+  }
+}

@@ -32,11 +32,22 @@ Three evidence sets so far:
 - Reading: format brittleness is distribution-specific (the phone setup: 10 tools, free-text bodies), not a property of the models on standard function calling.
 - Still owed: quantify the phone-tool format gap at larger n.
 
-### 4. 4-bit weight quantization is nearly free for tool calling
-- Status: supported (nf4 proxy), including on the 0.6B specialist.
-- Evidence: BFCL nf4 vs fp16 costs 2 to 4 points per size, CIs mostly overlapping (borderline only at 1.7B: 0.910 vs 0.872). Specialist (0.6B) on the phone LOTO set: nf4 0.925 vs fp16 0.90 call accuracy (a single item at n=48), schema validity and no-call both 1.00 at 4-bit, so the distilled specialist survives 4-bit intact.
-- Kill criterion: a real cliff under the on-device W4A16 contract.
-- Still owed: AIMET W4A16 (round-to-nearest, then SeqMSE, then SpinQuant), and W4A8 / int8 KV, to replace the nf4 proxy with the real numerics.
+### 4. 4-bit weight quantization is free for tool calling WITH THE RIGHT METHOD, not for free
+- Status: established under the device-representative W4A16 contract (AIMET QuantSim, LPBQ int4 block-64, A16, lm_head/embeddings/norm gammas fp, 128 calibration prompts). This replaces the nf4 proxy and sharpens the old "nearly free" wording.
+- Evidence, specialist (0.6B) on the phone LOTO set (n=48):
+
+  | config | call_acc | schema | no-call |
+  |---|---|---|---|
+  | fp16 | 0.90 | 1.00 | 1.00 |
+  | nf4 (bnb, NF4 datatype, block-64) | 0.925 | 1.00 | 1.00 |
+  | W4A16 int4 RTN | 0.775 | 0.975 | 1.00 |
+  | W4A16 int4 + SpinQuant (R1+R2) | 0.600 | 0.85 | 0.875 |
+  | W4A16 int4 + SeqMSE | 0.925 | 1.00 | 1.00 |
+
+- Reading: three findings. (a) Real int4 RTN costs 12.5 points where the nf4 proxy showed a free lunch; "4-bit" is not one thing, the NF4 datatype's nonlinear grid was doing real work. (b) SeqMSE recovers all of it (0.925, equal to nf4, above fp16), so the on-device claim survives, but only method-conditional. (c) Remedies are not monotonic: SpinQuant, applied under blockwise quant, made things worse (rotation spreads outliers that block-64 already handles locally, and its RMSNorm-gamma fusion widens the range inside each 64-column block; R2 here is an untrained Hadamard). Rotation is a coarse-granularity remedy, not a universal one.
+- Failure anatomy: RTN's entire loss is tool selection (schema 0.975, no-call 1.00): six items collapse onto set_reminder, the most over-represented training tool (334 examples), with create_note (second-rarest, 112) falling 1.00 to 0.25. Quantization loses fine discrimination first and falls back to the highest-prior tool, echoing the note/reminder confusion from the data audit. SpinQuant's loss is diffuse instead: dropped <tool_call> tags, hallucinated tool names, argument corruption.
+- Kill criterion: the on-device (QNN/HTP) run diverging from this QuantSim proxy.
+- Still owed: ONNX-QDQ export and on-device replay of the SeqMSE config; W4A8 / int8 KV; optional cross-check that SpinQuant does rescue per-channel granularity (would complete the rotation-granularity interaction story).
 
 ### 5. Constrained decoding recovers the format gap
 - Status: open, rescoped to the phone-tool eval.
@@ -59,7 +70,8 @@ Three evidence sets so far:
 - Evidence: LoRA-distilling the 4B teacher's calls into Qwen3-0.6B lifts phone-tool call accuracy from 0.55 (base) to 0.90 and schema validity from 0.63 to 1.00. Held-out queries: seen tools (7 trained) 0.93, the unseen trio (never trained) 0.83 (gap +0.10), and schema validity is 1.00 even on the unseen tools. No-call abstention 1.00 for both.
 - Reading: refines Claim 1. The ~1.7B floor is for a generalist caller; a 0.6B distilled onto a fixed tool set clears it, and the competence transfers to tools seen only in the prompt (unseen schema 1.00), so the low-end limit here is format/competence, not raw capacity or tool-specific memorization.
 - Kill criterion: 4-bit (nf4, then W4A16) failing to preserve ~0.90, or the gap widening sharply at larger n, puts the floor back on capacity.
-- Still owed: the nf4 replay holds (0.925, schema 1.00, no-call 1.00 at 4-bit); still owed the on-device W4A16 numerics (SpinQuant); widen n beyond 48 (per-tool cells are 4 items); residual misses are confusable siblings (calendar->reminder, sms->email) plus one AM/PM parse.
+- 4-bit replays, both landed: nf4 holds (0.925, schema 1.00, no-call 1.00), and the device-representative W4A16 holds at 0.925 with SeqMSE (schema 1.00, no-call 1.00, seen 0.93 vs unseen 0.92, gap +0.01, the tightest of any config). Method matters though: W4A16 RTN drops to 0.775 by over-routing confusables to set_reminder, and SpinQuant to 0.600. See Claim 4 for the ladder.
+- Still owed: the on-device replay of the W4A16 SeqMSE config through the QNN/HTP runtime; widen n beyond 48 (per-tool cells are 4 items); residual misses under SeqMSE are two routing items (settings_03, sms_01) plus the recurring quarter-past-eight time parse (alarm_04).
 
 ## Decisions forced by the data
 - App model: 1.7B (nf4 ~0.85 GB, or fp16 ~3.4 GB), not 4B. 4B was memory-marginal on the S25's 12 GB in the device proof and gives no accuracy gain here.
