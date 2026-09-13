@@ -7,7 +7,6 @@
   "block_size": 64,
   "config_file": "default",
   "quant_scheme": "min_max",
-  "note": "Reconstructed from the Colab console output (2026-09-13 run, A100): the runtime was released before the JSON was downloaded, and the file was written to VM-local disk, not Drive. Summary and LOTO numbers are verbatim from the run log; the per-item results array (raw generations) was not recoverable. SeqMSE settings: 32 calibration prompts truncated to 426 tokens, 20 candidates.",
   "summary": {
     "strict": {
       "n_total": 48,
@@ -17,44 +16,2036 @@
       "right_tool_rate": 0.95,
       "call_accuracy": 0.925,
       "irrelevance_accuracy": 1.0
+    },
+    "lenient": {
+      "n_total": 48,
+      "n_call_items": 40,
+      "n_irrelevance_items": 8,
+      "schema_valid_rate": 1.0,
+      "right_tool_rate": 0.95,
+      "call_accuracy": 0.925,
+      "irrelevance_accuracy": 1.0
+    },
+    "format_recoverable": 0.0
+  },
+  "results": [
+    {
+      "id": "alarm_01",
+      "query": "Set an alarm for 7am tomorrow.",
+      "raw": "<tool_call>{\"name\": \"set_alarm\", \"arguments\": {\"time\": \"07:00\", \"label\": \"7am tomorrow\"}}</tool_call>",
+      "strict_calls": [
+        {
+          "name": "set_alarm",
+          "arguments": {
+            "time": "07:00",
+            "label": "7am tomorrow"
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "set_alarm",
+          "arguments": {
+            "time": "07:00",
+            "label": "7am tomorrow"
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "alarm_01",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "alarm_01",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      }
+    },
+    {
+      "id": "alarm_02",
+      "query": "Wake me up at 6:30 in the morning.",
+      "raw": "<tool_call>{\"name\": \"set_alarm\", \"arguments\": {\"time\": \"06:30\"}}</tool_call>",
+      "strict_calls": [
+        {
+          "name": "set_alarm",
+          "arguments": {
+            "time": "06:30"
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "set_alarm",
+          "arguments": {
+            "time": "06:30"
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "alarm_02",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "alarm_02",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      }
+    },
+    {
+      "id": "alarm_03",
+      "query": "Can you set an alarm for 5 PM?",
+      "raw": "<tool_call>{\"name\": \"set_alarm\", \"arguments\": {\"time\": \"17:00\"}}</tool_call>",
+      "strict_calls": [
+        {
+          "name": "set_alarm",
+          "arguments": {
+            "time": "17:00"
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "set_alarm",
+          "arguments": {
+            "time": "17:00"
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "alarm_03",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "alarm_03",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      }
+    },
+    {
+      "id": "alarm_04",
+      "query": "Set an alarm for quarter past eight tonight.",
+      "raw": "<tool_call>{\"name\": \"set_alarm\", \"arguments\": {\"time\": \"08:15\", \"label\": \"Quarter past eight\"}}</tool_call>",
+      "strict_calls": [
+        {
+          "name": "set_alarm",
+          "arguments": {
+            "time": "08:15",
+            "label": "Quarter past eight"
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "set_alarm",
+          "arguments": {
+            "time": "08:15",
+            "label": "Quarter past eight"
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "alarm_04",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": false,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "alarm_04",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": false,
+        "no_call_correct": null
+      }
+    },
+    {
+      "id": "timer_01",
+      "query": "Start a 10 minute timer.",
+      "raw": "<tool_call>{\"name\": \"set_timer\", \"arguments\": {\"duration_minutes\": 10}}</tool_call>",
+      "strict_calls": [
+        {
+          "name": "set_timer",
+          "arguments": {
+            "duration_minutes": 10
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "set_timer",
+          "arguments": {
+            "duration_minutes": 10
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "timer_01",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "timer_01",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      }
+    },
+    {
+      "id": "timer_02",
+      "query": "Set a timer for half an hour.",
+      "raw": "<tool_call>{\"name\": \"set_timer\", \"arguments\": {\"duration_minutes\": 30}}</tool_call>",
+      "strict_calls": [
+        {
+          "name": "set_timer",
+          "arguments": {
+            "duration_minutes": 30
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "set_timer",
+          "arguments": {
+            "duration_minutes": 30
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "timer_02",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "timer_02",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      }
+    },
+    {
+      "id": "timer_03",
+      "query": "Give me a timer for 45 minutes.",
+      "raw": "<tool_call>{\"name\": \"set_timer\", \"arguments\": {\"duration_minutes\": 45}}</tool_call>",
+      "strict_calls": [
+        {
+          "name": "set_timer",
+          "arguments": {
+            "duration_minutes": 45
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "set_timer",
+          "arguments": {
+            "duration_minutes": 45
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "timer_03",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "timer_03",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      }
+    },
+    {
+      "id": "timer_04",
+      "query": "I need a two hour timer.",
+      "raw": "<tool_call>{\"name\": \"set_timer\", \"arguments\": {\"duration_minutes\": 120}}</tool_call>",
+      "strict_calls": [
+        {
+          "name": "set_timer",
+          "arguments": {
+            "duration_minutes": 120
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "set_timer",
+          "arguments": {
+            "duration_minutes": 120
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "timer_04",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "timer_04",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      }
+    },
+    {
+      "id": "cal_01",
+      "query": "Add a dentist appointment to my calendar for Friday at 2pm.",
+      "raw": "<tool_call>{\"name\": \"create_calendar_event\", \"arguments\": {\"title\": \"Dentist Appointment\", \"start_datetime\": \"2023-05-15T14:00\", \"end_datetime\": \"2023-05-15T16:00\"}}</tool_call>",
+      "strict_calls": [
+        {
+          "name": "create_calendar_event",
+          "arguments": {
+            "title": "Dentist Appointment",
+            "start_datetime": "2023-05-15T14:00",
+            "end_datetime": "2023-05-15T16:00"
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "create_calendar_event",
+          "arguments": {
+            "title": "Dentist Appointment",
+            "start_datetime": "2023-05-15T14:00",
+            "end_datetime": "2023-05-15T16:00"
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "cal_01",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "cal_01",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      }
+    },
+    {
+      "id": "cal_02",
+      "query": "Schedule a team meeting tomorrow at 10am.",
+      "raw": "<tool_call>{\"name\": \"create_calendar_event\", \"arguments\": {\"title\": \"Team Meeting\", \"start_datetime\": \"tomorrow at 10am\", \"end_datetime\": \"tomorrow at 10am\"}}</tool_call>",
+      "strict_calls": [
+        {
+          "name": "create_calendar_event",
+          "arguments": {
+            "title": "Team Meeting",
+            "start_datetime": "tomorrow at 10am",
+            "end_datetime": "tomorrow at 10am"
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "create_calendar_event",
+          "arguments": {
+            "title": "Team Meeting",
+            "start_datetime": "tomorrow at 10am",
+            "end_datetime": "tomorrow at 10am"
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "cal_02",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "cal_02",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      }
+    },
+    {
+      "id": "cal_03",
+      "query": "Put 'Lunch with Sam' on my calendar for noon today.",
+      "raw": "<tool_call>{\"name\": \"create_calendar_event\", \"arguments\": {\"title\": \"Lunch with Sam\", \"start_datetime\": \"12:00\", \"end_datetime\": \"12:00\"}}</tool_call>",
+      "strict_calls": [
+        {
+          "name": "create_calendar_event",
+          "arguments": {
+            "title": "Lunch with Sam",
+            "start_datetime": "12:00",
+            "end_datetime": "12:00"
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "create_calendar_event",
+          "arguments": {
+            "title": "Lunch with Sam",
+            "start_datetime": "12:00",
+            "end_datetime": "12:00"
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "cal_03",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "cal_03",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      }
+    },
+    {
+      "id": "cal_04",
+      "query": "Create a calendar event called Project Review next Monday at 9am.",
+      "raw": "<tool_call>{\"name\": \"create_calendar_event\", \"arguments\": {\"title\": \"Project Review\", \"start_datetime\": \"2023-07-01T09:00\", \"end_datetime\": \"2023-07-01T10:00\"}}</tool_call>",
+      "strict_calls": [
+        {
+          "name": "create_calendar_event",
+          "arguments": {
+            "title": "Project Review",
+            "start_datetime": "2023-07-01T09:00",
+            "end_datetime": "2023-07-01T10:00"
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "create_calendar_event",
+          "arguments": {
+            "title": "Project Review",
+            "start_datetime": "2023-07-01T09:00",
+            "end_datetime": "2023-07-01T10:00"
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "cal_04",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "cal_04",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      }
+    },
+    {
+      "id": "settings_01",
+      "query": "Open wifi settings.",
+      "raw": "<tool_call>{\"name\": \"open_settings\", \"arguments\": {\"panel\": \"wifi\"}}</tool_call>",
+      "strict_calls": [
+        {
+          "name": "open_settings",
+          "arguments": {
+            "panel": "wifi"
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "open_settings",
+          "arguments": {
+            "panel": "wifi"
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "settings_01",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "settings_01",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      }
+    },
+    {
+      "id": "settings_02",
+      "query": "Open the bluetooth settings for me.",
+      "raw": "<tool_call>{\"name\": \"open_settings\", \"arguments\": {\"panel\": \"bluetooth\"}}</tool_call>",
+      "strict_calls": [
+        {
+          "name": "open_settings",
+          "arguments": {
+            "panel": "bluetooth"
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "open_settings",
+          "arguments": {
+            "panel": "bluetooth"
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "settings_02",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "settings_02",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      }
+    },
+    {
+      "id": "settings_03",
+      "query": "I need to adjust the screen brightness.",
+      "raw": "<tool_call>{\"name\": \"toggle_flashlight\", \"arguments\": {\"state\": \"on\"}}</tool_call>",
+      "strict_calls": [
+        {
+          "name": "toggle_flashlight",
+          "arguments": {
+            "state": "on"
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "toggle_flashlight",
+          "arguments": {
+            "state": "on"
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "settings_03",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": false,
+        "right_args": false,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "settings_03",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": false,
+        "right_args": false,
+        "no_call_correct": null
+      }
+    },
+    {
+      "id": "settings_04",
+      "query": "Take me to the sound settings.",
+      "raw": "<tool_call>{\"name\": \"open_settings\", \"arguments\": {\"panel\": \"sound\"}}</tool_call>",
+      "strict_calls": [
+        {
+          "name": "open_settings",
+          "arguments": {
+            "panel": "sound"
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "open_settings",
+          "arguments": {
+            "panel": "sound"
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "settings_04",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "settings_04",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      }
+    },
+    {
+      "id": "sms_01",
+      "query": "Text Mom that I'll be home late.",
+      "raw": "<tool_call>{\"name\": \"create_note\", \"arguments\": {\"content\": \"I'll be home late.\", \"title\": \"Late Home\"}}</tool_call>",
+      "strict_calls": [
+        {
+          "name": "create_note",
+          "arguments": {
+            "content": "I'll be home late.",
+            "title": "Late Home"
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "create_note",
+          "arguments": {
+            "content": "I'll be home late.",
+            "title": "Late Home"
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "sms_01",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": false,
+        "right_args": false,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "sms_01",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": false,
+        "right_args": false,
+        "no_call_correct": null
+      }
+    },
+    {
+      "id": "sms_02",
+      "query": "Send a text to John saying happy birthday.",
+      "raw": "<tool_call>{\"name\": \"draft_sms\", \"arguments\": {\"recipient\": \"John\", \"body\": \"Happy birthday! \ud83c\udf89\"}}</tool_call>",
+      "strict_calls": [
+        {
+          "name": "draft_sms",
+          "arguments": {
+            "recipient": "John",
+            "body": "Happy birthday! \ud83c\udf89"
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "draft_sms",
+          "arguments": {
+            "recipient": "John",
+            "body": "Happy birthday! \ud83c\udf89"
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "sms_02",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "sms_02",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      }
+    },
+    {
+      "id": "sms_03",
+      "query": "Draft an SMS to Sarah: running five minutes behind.",
+      "raw": "<tool_call>{\"name\": \"draft_sms\", \"arguments\": {\"recipient\": \"Sarah\", \"body\": \"Running five minutes behind.\"}}</tool_call>",
+      "strict_calls": [
+        {
+          "name": "draft_sms",
+          "arguments": {
+            "recipient": "Sarah",
+            "body": "Running five minutes behind."
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "draft_sms",
+          "arguments": {
+            "recipient": "Sarah",
+            "body": "Running five minutes behind."
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "sms_03",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "sms_03",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      }
+    },
+    {
+      "id": "sms_04",
+      "query": "Message Dad and tell him the flight landed.",
+      "raw": "<tool_call>{\"name\": \"draft_sms\", \"arguments\": {\"recipient\": \"Dad\", \"body\": \"The flight landed.\"}}</tool_call>",
+      "strict_calls": [
+        {
+          "name": "draft_sms",
+          "arguments": {
+            "recipient": "Dad",
+            "body": "The flight landed."
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "draft_sms",
+          "arguments": {
+            "recipient": "Dad",
+            "body": "The flight landed."
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "sms_04",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "sms_04",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      }
+    },
+    {
+      "id": "email_01",
+      "query": "Draft an email to alex@work.com about the quarterly report.",
+      "raw": "<tool_call>{\"name\": \"draft_email\", \"arguments\": {\"to\": \"alex@work.com\", \"subject\": \"Quarterly Report\", \"body\": \"I hope this email finds you well. I wanted to let you know about the quarterly report. Please find the attached file below. Let me know if you have any questions or need further clarification.\"}}</tool_call>",
+      "strict_calls": [
+        {
+          "name": "draft_email",
+          "arguments": {
+            "to": "alex@work.com",
+            "subject": "Quarterly Report",
+            "body": "I hope this email finds you well. I wanted to let you know about the quarterly report. Please find the attached file below. Let me know if you have any questions or need further clarification."
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "draft_email",
+          "arguments": {
+            "to": "alex@work.com",
+            "subject": "Quarterly Report",
+            "body": "I hope this email finds you well. I wanted to let you know about the quarterly report. Please find the attached file below. Let me know if you have any questions or need further clarification."
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "email_01",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "email_01",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      }
+    },
+    {
+      "id": "email_02",
+      "query": "Write an email to my boss asking for tomorrow off.",
+      "raw": "<tool_call>{\"name\": \"draft_email\", \"arguments\": {\"to\": \"myboss@example.com\", \"subject\": \"Request for Tomorrow's Off\", \"body\": \"I need to take a break tomorrow. Please let me know if I can go.\"}}</tool_call>",
+      "strict_calls": [
+        {
+          "name": "draft_email",
+          "arguments": {
+            "to": "myboss@example.com",
+            "subject": "Request for Tomorrow's Off",
+            "body": "I need to take a break tomorrow. Please let me know if I can go."
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "draft_email",
+          "arguments": {
+            "to": "myboss@example.com",
+            "subject": "Request for Tomorrow's Off",
+            "body": "I need to take a break tomorrow. Please let me know if I can go."
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "email_02",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "email_02",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      }
+    },
+    {
+      "id": "email_03",
+      "query": "Compose an email to the team with the subject Release Notes.",
+      "raw": "<tool_call>{\"name\": \"draft_email\", \"arguments\": {\"to\": \"team@example.com\", \"subject\": \"Release Notes\", \"body\": \"Here are the release notes for the latest version of the software.\"}}</tool_call>",
+      "strict_calls": [
+        {
+          "name": "draft_email",
+          "arguments": {
+            "to": "team@example.com",
+            "subject": "Release Notes",
+            "body": "Here are the release notes for the latest version of the software."
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "draft_email",
+          "arguments": {
+            "to": "team@example.com",
+            "subject": "Release Notes",
+            "body": "Here are the release notes for the latest version of the software."
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "email_03",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "email_03",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      }
+    },
+    {
+      "id": "email_04",
+      "query": "Email jane about the lunch plans.",
+      "raw": "<tool_call>{\"name\": \"draft_email\", \"arguments\": {\"to\": \"jane\", \"subject\": \"Lunch Plans\", \"body\": \"I wanted to let you know about the lunch plans. Let me know if you have any questions or need further details.\"}}</tool_call>",
+      "strict_calls": [
+        {
+          "name": "draft_email",
+          "arguments": {
+            "to": "jane",
+            "subject": "Lunch Plans",
+            "body": "I wanted to let you know about the lunch plans. Let me know if you have any questions or need further details."
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "draft_email",
+          "arguments": {
+            "to": "jane",
+            "subject": "Lunch Plans",
+            "body": "I wanted to let you know about the lunch plans. Let me know if you have any questions or need further details."
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "email_04",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "email_04",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      }
+    },
+    {
+      "id": "music_01",
+      "query": "Play some jazz.",
+      "raw": "<tool_call>{\"name\": \"play_music\", \"arguments\": {\"query\": \"jazz\"}}</tool_call>",
+      "strict_calls": [
+        {
+          "name": "play_music",
+          "arguments": {
+            "query": "jazz"
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "play_music",
+          "arguments": {
+            "query": "jazz"
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "music_01",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "music_01",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      }
+    },
+    {
+      "id": "music_02",
+      "query": "Play Bohemian Rhapsody.",
+      "raw": "<tool_call>{\"name\": \"play_music\", \"arguments\": {\"query\": \"Bohemian Rhapsody\"}}</tool_call>",
+      "strict_calls": [
+        {
+          "name": "play_music",
+          "arguments": {
+            "query": "Bohemian Rhapsody"
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "play_music",
+          "arguments": {
+            "query": "Bohemian Rhapsody"
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "music_02",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "music_02",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      }
+    },
+    {
+      "id": "music_03",
+      "query": "Pause the music.",
+      "raw": "<tool_call>{\"name\": \"play_music\", \"arguments\": {\"action\": \"pause\"}}</tool_call>",
+      "strict_calls": [
+        {
+          "name": "play_music",
+          "arguments": {
+            "action": "pause"
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "play_music",
+          "arguments": {
+            "action": "pause"
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "music_03",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "music_03",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      }
+    },
+    {
+      "id": "music_04",
+      "query": "Skip to the next song.",
+      "raw": "<tool_call>{\"name\": \"play_music\", \"arguments\": {\"action\": \"next\"}}</tool_call>",
+      "strict_calls": [
+        {
+          "name": "play_music",
+          "arguments": {
+            "action": "next"
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "play_music",
+          "arguments": {
+            "action": "next"
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "music_04",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "music_04",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      }
+    },
+    {
+      "id": "flash_01",
+      "query": "Turn on the flashlight.",
+      "raw": "<tool_call>{\"name\": \"toggle_flashlight\", \"arguments\": {\"state\": \"on\"}}</tool_call>",
+      "strict_calls": [
+        {
+          "name": "toggle_flashlight",
+          "arguments": {
+            "state": "on"
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "toggle_flashlight",
+          "arguments": {
+            "state": "on"
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "flash_01",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "flash_01",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      }
+    },
+    {
+      "id": "flash_02",
+      "query": "Turn off the torch.",
+      "raw": "<tool_call>{\"name\": \"toggle_flashlight\", \"arguments\": {\"state\": \"off\"}}</tool_call>",
+      "strict_calls": [
+        {
+          "name": "toggle_flashlight",
+          "arguments": {
+            "state": "off"
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "toggle_flashlight",
+          "arguments": {
+            "state": "off"
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "flash_02",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "flash_02",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      }
+    },
+    {
+      "id": "flash_03",
+      "query": "Switch on my flashlight please.",
+      "raw": "<tool_call>{\"name\": \"toggle_flashlight\", \"arguments\": {\"state\": \"on\"}}</tool_call>",
+      "strict_calls": [
+        {
+          "name": "toggle_flashlight",
+          "arguments": {
+            "state": "on"
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "toggle_flashlight",
+          "arguments": {
+            "state": "on"
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "flash_03",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "flash_03",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      }
+    },
+    {
+      "id": "flash_04",
+      "query": "Kill the flashlight.",
+      "raw": "<tool_call>{\"name\": \"toggle_flashlight\", \"arguments\": {\"state\": \"off\"}}</tool_call>",
+      "strict_calls": [
+        {
+          "name": "toggle_flashlight",
+          "arguments": {
+            "state": "off"
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "toggle_flashlight",
+          "arguments": {
+            "state": "off"
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "flash_04",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "flash_04",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      }
+    },
+    {
+      "id": "note_01",
+      "query": "Make a note to buy milk.",
+      "raw": "<tool_call>{\"name\": \"create_note\", \"arguments\": {\"content\": \"buy milk\", \"title\": \"Reminder\"}}</tool_call>",
+      "strict_calls": [
+        {
+          "name": "create_note",
+          "arguments": {
+            "content": "buy milk",
+            "title": "Reminder"
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "create_note",
+          "arguments": {
+            "content": "buy milk",
+            "title": "Reminder"
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "note_01",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "note_01",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      }
+    },
+    {
+      "id": "note_02",
+      "query": "Note down: call the plumber.",
+      "raw": "<tool_call>{\"name\": \"create_note\", \"arguments\": {\"content\": \"call the plumber.\", \"title\": \"Call the Plumber\"}}</tool_call>",
+      "strict_calls": [
+        {
+          "name": "create_note",
+          "arguments": {
+            "content": "call the plumber.",
+            "title": "Call the Plumber"
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "create_note",
+          "arguments": {
+            "content": "call the plumber.",
+            "title": "Call the Plumber"
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "note_02",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "note_02",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      }
+    },
+    {
+      "id": "note_03",
+      "query": "Take a note that the spare key is under the mat.",
+      "raw": "<tool_call>{\"name\": \"create_note\", \"arguments\": {\"content\": \"The spare key is under the mat.\", \"title\": \"Note\"}}</tool_call>",
+      "strict_calls": [
+        {
+          "name": "create_note",
+          "arguments": {
+            "content": "The spare key is under the mat.",
+            "title": "Note"
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "create_note",
+          "arguments": {
+            "content": "The spare key is under the mat.",
+            "title": "Note"
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "note_03",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "note_03",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      }
+    },
+    {
+      "id": "note_04",
+      "query": "Jot down the meeting notes: ship the beta on Thursday.",
+      "raw": "<tool_call>{\"name\": \"create_note\", \"arguments\": {\"content\": \"ship the beta on Thursday.\", \"title\": \"Meeting Notes\"}}</tool_call>",
+      "strict_calls": [
+        {
+          "name": "create_note",
+          "arguments": {
+            "content": "ship the beta on Thursday.",
+            "title": "Meeting Notes"
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "create_note",
+          "arguments": {
+            "content": "ship the beta on Thursday.",
+            "title": "Meeting Notes"
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "note_04",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "note_04",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      }
+    },
+    {
+      "id": "remind_01",
+      "query": "Remind me to take out the trash at 8pm.",
+      "raw": "<tool_call>{\"name\": \"set_reminder\", \"arguments\": {\"text\": \"take out the trash\", \"time\": \"8pm\"}}</tool_call>",
+      "strict_calls": [
+        {
+          "name": "set_reminder",
+          "arguments": {
+            "text": "take out the trash",
+            "time": "8pm"
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "set_reminder",
+          "arguments": {
+            "text": "take out the trash",
+            "time": "8pm"
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "remind_01",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "remind_01",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      }
+    },
+    {
+      "id": "remind_02",
+      "query": "Set a reminder to call the dentist tomorrow.",
+      "raw": "<tool_call>{\"name\": \"set_reminder\", \"arguments\": {\"text\": \"Call the dentist\", \"time\": \"tomorrow\"}}</tool_call>",
+      "strict_calls": [
+        {
+          "name": "set_reminder",
+          "arguments": {
+            "text": "Call the dentist",
+            "time": "tomorrow"
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "set_reminder",
+          "arguments": {
+            "text": "Call the dentist",
+            "time": "tomorrow"
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "remind_02",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "remind_02",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      }
+    },
+    {
+      "id": "remind_03",
+      "query": "Remind me to water the plants this evening.",
+      "raw": "<tool_call>{\"name\": \"set_reminder\", \"arguments\": {\"text\": \"water the plants\", \"time\": \"this evening\"}}</tool_call>",
+      "strict_calls": [
+        {
+          "name": "set_reminder",
+          "arguments": {
+            "text": "water the plants",
+            "time": "this evening"
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "set_reminder",
+          "arguments": {
+            "text": "water the plants",
+            "time": "this evening"
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "remind_03",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "remind_03",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      }
+    },
+    {
+      "id": "remind_04",
+      "query": "Can you remind me about the meeting in an hour?",
+      "raw": "<tool_call>{\"name\": \"set_reminder\", \"arguments\": {\"text\": \"meeting\", \"time\": \"1 hour\"}}</tool_call>",
+      "strict_calls": [
+        {
+          "name": "set_reminder",
+          "arguments": {
+            "text": "meeting",
+            "time": "1 hour"
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "set_reminder",
+          "arguments": {
+            "text": "meeting",
+            "time": "1 hour"
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "remind_04",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "remind_04",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      }
+    },
+    {
+      "id": "irr_01",
+      "query": "What's the capital of France?",
+      "raw": "The capital of France is Paris.",
+      "strict_calls": [],
+      "lenient_calls": [],
+      "strict_score": {
+        "id": "irr_01",
+        "category": "irrelevance",
+        "expected_call": false,
+        "made_call": false,
+        "schema_valid": false,
+        "right_tool": false,
+        "right_args": false,
+        "no_call_correct": true
+      },
+      "lenient_score": {
+        "id": "irr_01",
+        "category": "irrelevance",
+        "expected_call": false,
+        "made_call": false,
+        "schema_valid": false,
+        "right_tool": false,
+        "right_args": false,
+        "no_call_correct": true
+      }
+    },
+    {
+      "id": "irr_02",
+      "query": "Tell me a joke.",
+      "raw": "I can't tell you jokes.",
+      "strict_calls": [],
+      "lenient_calls": [],
+      "strict_score": {
+        "id": "irr_02",
+        "category": "irrelevance",
+        "expected_call": false,
+        "made_call": false,
+        "schema_valid": false,
+        "right_tool": false,
+        "right_args": false,
+        "no_call_correct": true
+      },
+      "lenient_score": {
+        "id": "irr_02",
+        "category": "irrelevance",
+        "expected_call": false,
+        "made_call": false,
+        "schema_valid": false,
+        "right_tool": false,
+        "right_args": false,
+        "no_call_correct": true
+      }
+    },
+    {
+      "id": "irr_03",
+      "query": "How tall is Mount Everest?",
+      "raw": "Mount Everest is approximately 8.5 kilometers (5,000 feet) high.",
+      "strict_calls": [],
+      "lenient_calls": [],
+      "strict_score": {
+        "id": "irr_03",
+        "category": "irrelevance",
+        "expected_call": false,
+        "made_call": false,
+        "schema_valid": false,
+        "right_tool": false,
+        "right_args": false,
+        "no_call_correct": true
+      },
+      "lenient_score": {
+        "id": "irr_03",
+        "category": "irrelevance",
+        "expected_call": false,
+        "made_call": false,
+        "schema_valid": false,
+        "right_tool": false,
+        "right_args": false,
+        "no_call_correct": true
+      }
+    },
+    {
+      "id": "irr_04",
+      "query": "What is 15 percent of 240?",
+      "raw": "To find 15% of 240, you can follow these steps:",
+      "strict_calls": [],
+      "lenient_calls": [],
+      "strict_score": {
+        "id": "irr_04",
+        "category": "irrelevance",
+        "expected_call": false,
+        "made_call": false,
+        "schema_valid": false,
+        "right_tool": false,
+        "right_args": false,
+        "no_call_correct": true
+      },
+      "lenient_score": {
+        "id": "irr_04",
+        "category": "irrelevance",
+        "expected_call": false,
+        "made_call": false,
+        "schema_valid": false,
+        "right_tool": false,
+        "right_args": false,
+        "no_call_correct": true
+      }
+    },
+    {
+      "id": "irr_05",
+      "query": "Who won the World Cup in 2018?",
+      "raw": "The winner of the World Cup in 2018 was Liverpool (England).",
+      "strict_calls": [],
+      "lenient_calls": [],
+      "strict_score": {
+        "id": "irr_05",
+        "category": "irrelevance",
+        "expected_call": false,
+        "made_call": false,
+        "schema_valid": false,
+        "right_tool": false,
+        "right_args": false,
+        "no_call_correct": true
+      },
+      "lenient_score": {
+        "id": "irr_05",
+        "category": "irrelevance",
+        "expected_call": false,
+        "made_call": false,
+        "schema_valid": false,
+        "right_tool": false,
+        "right_args": false,
+        "no_call_correct": true
+      }
+    },
+    {
+      "id": "irr_06",
+      "query": "Explain how photosynthesis works.",
+      "raw": "Photosynthesis is the process by which plants use sunlight to convert water and carbon dioxide into glucose, a type of",
+      "strict_calls": [],
+      "lenient_calls": [],
+      "strict_score": {
+        "id": "irr_06",
+        "category": "irrelevance",
+        "expected_call": false,
+        "made_call": false,
+        "schema_valid": false,
+        "right_tool": false,
+        "right_args": false,
+        "no_call_correct": true
+      },
+      "lenient_score": {
+        "id": "irr_06",
+        "category": "irrelevance",
+        "expected_call": false,
+        "made_call": false,
+        "schema_valid": false,
+        "right_tool": false,
+        "right_args": false,
+        "no_call_correct": true
+      }
+    },
+    {
+      "id": "irr_07",
+      "query": "What's the weather going to be like this weekend?",
+      "raw": "I don't have real-time data or access to current weather information.",
+      "strict_calls": [],
+      "lenient_calls": [],
+      "strict_score": {
+        "id": "irr_07",
+        "category": "irrelevance",
+        "expected_call": false,
+        "made_call": false,
+        "schema_valid": false,
+        "right_tool": false,
+        "right_args": false,
+        "no_call_correct": true
+      },
+      "lenient_score": {
+        "id": "irr_07",
+        "category": "irrelevance",
+        "expected_call": false,
+        "made_call": false,
+        "schema_valid": false,
+        "right_tool": false,
+        "right_args": false,
+        "no_call_correct": true
+      }
+    },
+    {
+      "id": "irr_08",
+      "query": "Translate 'hello' into Spanish.",
+      "raw": "\"Hello\" in Spanish is \"\u00a1Hola!\"",
+      "strict_calls": [],
+      "lenient_calls": [],
+      "strict_score": {
+        "id": "irr_08",
+        "category": "irrelevance",
+        "expected_call": false,
+        "made_call": false,
+        "schema_valid": false,
+        "right_tool": false,
+        "right_args": false,
+        "no_call_correct": true
+      },
+      "lenient_score": {
+        "id": "irr_08",
+        "category": "irrelevance",
+        "expected_call": false,
+        "made_call": false,
+        "schema_valid": false,
+        "right_tool": false,
+        "right_args": false,
+        "no_call_correct": true
+      }
     }
-  },
-  "item_marks": {
-    "ok": ["alarm_01", "alarm_02", "alarm_03", "timer_01", "timer_02", "timer_03", "timer_04", "cal_01", "cal_02", "cal_03", "cal_04", "settings_01", "settings_02", "settings_04", "sms_02", "sms_03", "sms_04", "email_01", "email_02", "email_03", "email_04", "music_01", "music_02", "music_03", "music_04", "flash_01", "flash_02", "flash_03", "flash_04", "note_01", "note_02", "note_03", "note_04", "remind_01", "remind_02", "remind_03", "remind_04", "irr_01", "irr_02", "irr_03", "irr_04", "irr_05", "irr_06", "irr_07", "irr_08"],
-    "right_tool_wrong_args": ["alarm_04"],
-    "miss": ["settings_03", "sms_01"]
-  },
+  ],
   "loto": {
     "strict": {
       "which": "strict",
-      "held_out": ["create_calendar_event", "draft_sms", "toggle_flashlight"],
+      "held_out": [
+        "create_calendar_event",
+        "draft_sms",
+        "toggle_flashlight"
+      ],
       "per_tool": {
-        "create_note": {"n": 4, "right_tool": 1.0, "call_accuracy": 1.0, "schema_valid": 1.0},
-        "draft_email": {"n": 4, "right_tool": 1.0, "call_accuracy": 1.0, "schema_valid": 1.0},
-        "open_settings": {"n": 4, "right_tool": 0.75, "call_accuracy": 0.75, "schema_valid": 1.0},
-        "play_music": {"n": 4, "right_tool": 1.0, "call_accuracy": 1.0, "schema_valid": 1.0},
-        "set_alarm": {"n": 4, "right_tool": 1.0, "call_accuracy": 0.75, "schema_valid": 1.0},
-        "set_reminder": {"n": 4, "right_tool": 1.0, "call_accuracy": 1.0, "schema_valid": 1.0},
-        "set_timer": {"n": 4, "right_tool": 1.0, "call_accuracy": 1.0, "schema_valid": 1.0},
-        "create_calendar_event": {"n": 4, "right_tool": 1.0, "call_accuracy": 1.0, "schema_valid": 1.0},
-        "draft_sms": {"n": 4, "right_tool": 0.75, "call_accuracy": 0.75, "schema_valid": 1.0},
-        "toggle_flashlight": {"n": 4, "right_tool": 1.0, "call_accuracy": 1.0, "schema_valid": 1.0}
+        "create_note": {
+          "n": 4,
+          "right_tool": 1.0,
+          "call_accuracy": 1.0,
+          "schema_valid": 1.0
+        },
+        "draft_email": {
+          "n": 4,
+          "right_tool": 1.0,
+          "call_accuracy": 1.0,
+          "schema_valid": 1.0
+        },
+        "open_settings": {
+          "n": 4,
+          "right_tool": 0.75,
+          "call_accuracy": 0.75,
+          "schema_valid": 1.0
+        },
+        "play_music": {
+          "n": 4,
+          "right_tool": 1.0,
+          "call_accuracy": 1.0,
+          "schema_valid": 1.0
+        },
+        "set_alarm": {
+          "n": 4,
+          "right_tool": 1.0,
+          "call_accuracy": 0.75,
+          "schema_valid": 1.0
+        },
+        "set_reminder": {
+          "n": 4,
+          "right_tool": 1.0,
+          "call_accuracy": 1.0,
+          "schema_valid": 1.0
+        },
+        "set_timer": {
+          "n": 4,
+          "right_tool": 1.0,
+          "call_accuracy": 1.0,
+          "schema_valid": 1.0
+        },
+        "create_calendar_event": {
+          "n": 4,
+          "right_tool": 1.0,
+          "call_accuracy": 1.0,
+          "schema_valid": 1.0
+        },
+        "draft_sms": {
+          "n": 4,
+          "right_tool": 0.75,
+          "call_accuracy": 0.75,
+          "schema_valid": 1.0
+        },
+        "toggle_flashlight": {
+          "n": 4,
+          "right_tool": 1.0,
+          "call_accuracy": 1.0,
+          "schema_valid": 1.0
+        }
       },
       "seen": {
-        "tools": ["create_note", "draft_email", "open_settings", "play_music", "set_alarm", "set_reminder", "set_timer"],
+        "tools": [
+          "create_note",
+          "draft_email",
+          "open_settings",
+          "play_music",
+          "set_alarm",
+          "set_reminder",
+          "set_timer"
+        ],
         "n": 28,
         "right_tool": 0.9643,
         "call_accuracy": 0.9286,
         "schema_valid": 1.0
       },
       "unseen": {
-        "tools": ["create_calendar_event", "draft_sms", "toggle_flashlight"],
+        "tools": [
+          "create_calendar_event",
+          "draft_sms",
+          "toggle_flashlight"
+        ],
         "n": 12,
         "right_tool": 0.9167,
         "call_accuracy": 0.9167,
         "schema_valid": 1.0
       },
-      "no_call": {"n": 8, "accuracy": 1.0}
+      "no_call": {
+        "n": 8,
+        "accuracy": 1.0
+      }
     }
   }
 }
