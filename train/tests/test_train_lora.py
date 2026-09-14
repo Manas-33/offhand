@@ -6,7 +6,10 @@ the tools/system prompt actually land in the prompt. Skips cleanly if the
 tokenizer can't be loaded (offline). Run: `python train/tests/test_train_lora.py`.
 """
 
+import json
+import os
 import sys
+import tempfile
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))             # train/
@@ -16,7 +19,9 @@ import train_lora
 from offhand_eval.dataset import load_tools, tools_by_name
 
 BASE = "Qwen/Qwen3-0.6B"
-TOOLS = tools_by_name(load_tools(str(Path(train_lora.HERE).parent / "eval" / "tools.json")))
+PHONE_TOOLS = load_tools(str(Path(train_lora.HERE).parent / "eval" / "tools.json"))
+TOOLS = tools_by_name(PHONE_TOOLS)
+ALL_TOOLS = tools_by_name(PHONE_TOOLS + load_tools(str(Path(train_lora.HERE) / "general_tools.json")))
 
 TOOL_ITEM = {
     "intended_tool": "set_alarm",
@@ -29,6 +34,13 @@ NO_CALL_ITEM = {
     "query": "what's the capital of France?",
     "tools_listed": ["set_alarm", "play_music", "draft_email"],
     "target": "The capital of France is Paris.",
+}
+INFO_ITEM = {
+    "kind": "info_call",
+    "intended_tool": "fx_rate",
+    "query": "what's the exchange rate from dollars to euros?",
+    "tools_listed": ["set_alarm", "fx_rate", "local_time"],
+    "target": '<tool_call>{"name": "fx_rate", "arguments": {"base": "USD", "quote": "EUR"}}</tool_call>',
 }
 
 
@@ -78,6 +90,14 @@ def test_no_call_example(tok):
     assert "Paris" in tok.decode(completion_ids)
 
 
+def test_informational_tool_example(tok):
+    ex = train_lora.build_example(tok, INFO_ITEM, ALL_TOOLS, max_length=2048)
+    first_real = [lab == -100 for lab in ex["labels"]].index(False)
+    prompt = tok.decode(ex["input_ids"][:first_real])
+    assert "fx_rate" in prompt and "local_time" in prompt  # listed informational tools are shown
+    assert INFO_ITEM["target"] in tok.decode([lab for lab in ex["labels"] if lab != -100])
+
+
 def test_pad_collator():
     out = train_lora.PadCollator(pad_token_id=0)([
         {"input_ids": [1, 2, 3], "labels": [-100, 2, 3], "attention_mask": [1, 1, 1]},
@@ -88,14 +108,37 @@ def test_pad_collator():
     assert out["attention_mask"][1].tolist() == [1, 1, 0]     # and from attention
 
 
+def test_item_kind_and_filter():
+    items = [TOOL_ITEM, NO_CALL_ITEM, INFO_ITEM, {**NO_CALL_ITEM, "kind": "near_miss_phone"}]
+    # v1 items have no kind field, so it is derived from intended_tool
+    assert [train_lora.item_kind(it) for it in items] == ["phone_call", "no_call", "info_call", "near_miss_phone"]
+    assert train_lora.filter_kinds(items, {"info_call", "near_miss_phone"}) == [TOOL_ITEM, NO_CALL_ITEM]
+
+
+def test_load_train_files_concatenates():
+    paths = []
+    for rows in ([TOOL_ITEM, NO_CALL_ITEM], [INFO_ITEM]):
+        with tempfile.NamedTemporaryFile("w", suffix=".jsonl", delete=False) as fh:
+            fh.write("\n".join(json.dumps(r) for r in rows) + "\n\n")  # trailing blank line
+            paths.append(fh.name)
+    try:
+        items = train_lora.load_train_files(paths)
+        assert [it["query"] for it in items] == [TOOL_ITEM["query"], NO_CALL_ITEM["query"], INFO_ITEM["query"]]
+    finally:
+        for path in paths:
+            os.unlink(path)
+
+
 def _run_all():
-    test_pad_collator()
-    print("  PASS  test_pad_collator")
+    for name in ("test_pad_collator", "test_item_kind_and_filter", "test_load_train_files_concatenates"):
+        globals()[name]()
+        print(f"  PASS  {name}")
     tok = _load_tokenizer()
     if tok is None:
         print("tokenizer-dependent tests skipped.")
         return
-    for name in ("test_completion_only_masking", "test_prompt_carries_tools_and_system", "test_no_call_example"):
+    for name in ("test_completion_only_masking", "test_prompt_carries_tools_and_system",
+                 "test_no_call_example", "test_informational_tool_example"):
         globals()[name](tok)
         print(f"  PASS  {name}")
     print("all train_lora tests passed.")
