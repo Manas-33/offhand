@@ -129,8 +129,35 @@ def test_load_train_files_concatenates():
             os.unlink(path)
 
 
+def test_parse_keep_fracs():
+    assert train_lora.parse_keep_fracs(["info_call=0.25", " near_miss_general =1"]) == {
+        "info_call": 0.25, "near_miss_general": 1.0}
+    for bad in ("info_call", "=0.5", "info_call=", "info_call=1.5"):
+        try:
+            train_lora.parse_keep_fracs([bad])
+        except ValueError:
+            continue
+        raise AssertionError(f"{bad!r} should be rejected")
+
+
+def test_subsample_kinds_spreads_over_tools():
+    info = [{**INFO_ITEM, "intended_tool": tool, "query": f"{tool} question {n}"}
+            for tool in ("fx_rate", "local_time", "stock_quote") for n in range(6)]
+    items = [TOOL_ITEM, *info, NO_CALL_ITEM]
+    kept = train_lora.subsample_kinds(items, {"info_call": 0.5}, seed=0)
+    kept_info = [it for it in kept if train_lora.item_kind(it) == "info_call"]
+    # the same share of every tool, other families untouched, order kept
+    assert sorted(it["intended_tool"] for it in kept_info) == ["fx_rate"] * 3 + ["local_time"] * 3 + ["stock_quote"] * 3
+    assert kept[0] == TOOL_ITEM and kept[-1] == NO_CALL_ITEM
+    assert kept == [it for it in items if it in kept]
+    assert kept == train_lora.subsample_kinds(items, {"info_call": 0.5}, seed=0)  # same seed, same draw
+    assert train_lora.subsample_kinds(items, {"info_call": 1.0}, seed=0) == items
+    assert train_lora.subsample_kinds(items, {"info_call": 0.0}, seed=0) == [TOOL_ITEM, NO_CALL_ITEM]
+
+
 def _run_all():
-    for name in ("test_pad_collator", "test_item_kind_and_filter", "test_load_train_files_concatenates"):
+    for name in ("test_pad_collator", "test_item_kind_and_filter", "test_load_train_files_concatenates",
+                 "test_parse_keep_fracs", "test_subsample_kinds_spreads_over_tools"):
         globals()[name]()
         print(f"  PASS  {name}")
     tok = _load_tokenizer()

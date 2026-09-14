@@ -22,6 +22,8 @@ Run on Colab / a GPU box:
 With the hard call/no-call families (gen_data.py --hard), pass the v1 set and
 the hard set together; --drop-kinds leaves families out for an ablation:
   python train/train_lora.py --train-file <v1>/train.jsonl <hard>/train_clean.jsonl --out-dir <out>/v2
+--keep-frac keeps a share of a family, drawn evenly across its tools, for a mix sweep:
+  python train/train_lora.py --train-file <v1>/train.jsonl <hard>/train_final.jsonl --keep-frac info_call=0.5 --out-dir <out>/v3_ic50
 
 Smoke the data/masking path locally (tokenizer only, no GPU, no peft):
   python train/tests/test_train_lora.py
@@ -31,8 +33,9 @@ from __future__ import annotations
 
 import argparse
 import json
+import random
 import sys
-from collections import Counter
+from collections import Counter, defaultdict
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -110,6 +113,41 @@ def filter_kinds(items: list[dict], drop: set[str]) -> list[dict]:
     return [it for it in items if item_kind(it) not in drop]
 
 
+def parse_keep_fracs(specs: list[str]) -> dict[str, float]:
+    """Parse --keep-frac KIND=FRAC flags into {kind: fraction}."""
+    fracs = {}
+    for spec in specs:
+        kind, sep, frac = spec.partition("=")
+        if not sep or not kind.strip():
+            raise ValueError(f"--keep-frac expects KIND=FRAC, got {spec!r}")
+        value = float(frac)
+        if not 0.0 <= value <= 1.0:
+            raise ValueError(f"--keep-frac {spec!r}: the fraction must be between 0 and 1")
+        fracs[kind.strip()] = value
+    return fracs
+
+
+def subsample_kinds(items: list[dict], fracs: dict[str, float], seed: int) -> list[dict]:
+    """Keep only a share of some families, drawn evenly across each family's tools.
+
+    A family's items are grouped by the tool they are about (intended or
+    related) and the same share is drawn from every group, so a smaller share
+    still covers every tool. Other families and the order are left alone.
+    """
+    rng = random.Random(seed)
+    dropped: set[int] = set()
+    for kind in sorted(fracs):
+        groups: dict[str, list[int]] = defaultdict(list)
+        for idx, it in enumerate(items):
+            if item_kind(it) == kind:
+                groups[str(it.get("intended_tool") or it.get("related_tool"))].append(idx)
+        for key in sorted(groups):
+            idxs = groups[key]
+            kept = set(rng.sample(idxs, round(fracs[kind] * len(idxs))))
+            dropped.update(i for i in idxs if i not in kept)
+    return [it for idx, it in enumerate(items) if idx not in dropped]
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description="LoRA-train the 0.6B tool-call specialist")
     ap.add_argument("--base-model", default="Qwen/Qwen3-0.6B")
@@ -120,6 +158,9 @@ def main() -> None:
                     help="training-only tool schemas the hard families list")
     ap.add_argument("--drop-kinds", default="",
                     help="comma-separated item kinds to leave out (ablations)")
+    ap.add_argument("--keep-frac", action="append", default=[], metavar="KIND=FRAC",
+                    help="keep only this share of a family, drawn evenly across its tools, "
+                         "e.g. info_call=0.5 (repeatable)")
     ap.add_argument("--out-dir", default=str(HERE / "out"))
     ap.add_argument("--epochs", type=float, default=3.0)
     ap.add_argument("--batch-size", type=int, default=8)
@@ -134,6 +175,10 @@ def main() -> None:
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--no-merge", action="store_true", help="save the adapter only, skip merge")
     args = ap.parse_args()
+    try:
+        keep = parse_keep_fracs(args.keep_frac)
+    except ValueError as exc:
+        ap.error(str(exc))
 
     import torch
     from torch.utils.data import Dataset
@@ -164,10 +209,13 @@ def main() -> None:
 
     drop = {k.strip() for k in args.drop_kinds.split(",") if k.strip()}
     items = filter_kinds(load_train_files(args.train_file), drop)
+    if keep:
+        items = subsample_kinds(items, keep, args.seed)
     if args.max_samples:
         items = items[: args.max_samples]
     print(f"training kinds: {dict(Counter(item_kind(it) for it in items))}"
-          + (f" (dropped kinds: {sorted(drop)})" if drop else ""))
+          + (f" (dropped kinds: {sorted(drop)})" if drop else "")
+          + (f" (kept shares: {keep})" if keep else ""))
 
     examples = [build_example(tokenizer, it, by_name, args.max_length) for it in items]
     kept = [ex for ex in examples if len(ex["input_ids"]) < args.max_length]
