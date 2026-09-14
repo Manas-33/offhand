@@ -1,0 +1,360 @@
+[
+  {
+    "type": "function",
+    "function": {
+      "name": "weather_now",
+      "description": "Current weather conditions in a city, right now only. No forecasts and no past weather.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "city": { "type": "string", "description": "City name." },
+          "units": { "type": "string", "description": "Temperature units.", "enum": ["metric", "imperial"] }
+        },
+        "required": ["city", "units"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "forecast_outlook",
+      "description": "Daily weather forecast for a city for the next 1 to 7 days. No past weather.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "city": { "type": "string", "description": "City name." },
+          "days": { "type": "integer", "description": "Number of days ahead, 1 to 7." }
+        },
+        "required": ["city", "days"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "fx_rate",
+      "description": "Current exchange rate between two currencies. Rates only; it does not know prices of products.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "base": { "type": "string", "description": "ISO code of the currency to convert from, e.g. USD." },
+          "quote": { "type": "string", "description": "ISO code of the currency to convert to, e.g. EUR." }
+        },
+        "required": ["base", "quote"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "convert_units",
+      "description": "Convert a quantity between units of length, weight, volume or temperature.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "value": { "type": "number", "description": "The quantity to convert." },
+          "from_unit": { "type": "string", "description": "Unit of the given quantity." },
+          "to_unit": { "type": "string", "description": "Unit to convert to." }
+        },
+        "required": ["value", "from_unit", "to_unit"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "percent_of",
+      "description": "Compute a given percentage of a number.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "percent": { "type": "number", "description": "The percentage, e.g. 15 for 15%." },
+          "value": { "type": "number", "description": "The number to take the percentage of." }
+        },
+        "required": ["percent", "value"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "split_bill",
+      "description": "Tip amount and each person's share of a restaurant bill.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "total": { "type": "number", "description": "Bill total before tip." },
+          "tip_percent": { "type": "number", "description": "Tip as a percentage of the total." },
+          "people": { "type": "integer", "description": "Number of people splitting the bill." }
+        },
+        "required": ["total", "tip_percent", "people"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "local_time",
+      "description": "Current local time in a city.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "city": { "type": "string", "description": "City name." }
+        },
+        "required": ["city"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "define_word",
+      "description": "Dictionary definition of an English word. Definitions only, no translations.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "word": { "type": "string", "description": "The word to define." }
+        },
+        "required": ["word"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "translate_phrase",
+      "description": "Translate a short phrase into another language.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "text": { "type": "string", "description": "The phrase to translate." },
+          "target_language": { "type": "string", "description": "Language to translate into." }
+        },
+        "required": ["text", "target_language"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "stock_quote",
+      "description": "Latest trading price for a stock. Price only; no advice, news or company financials.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "ticker": { "type": "string", "description": "Stock ticker symbol, e.g. AAPL." }
+        },
+        "required": ["ticker"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "game_score",
+      "description": "Score of a team's most recent or ongoing game. Results only; no upcoming schedules.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "team": { "type": "string", "description": "Team name." },
+          "sport": { "type": "string", "description": "The team's sport.", "enum": ["soccer", "basketball", "baseball", "american_football", "hockey", "cricket"] }
+        },
+        "required": ["team", "sport"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "flight_status",
+      "description": "Live status of a flight: departure, arrival and delays. It cannot book or price tickets.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "flight_number": { "type": "string", "description": "Airline code and number, e.g. UA 837." },
+          "date": { "type": "string", "description": "Optional flight date as YYYY-MM-DD." }
+        },
+        "required": ["flight_number"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "track_parcel",
+      "description": "Delivery status of a package from its tracking number.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "tracking_number": { "type": "string", "description": "The carrier's tracking number." },
+          "carrier": { "type": "string", "description": "Shipping carrier.", "enum": ["ups", "fedex", "usps", "dhl"] }
+        },
+        "required": ["tracking_number", "carrier"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "dish_ideas",
+      "description": "Find recipes that use the given ingredients.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "ingredients": { "type": "string", "description": "Comma-separated ingredients." },
+          "max_minutes": { "type": "integer", "description": "Optional limit on total cooking time." }
+        },
+        "required": ["ingredients"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "nutrition_facts",
+      "description": "Calories and macronutrients for a serving of a food.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "food": { "type": "string", "description": "The food." },
+          "grams": { "type": "number", "description": "Serving size in grams." }
+        },
+        "required": ["food", "grams"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "public_holidays",
+      "description": "Public holidays in a country for a given year.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "country": { "type": "string", "description": "Country name." },
+          "year": { "type": "integer", "description": "Calendar year." }
+        },
+        "required": ["country", "year"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "next_departures",
+      "description": "Next departures from a public transit stop.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "stop": { "type": "string", "description": "Transit stop or station name." },
+          "line": { "type": "string", "description": "Optional line or route to filter by." }
+        },
+        "required": ["stop"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "city_distance",
+      "description": "Straight-line distance between two cities, in kilometers.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "from_city": { "type": "string", "description": "First city." },
+          "to_city": { "type": "string", "description": "Second city." }
+        },
+        "required": ["from_city", "to_city"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "aqi_reading",
+      "description": "Current air quality index for a city.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "city": { "type": "string", "description": "City name." }
+        },
+        "required": ["city"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "sun_times",
+      "description": "Sunrise and sunset times for a city on a date.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "city": { "type": "string", "description": "City name." },
+          "date": { "type": "string", "description": "Date as YYYY-MM-DD." }
+        },
+        "required": ["city", "date"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "cinema_listings",
+      "description": "Showtimes for a film at cinemas in a city.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "title": { "type": "string", "description": "Film title." },
+          "city": { "type": "string", "description": "City name." }
+        },
+        "required": ["title", "city"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "book_details",
+      "description": "Author, publication year and page count of a book. No summaries or recommendations.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "title": { "type": "string", "description": "Book title." }
+        },
+        "required": ["title"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "crypto_price",
+      "description": "Current price of a cryptocurrency.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "coin": { "type": "string", "description": "Cryptocurrency name or symbol." },
+          "currency": { "type": "string", "description": "Fiat currency code, e.g. USD." }
+        },
+        "required": ["coin", "currency"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "loan_payment",
+      "description": "Monthly payment on a fixed-rate loan.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "principal": { "type": "number", "description": "Amount borrowed." },
+          "annual_rate": { "type": "number", "description": "Annual interest rate in percent." },
+          "years": { "type": "integer", "description": "Loan term in years." }
+        },
+        "required": ["principal", "annual_rate", "years"]
+      }
+    }
+  }
+]
