@@ -1,0 +1,962 @@
+{
+ "irrelevance_0": {
+  "label": "no_fit",
+  "reason": "BMI tool cannot compute a triangle's area."
+ },
+ "irrelevance_1": {
+  "label": "no_fit",
+  "reason": "A list-sum tool cannot solve a quadratic equation."
+ },
+ "irrelevance_2": {
+  "label": "no_fit",
+  "reason": "A geographic distance tool cannot find polynomial roots."
+ },
+ "irrelevance_3": {
+  "label": "no_fit",
+  "reason": "Critical points of a function are not the perpendicular slope."
+ },
+ "irrelevance_4": {
+  "label": "no_fit",
+  "reason": "Question is a symbolic linear equation; the tool solves numeric quadratics (a=0 degenerates)."
+ },
+ "irrelevance_5": {
+  "label": "no_fit",
+  "reason": "A quadratic solver does not compute a rectangle's perimeter."
+ },
+ "irrelevance_6": {
+  "label": "no_fit",
+  "reason": "Drawing a circle does not give a rectangle's area."
+ },
+ "irrelevance_7": {
+  "label": "fits",
+  "reason": "Area under 3x^2 on [1,5] is exactly the definite integral the tool computes, with all inputs given."
+ },
+ "irrelevance_8": {
+  "label": "no_fit",
+  "reason": "String-to-integer conversion cannot compute an integral."
+ },
+ "irrelevance_9": {
+  "label": "no_fit",
+  "reason": "An income tax calculator cannot compute an integral."
+ },
+ "irrelevance_10": {
+  "label": "no_fit",
+  "reason": "Tool integrates; the question asks for a derivative."
+ },
+ "irrelevance_11": {
+  "label": "no_fit",
+  "reason": "Tool returns the closest prime below a number, not the closest integer."
+ },
+ "irrelevance_12": {
+  "label": "no_fit",
+  "reason": "Prime number range tool has nothing to do with routes."
+ },
+ "irrelevance_13": {
+  "label": "no_fit",
+  "reason": "Compound interest tool cannot factor numbers."
+ },
+ "irrelevance_14": {
+  "label": "no_fit",
+  "reason": "Tool gives maximum height, a different quantity than acceleration."
+ },
+ "irrelevance_15": {
+  "label": "no_fit",
+  "reason": "Velocity calculator is unrelated to movie releases."
+ },
+ "irrelevance_16": {
+  "label": "partial",
+  "reason": "Tool computes exactly this projectile range, but v, theta and t are symbols, not numbers."
+ },
+ "irrelevance_17": {
+  "label": "no_fit",
+  "reason": "Tool computes travel time for a distance, not the current clock time."
+ },
+ "irrelevance_18": {
+  "label": "no_fit",
+  "reason": "How-to question with no vector components given; the momentum's angle is not the force's angle."
+ },
+ "irrelevance_19": {
+  "label": "no_fit",
+  "reason": "Investment return tool cannot compute a cone's volume."
+ },
+ "irrelevance_20": {
+  "label": "no_fit",
+  "reason": "Currency converter cannot give flight duration."
+ },
+ "irrelevance_21": {
+  "label": "no_fit",
+  "reason": "Wave amplitude from an electric field is not a wire's magnetic field."
+ },
+ "irrelevance_22": {
+  "label": "partial",
+  "reason": "Tool computes exactly this field, but current and distance are given only as symbols I and r."
+ },
+ "irrelevance_23": {
+  "label": "no_fit",
+  "reason": "Magnetic field calculator cannot give the electron's mass."
+ },
+ "irrelevance_24": {
+  "label": "no_fit",
+  "reason": "Current calculator cannot give the electron's mass."
+ },
+ "irrelevance_25": {
+  "label": "no_fit",
+  "reason": "Tool computes boiling point; the question asks for freezing point."
+ },
+ "irrelevance_26": {
+  "label": "no_fit",
+  "reason": "Tool returns pressure after heating, not an amount of gas generated."
+ },
+ "irrelevance_27": {
+  "label": "fits",
+  "reason": "Tool computes heat from mass, specific heat (water's value is given in the spec) and temperature change."
+ },
+ "irrelevance_28": {
+  "label": "no_fit",
+  "reason": "Boiling point tool is unrelated to a hexagon's sides."
+ },
+ "irrelevance_29": {
+  "label": "no_fit",
+  "reason": "Tool describes cell part functions, not how many mitochondria a cell has."
+ },
+ "irrelevance_30": {
+  "label": "no_fit",
+  "reason": "Tool classifies blood cells by shape and size; it does not name multinucleated cell types."
+ },
+ "irrelevance_31": {
+  "label": "no_fit",
+  "reason": "Cell division simulator is unrelated to restaurants."
+ },
+ "irrelevance_32": {
+  "label": "no_fit",
+  "reason": "Tool classifies cells by nucleus count and organism, not by clotting function."
+ },
+ "irrelevance_33": {
+  "label": "partial",
+  "reason": "Tool identifies a species from a sequence, but the question may be asking what ATCG itself is."
+ },
+ "irrelevance_34": {
+  "label": "no_fit",
+  "reason": "Variant frequency tool needs a variant id; it does not give a lion's dominant trait."
+ },
+ "irrelevance_35": {
+  "label": "no_fit",
+  "reason": "Genetic traits tool does not describe mating behavior."
+ },
+ "irrelevance_36": {
+  "label": "no_fit",
+  "reason": "Dominant-trait tool cannot give a variant's population frequency."
+ },
+ "irrelevance_37": {
+  "label": "no_fit",
+  "reason": "Fauna information tool does not find picnic spots."
+ },
+ "irrelevance_38": {
+  "label": "no_fit",
+  "reason": "Tool fetches research papers, not documentaries, and needs a year."
+ },
+ "irrelevance_39": {
+  "label": "no_fit",
+  "reason": "Advice question; tool only computes growth from given birth and death rates."
+ },
+ "irrelevance_40": {
+  "label": "no_fit",
+  "reason": "Plant biomass tool cannot report air quality."
+ },
+ "irrelevance_41": {
+  "label": "no_fit",
+  "reason": "Fibonacci tool is unrelated to common ancestry."
+ },
+ "irrelevance_42": {
+  "label": "no_fit",
+  "reason": "Biodiversity index tool does not give evolutionary history."
+ },
+ "irrelevance_43": {
+  "label": "no_fit",
+  "reason": "Asks how to apply EAs in game AI; tool runs a creature simulation that needs invented parameters."
+ },
+ "irrelevance_44": {
+  "label": "no_fit",
+  "reason": "Tool simulates hypothetical sequences and needs mutation rate and duration; the question asks for actual whale genetics."
+ },
+ "irrelevance_45": {
+  "label": "no_fit",
+  "reason": "Polygon drawing tool cannot compute a sine."
+ },
+ "irrelevance_46": {
+  "label": "no_fit",
+  "reason": "An exchange rate alone does not give the car's price in India."
+ },
+ "irrelevance_47": {
+  "label": "no_fit",
+  "reason": "Flight timing tool is unrelated to lasagna ingredients."
+ },
+ "irrelevance_48": {
+  "label": "no_fit",
+  "reason": "GDP is a different statistic from the Gini coefficient."
+ },
+ "irrelevance_49": {
+  "label": "no_fit",
+  "reason": "Coordinates do not give the time zone difference."
+ },
+ "irrelevance_50": {
+  "label": "no_fit",
+  "reason": "Temperature conversion is unrelated to movie picks."
+ },
+ "irrelevance_51": {
+  "label": "no_fit",
+  "reason": "Crypto price tool cannot compute Fibonacci numbers."
+ },
+ "irrelevance_52": {
+  "label": "no_fit",
+  "reason": "File compression cannot translate text."
+ },
+ "irrelevance_53": {
+  "label": "no_fit",
+  "reason": "Generic SQL tool with no known database holding sports results."
+ },
+ "irrelevance_54": {
+  "label": "no_fit",
+  "reason": "Movie search needs a title and year; it cannot rank box office totals."
+ },
+ "irrelevance_55": {
+  "label": "no_fit",
+  "reason": "Adding to a cart does not tell which bookstore sells the book."
+ },
+ "irrelevance_56": {
+  "label": "no_fit",
+  "reason": "Generic database select with no known database or table for bitcoin prices."
+ },
+ "irrelevance_57": {
+  "label": "no_fit",
+  "reason": "Genetic algorithm optimizer is not a quadratic solver."
+ },
+ "irrelevance_58": {
+  "label": "no_fit",
+  "reason": "Tool returns a solar panel count, not electricity need, and needs sunlight hours."
+ },
+ "irrelevance_59": {
+  "label": "no_fit",
+  "reason": "Linear equation solver is not an exponent calculator."
+ },
+ "irrelevance_60": {
+  "label": "partial",
+  "reason": "Tool does exactly this calculation, but the required original price is not given."
+ },
+ "irrelevance_61": {
+  "label": "no_fit",
+  "reason": "SVM tool cannot translate words."
+ },
+ "irrelevance_62": {
+  "label": "no_fit",
+  "reason": "Recommender model tool does not build a frontend."
+ },
+ "irrelevance_63": {
+  "label": "no_fit",
+  "reason": "Question asks for possible head counts; tool computes a probability from outcome counts."
+ },
+ "irrelevance_64": {
+  "label": "no_fit",
+  "reason": "Coin toss probability tool does not handle a deck of cards."
+ },
+ "irrelevance_65": {
+  "label": "fits",
+  "reason": "Tool computes the count from probability and sample size, i.e. 0.3 x 20 red marbles."
+ },
+ "irrelevance_66": {
+  "label": "no_fit",
+  "reason": "Standard deviation tool does not give a coin flip probability."
+ },
+ "irrelevance_67": {
+  "label": "no_fit",
+  "reason": "Question asks for a mean; tool returns a binomial test p-value."
+ },
+ "irrelevance_68": {
+  "label": "no_fit",
+  "reason": "Question asks for a standard deviation; tool returns a t-test p-value."
+ },
+ "irrelevance_69": {
+  "label": "no_fit",
+  "reason": "Regression predictor needs a trained model and features; it does not retrieve average prices."
+ },
+ "irrelevance_70": {
+  "label": "no_fit",
+  "reason": "Mortgage payment is a different calculation from compound interest."
+ },
+ "irrelevance_71": {
+  "label": "no_fit",
+  "reason": "ROI is a different metric from profit margin."
+ },
+ "irrelevance_72": {
+  "label": "no_fit",
+  "reason": "Tool computes IRR; the question asks for the external rate of return."
+ },
+ "irrelevance_73": {
+  "label": "no_fit",
+  "reason": "Tool predicts revenue, not losses."
+ },
+ "irrelevance_74": {
+  "label": "no_fit",
+  "reason": "Tool returns net profit, not a rate of return."
+ },
+ "irrelevance_75": {
+  "label": "no_fit",
+  "reason": "Portfolio return tool cannot convert pounds to kilograms."
+ },
+ "irrelevance_76": {
+  "label": "no_fit",
+  "reason": "Investment trend analysis does not fetch sports news."
+ },
+ "irrelevance_77": {
+  "label": "no_fit",
+  "reason": "Investment value calculator is unrelated to movies."
+ },
+ "irrelevance_78": {
+  "label": "no_fit",
+  "reason": "Bond price calculator does not give the gold price."
+ },
+ "irrelevance_79": {
+  "label": "no_fit",
+  "reason": "Stock prediction tool is unrelated to soccer players."
+ },
+ "irrelevance_80": {
+  "label": "no_fit",
+  "reason": "Stock ticker tool cannot tell who won the World Cup."
+ },
+ "irrelevance_81": {
+  "label": "no_fit",
+  "reason": "Stock price tool is unrelated to movies."
+ },
+ "irrelevance_82": {
+  "label": "no_fit",
+  "reason": "Capital gains calculator does not retrieve news."
+ },
+ "irrelevance_83": {
+  "label": "no_fit",
+  "reason": "Mortgage calculator takes a rate as input; it does not report current rates."
+ },
+ "irrelevance_84": {
+  "label": "no_fit",
+  "reason": "Stock data tool cannot report a basketball result."
+ },
+ "irrelevance_85": {
+  "label": "no_fit",
+  "reason": "Criminal case lookup does not give election results."
+ },
+ "irrelevance_86": {
+  "label": "fits",
+  "reason": "Tool returns penalty information for a crime and state, both given."
+ },
+ "irrelevance_87": {
+  "label": "no_fit",
+  "reason": "Case filing tool cannot identify the governor."
+ },
+ "irrelevance_88": {
+  "label": "no_fit",
+  "reason": "Forgery detection is unrelated to movie recommendations."
+ },
+ "irrelevance_89": {
+  "label": "no_fit",
+  "reason": "Contract generator does not explain tenant rights."
+ },
+ "irrelevance_90": {
+  "label": "no_fit",
+  "reason": "Noise complaint filing does not explain the components of civil law."
+ },
+ "irrelevance_91": {
+  "label": "no_fit",
+  "reason": "Law category lookup does not answer whether or how to file a noise complaint."
+ },
+ "irrelevance_92": {
+  "label": "no_fit",
+  "reason": "Lawyer search does not find security guards."
+ },
+ "irrelevance_93": {
+  "label": "no_fit",
+  "reason": "Tool lists a firm's impactful cases, not the judgement in a given case."
+ },
+ "irrelevance_94": {
+  "label": "no_fit",
+  "reason": "Tool retrieves one case by id, not a firm's most impactful cases."
+ },
+ "irrelevance_95": {
+  "label": "no_fit",
+  "reason": "Tool gives the case outcome, not the lawyer, and needs a year."
+ },
+ "irrelevance_96": {
+  "label": "no_fit",
+  "reason": "Law case lookup is unrelated to painting the Eiffel Tower."
+ },
+ "irrelevance_97": {
+  "label": "no_fit",
+  "reason": "Lawsuit filing is unrelated to restaurant recommendations."
+ },
+ "irrelevance_98": {
+  "label": "no_fit",
+  "reason": "Settlement estimator is unrelated to painting time."
+ },
+ "irrelevance_99": {
+  "label": "no_fit",
+  "reason": "Tool searches lawsuits, not the traffic laws themselves."
+ },
+ "irrelevance_100": {
+  "label": "no_fit",
+  "reason": "Litigation cost tool cannot give calories."
+ },
+ "irrelevance_101": {
+  "label": "no_fit",
+  "reason": "Best month is a judgment; tool only returns the temperature for a named month."
+ },
+ "irrelevance_102": {
+  "label": "no_fit",
+  "reason": "Sunrise and sunset times are not the current time."
+ },
+ "irrelevance_103": {
+  "label": "no_fit",
+  "reason": "Weather forecast does not give the current time."
+ },
+ "irrelevance_104": {
+  "label": "no_fit",
+  "reason": "Park area from a radius is not a sphere's volume."
+ },
+ "irrelevance_105": {
+  "label": "no_fit",
+  "reason": "Elevation plotting is unrelated to pollinator flowers."
+ },
+ "irrelevance_106": {
+  "label": "no_fit",
+  "reason": "Soil analysis does not recommend fertilizer."
+ },
+ "irrelevance_107": {
+  "label": "no_fit",
+  "reason": "Tool analyzes soil texture, not species composition."
+ },
+ "irrelevance_108": {
+  "label": "no_fit",
+  "reason": "General advice question; tool estimates one action's reduction and needs current emissions and duration."
+ },
+ "irrelevance_109": {
+  "label": "no_fit",
+  "reason": "Tool computes water needs, not nutrient needs."
+ },
+ "irrelevance_110": {
+  "label": "no_fit",
+  "reason": "BMI calculator cannot give temperatures."
+ },
+ "irrelevance_111": {
+  "label": "no_fit",
+  "reason": "Tool finds eco-friendly products, not GMO ones, and requires a location that was not given."
+ },
+ "irrelevance_112": {
+  "label": "no_fit",
+  "reason": "Geocoding does not report traffic."
+ },
+ "irrelevance_113": {
+  "label": "fits",
+  "reason": "Tool finds points of interest by city with a Restaurants category."
+ },
+ "irrelevance_114": {
+  "label": "no_fit",
+  "reason": "Closest airport lookup does not give a route."
+ },
+ "irrelevance_115": {
+  "label": "no_fit",
+  "reason": "Tool returns straight-line distance, not driving time, and speed is not given."
+ },
+ "irrelevance_116": {
+  "label": "no_fit",
+  "reason": "Word count tool cannot recommend movies."
+ },
+ "irrelevance_117": {
+  "label": "no_fit",
+  "reason": "Distance calculator does not list airports."
+ },
+ "irrelevance_118": {
+  "label": "partial",
+  "reason": "The 1996 Finals bracket would likely show the champion, but the tool displays brackets rather than the winner."
+ },
+ "irrelevance_119": {
+  "label": "no_fit",
+  "reason": "Sentiment analysis does not supply quotes."
+ },
+ "irrelevance_120": {
+  "label": "no_fit",
+  "reason": "Tool covers caffeine's effects on the brain, not sports."
+ },
+ "irrelevance_121": {
+  "label": "fits",
+  "reason": "Tool retrieves medical information by disease name; motor neuron disease is a disease name."
+ },
+ "irrelevance_122": {
+  "label": "no_fit",
+  "reason": "Patient neural activity tool does not give average brain weight."
+ },
+ "irrelevance_123": {
+  "label": "no_fit",
+  "reason": "BMI calculator cannot give a Big Mac's calories."
+ },
+ "irrelevance_124": {
+  "label": "fits",
+  "reason": "Tool retrieves trending topics for a category (technology); region has an obvious worldwide value."
+ },
+ "irrelevance_125": {
+  "label": "no_fit",
+  "reason": "Recent tweets tool does not list an author's books."
+ },
+ "irrelevance_126": {
+  "label": "no_fit",
+  "reason": "General causal question; tool returns one country-year index and needs a country and year not given."
+ },
+ "irrelevance_127": {
+  "label": "fits",
+  "reason": "Tool analyzes overall Twitter sentiment on a topic; English is a sensible language value."
+ },
+ "irrelevance_128": {
+  "label": "no_fit",
+  "reason": "Personality scoring is unrelated to vegetable servings."
+ },
+ "irrelevance_129": {
+  "label": "partial",
+  "reason": "Tool categorizes personality type, but needs the friend's trait percentages, which are not given."
+ },
+ "irrelevance_130": {
+  "label": "partial",
+  "reason": "Tool assesses personality traits, but needs the user's questionnaire answers, which are not given."
+ },
+ "irrelevance_131": {
+  "label": "no_fit",
+  "reason": "Tool covers color symbolism in personality psychology, not computer vision."
+ },
+ "irrelevance_132": {
+  "label": "no_fit",
+  "reason": "Tool gives an event's date, not casualty numbers."
+ },
+ "irrelevance_133": {
+  "label": "no_fit",
+  "reason": "Historical battle details tool does not cover the NBA finals."
+ },
+ "irrelevance_134": {
+  "label": "no_fit",
+  "reason": "Battle outcome predictor does not cover the World Cup."
+ },
+ "irrelevance_135": {
+  "label": "no_fit",
+  "reason": "Date addition tool cannot say when the Declaration was signed."
+ },
+ "irrelevance_136": {
+  "label": "no_fit",
+  "reason": "Tool returns the president, not the vice president."
+ },
+ "irrelevance_137": {
+  "label": "no_fit",
+  "reason": "Tool returns an event date, not who signed it."
+ },
+ "irrelevance_138": {
+  "label": "no_fit",
+  "reason": "Age calculator cannot give the signing date."
+ },
+ "irrelevance_139": {
+  "label": "no_fit",
+  "reason": "Star information tool does not answer about planets."
+ },
+ "irrelevance_140": {
+  "label": "no_fit",
+  "reason": "Current calculator does not answer a history question."
+ },
+ "irrelevance_141": {
+  "label": "no_fit",
+  "reason": "Scientist contribution lookup does not give element properties."
+ },
+ "irrelevance_142": {
+  "label": "no_fit",
+  "reason": "Element properties tool does not identify scientists."
+ },
+ "irrelevance_143": {
+  "label": "no_fit",
+  "reason": "Historical figure lookup does not define what a scientist is."
+ },
+ "irrelevance_144": {
+  "label": "no_fit",
+  "reason": "Tool searches a named holy book; it does not define what a holy book is."
+ },
+ "irrelevance_145": {
+  "label": "no_fit",
+  "reason": "Tool gives the year of an event, not who initiated it."
+ },
+ "irrelevance_146": {
+  "label": "no_fit",
+  "reason": "Prophet details tool cannot mix colors."
+ },
+ "irrelevance_147": {
+  "label": "no_fit",
+  "reason": "Color mixing tool cannot answer about prophets."
+ },
+ "irrelevance_148": {
+  "label": "no_fit",
+  "reason": "Tool finds a contrasting complementary color, the opposite of a similar color."
+ },
+ "irrelevance_149": {
+  "label": "no_fit",
+  "reason": "Paint mix proportions tool does not give Pantone codes."
+ },
+ "irrelevance_150": {
+  "label": "no_fit",
+  "reason": "RGB-to-Pantone conversion does not say which paints to mix."
+ },
+ "irrelevance_151": {
+  "label": "no_fit",
+  "reason": "Sculpture dimensions tool does not give a painting's year."
+ },
+ "irrelevance_152": {
+  "label": "no_fit",
+  "reason": "3D sculpture creation does not recommend rock types."
+ },
+ "irrelevance_153": {
+  "label": "no_fit",
+  "reason": "Sculpting tool lookup does not identify famous sculptures."
+ },
+ "irrelevance_154": {
+  "label": "no_fit",
+  "reason": "Sculpture creator lookup does not give stadium capacity."
+ },
+ "irrelevance_155": {
+  "label": "no_fit",
+  "reason": "Seating capacity tool does not identify a sculptor."
+ },
+ "irrelevance_156": {
+  "label": "no_fit",
+  "reason": "Architecture plan generator does not give the Eiffel Tower's height."
+ },
+ "irrelevance_157": {
+  "label": "no_fit",
+  "reason": "Building information lookup does not explain how to design a ceiling."
+ },
+ "irrelevance_158": {
+  "label": "no_fit",
+  "reason": "Construction cost is not apartment rent."
+ },
+ "irrelevance_159": {
+  "label": "partial",
+  "reason": "Tool returns artwork details including the artist, but requires a museum location the user did not give."
+ },
+ "irrelevance_160": {
+  "label": "no_fit",
+  "reason": "Tool returns the single most frequent visitor, not how often members visit."
+ },
+ "irrelevance_161": {
+  "label": "no_fit",
+  "reason": "Museum visit statistics do not cover markets."
+ },
+ "irrelevance_162": {
+  "label": "no_fit",
+  "reason": "Museum artist lists do not identify famous dancers."
+ },
+ "irrelevance_163": {
+  "label": "no_fit",
+  "reason": "Instrument tuning does not help sell a guitar."
+ },
+ "irrelevance_164": {
+  "label": "no_fit",
+  "reason": "Tool searches instrument players; singers are not covered."
+ },
+ "irrelevance_165": {
+  "label": "fits",
+  "reason": "Tool returns an instrument's type for a named instrument."
+ },
+ "irrelevance_166": {
+  "label": "no_fit",
+  "reason": "Rental prices are not piano maintenance tips."
+ },
+ "irrelevance_167": {
+  "label": "no_fit",
+  "reason": "Concert info tool does not identify lecture teachers."
+ },
+ "irrelevance_168": {
+  "label": "no_fit",
+  "reason": "Concert availability is not university class availability."
+ },
+ "irrelevance_169": {
+  "label": "no_fit",
+  "reason": "Tool finds concerts, not basketball games."
+ },
+ "irrelevance_170": {
+  "label": "no_fit",
+  "reason": "Chord progression generator does not identify composers."
+ },
+ "irrelevance_171": {
+  "label": "no_fit",
+  "reason": "Composer search is unrelated to ancient Greek lawmakers."
+ },
+ "irrelevance_172": {
+  "label": "no_fit",
+  "reason": "Music composition info does not cover novels."
+ },
+ "irrelevance_173": {
+  "label": "no_fit",
+  "reason": "Tool finds common chords by genre, not the primary triads of a key."
+ },
+ "irrelevance_174": {
+  "label": "no_fit",
+  "reason": "Tool gives a key's primary triads and needs a key; not the most common pop chords."
+ },
+ "irrelevance_175": {
+  "label": "no_fit",
+  "reason": "Blues scale generator does not identify composers."
+ },
+ "irrelevance_176": {
+  "label": "no_fit",
+  "reason": "Composer lookup does not give a blues scale."
+ },
+ "irrelevance_177": {
+  "label": "no_fit",
+  "reason": "Chord progression lookup does not give Grammy winners."
+ },
+ "irrelevance_178": {
+  "label": "no_fit",
+  "reason": "Tool returns the top goal scorer, not the top assist provider."
+ },
+ "irrelevance_179": {
+  "label": "no_fit",
+  "reason": "Game results between two teams do not list a team's players."
+ },
+ "irrelevance_180": {
+  "label": "fits",
+  "reason": "Tool returns the cricket match schedule for a date; today is the obvious date."
+ },
+ "irrelevance_181": {
+  "label": "no_fit",
+  "reason": "Last match result between two teams does not list La Liga players."
+ },
+ "irrelevance_182": {
+  "label": "fits",
+  "reason": "Tool returns an NBA player's championship count."
+ },
+ "irrelevance_183": {
+  "label": "no_fit",
+  "reason": "Celebrity lookup needs a name and cannot identify a tournament winner."
+ },
+ "irrelevance_184": {
+  "label": "no_fit",
+  "reason": "Player stats tool needs a player name and does not identify the MVP."
+ },
+ "irrelevance_185": {
+  "label": "no_fit",
+  "reason": "Tool gives scoring averages, not assist averages."
+ },
+ "irrelevance_186": {
+  "label": "no_fit",
+  "reason": "MVP lookup does not give team rankings."
+ },
+ "irrelevance_187": {
+  "label": "no_fit",
+  "reason": "Team ranking tool does not identify the MVP."
+ },
+ "irrelevance_188": {
+  "label": "fits",
+  "reason": "Tool returns the champion of a sports event for a year, here World Series 2020."
+ },
+ "irrelevance_189": {
+  "label": "no_fit",
+  "reason": "Top-ranked athlete lookup does not describe LeBron James."
+ },
+ "irrelevance_190": {
+  "label": "no_fit",
+  "reason": "Team standings tool does not rank individual tennis players."
+ },
+ "irrelevance_191": {
+  "label": "no_fit",
+  "reason": "Match stats need a team name and do not identify the winner."
+ },
+ "irrelevance_192": {
+  "label": "no_fit",
+  "reason": "Top scorer tool does not give a roster."
+ },
+ "irrelevance_193": {
+  "label": "no_fit",
+  "reason": "Team details cover roster, results and fixtures, not the top scorer."
+ },
+ "irrelevance_194": {
+  "label": "no_fit",
+  "reason": "Game statistics tool does not analyze a chess position."
+ },
+ "irrelevance_195": {
+  "label": "no_fit",
+  "reason": "Board position analyser does not identify tournament winners."
+ },
+ "irrelevance_196": {
+  "label": "no_fit",
+  "reason": "Board game scoring does not count chess arrangements."
+ },
+ "irrelevance_197": {
+  "label": "no_fit",
+  "reason": "Possible moves calculator does not report who won."
+ },
+ "irrelevance_198": {
+  "label": "no_fit",
+  "reason": "Deck shuffling does not explain Uno rules."
+ },
+ "irrelevance_199": {
+  "label": "no_fit",
+  "reason": "Dealing poker hands does not identify who holds the most hearts."
+ },
+ "irrelevance_200": {
+  "label": "no_fit",
+  "reason": "Poker suit-holder lookup does not explain Blackjack rules."
+ },
+ "irrelevance_201": {
+  "label": "no_fit",
+  "reason": "Video game guide does not find ice cream stores."
+ },
+ "irrelevance_202": {
+  "label": "no_fit",
+  "reason": "Score calculator from points does not identify a World Series winner."
+ },
+ "irrelevance_203": {
+  "label": "no_fit",
+  "reason": "Tool returns a player's score, not their rank."
+ },
+ "irrelevance_204": {
+  "label": "no_fit",
+  "reason": "Tool solves a jigsaw puzzle; it does not create one."
+ },
+ "irrelevance_205": {
+  "label": "no_fit",
+  "reason": "Game score calculator cannot identify an author."
+ },
+ "irrelevance_206": {
+  "label": "no_fit",
+  "reason": "Tool picks a weapon and needs player level; the question asks for a character."
+ },
+ "irrelevance_207": {
+  "label": "no_fit",
+  "reason": "Tool returns the highest score; the question asks for the lowest."
+ },
+ "irrelevance_208": {
+  "label": "no_fit",
+  "reason": "Taxi fare calculator does not find game paths."
+ },
+ "irrelevance_209": {
+  "label": "no_fit",
+  "reason": "Recipe fetcher does not explain PC building."
+ },
+ "irrelevance_210": {
+  "label": "no_fit",
+  "reason": "Dish-based restaurant search does not identify famous places."
+ },
+ "irrelevance_211": {
+  "label": "no_fit",
+  "reason": "Tool computes cooking time, not a recipe."
+ },
+ "irrelevance_212": {
+  "label": "partial",
+  "reason": "Tool gives optimal egg boiling time, a key part of the answer, but not the full method, and size is not given."
+ },
+ "irrelevance_213": {
+  "label": "fits",
+  "reason": "Tool finds restaurants by cuisine and location, here pizza in Boston."
+ },
+ "irrelevance_214": {
+  "label": "no_fit",
+  "reason": "Tip calculator does not find restaurants."
+ },
+ "irrelevance_215": {
+  "label": "no_fit",
+  "reason": "Tip calculator does not estimate travel time."
+ },
+ "irrelevance_216": {
+  "label": "no_fit",
+  "reason": "Currency converter does not find restaurants."
+ },
+ "irrelevance_217": {
+  "label": "no_fit",
+  "reason": "Recipe creator does not write books."
+ },
+ "irrelevance_218": {
+  "label": "no_fit",
+  "reason": "Recipe retrieval does not recommend baking machines."
+ },
+ "irrelevance_219": {
+  "label": "no_fit",
+  "reason": "Calorie calculator does not provide a recipe."
+ },
+ "irrelevance_220": {
+  "label": "no_fit",
+  "reason": "Cooking temperature is not an ingredient list."
+ },
+ "irrelevance_221": {
+  "label": "no_fit",
+  "reason": "Grocery list tool does not recommend exercises."
+ },
+ "irrelevance_222": {
+  "label": "no_fit",
+  "reason": "Store item details need a store location and are not a nutrition lookup."
+ },
+ "irrelevance_223": {
+  "label": "partial",
+  "reason": "Tool finds grocery shops selling sourdough in Chicago, not bakeries specifically."
+ },
+ "irrelevance_224": {
+  "label": "no_fit",
+  "reason": "Grocery store locator does not find pet stores."
+ },
+ "irrelevance_225": {
+  "label": "no_fit",
+  "reason": "Time converter does not give population."
+ },
+ "irrelevance_226": {
+  "label": "no_fit",
+  "reason": "Tool needs a timezone as input and returns local time, not the timezone."
+ },
+ "irrelevance_227": {
+  "label": "no_fit",
+  "reason": "Tool computes sunrise; the question asks for sunset."
+ },
+ "irrelevance_228": {
+  "label": "fits",
+  "reason": "Tool returns the local time for a city, here Sydney."
+ },
+ "irrelevance_229": {
+  "label": "no_fit",
+  "reason": "Hotel booking does not find restaurants."
+ },
+ "irrelevance_230": {
+  "label": "no_fit",
+  "reason": "Pet-friendly hotel search does not find train stations."
+ },
+ "irrelevance_231": {
+  "label": "no_fit",
+  "reason": "Hotel availability does not find restaurants."
+ },
+ "irrelevance_232": {
+  "label": "fits",
+  "reason": "Tool searches hotels by location with Breakfast and Fitness Centre amenities."
+ },
+ "irrelevance_233": {
+  "label": "no_fit",
+  "reason": "Weather tool cannot convert currency."
+ },
+ "irrelevance_234": {
+  "label": "no_fit",
+  "reason": "Currency converter cannot convert inches to meters."
+ },
+ "irrelevance_235": {
+  "label": "no_fit",
+  "reason": "Currency exchange is unrelated to movies."
+ },
+ "irrelevance_236": {
+  "label": "partial",
+  "reason": "Tool returns the quickest flight duration rather than the way to travel, and a flight type must be picked."
+ },
+ "irrelevance_237": {
+  "label": "no_fit",
+  "reason": "Routing tool needs a known destination; it cannot find the nearest pharmacy."
+ },
+ "irrelevance_238": {
+  "label": "no_fit",
+  "reason": "Geographic lat/long distance is not a Euclidean hypotenuse."
+ },
+ "irrelevance_239": {
+  "label": "partial",
+  "reason": "Description says time difference, but the unit parameter is a miles/km distance unit, so the spec contradicts itself."
+ }
+}
