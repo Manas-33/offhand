@@ -24,9 +24,11 @@ import org.json.JSONObject
  * specialist bundle on the Hexagon NPU, the same runtime proven in the device
  * spike and the seeding run.
  *
- * loadModel -> create an LlmWrapper over the bundle's QAIRT context binaries
- *              (the seeded `part*_of_2.bin` set). The path may be absolute or
- *              relative to the app's filesDir.
+ * loadModel -> create an LlmWrapper over the bundle's QAIRT context binaries.
+ *              The path may be absolute or relative to the app's filesDir.
+ *              The bundle's geniex.json names the model and the shard to open,
+ *              read the way the GenieX demo reads them, so stock catalog
+ *              bundles (1.7B, 4B) load the same way as the 0.6B specialists.
  * generate  -> send PREFIX + user text + SUFFIX straight to the runtime. The
  *              prefix and suffix (assets/prompt_template.json) are rendered on
  *              the host by eval/export_app_prompt.py through the eval's own
@@ -67,7 +69,8 @@ class GenieEngine(private val context: Context) : Engine {
         if (!ensureSdk()) return false
 
         val dir = if (modelPath.startsWith("/")) File(modelPath) else File(context.filesDir, modelPath)
-        val shard = File(dir, MODEL_SHARD)
+        val (modelName, shardName) = bundleManifest(dir)
+        val shard = File(dir, shardName)
         if (!shard.exists()) {
             Log.e(TAG, "model shard not found: ${shard.absolutePath}")
             return false
@@ -77,7 +80,7 @@ class GenieEngine(private val context: Context) : Engine {
         // in the bundle), same as the GenieX demo's qairt path.
         val input =
             LlmCreateInput(
-                model_name = MODEL_NAME,
+                model_name = modelName,
                 model_path = shard.absolutePath,
                 tokenizer_path = null,
                 config = ModelConfig(nCtx = 0, nGpuLayers = 0, enable_thinking = false),
@@ -91,7 +94,7 @@ class GenieEngine(private val context: Context) : Engine {
                 llm = wrapper
                 // What we asked for. The SDK's own "QAIRT LLM created
                 // successfully" line is the confirmation it runs on the NPU.
-                Log.i(TAG, "model loaded from ${dir.absolutePath} (requested plugin=qairt, compute_unit=NPU)")
+                Log.i(TAG, "model loaded from ${dir.absolutePath} ($modelName, requested plugin=qairt, compute_unit=NPU)")
                 true
             },
             onFailure = { error ->
@@ -181,6 +184,20 @@ class GenieEngine(private val context: Context) : Engine {
         }
     }
 
+    /**
+     * The model name and the shard to open, from the bundle's geniex.json the
+     * way the GenieX demo reads them. A bundle without a readable one falls
+     * back to the 0.6B's.
+     */
+    private fun bundleManifest(dir: File): Pair<String, String> {
+        val json = runCatching { JSONObject(File(dir, MANIFEST).readText()) }.getOrNull()
+            ?: return MODEL_NAME to MODEL_SHARD
+        val name = json.optString("ModelName").ifEmpty { MODEL_NAME }
+        val files = json.optJSONObject("ModelFile")
+        val shard = files?.keys()?.asSequence()?.firstOrNull()?.let { files.optJSONObject(it)?.optString("Name") }
+        return name to (shard?.ifEmpty { null } ?: MODEL_SHARD)
+    }
+
     /** One-time SDK init; blocks until the native side reports back. */
     private fun ensureSdk(): Boolean {
         if (sdkReady) return true
@@ -208,7 +225,10 @@ class GenieEngine(private val context: Context) : Engine {
     companion object {
         private const val TAG = "Offhand"
 
-        /** Bundle's manifest name (geniex.json ModelName). */
+        /** Read from each bundle for the model name and the shard to open. */
+        private const val MANIFEST = "geniex.json"
+
+        /** Fallbacks for a bundle without a readable geniex.json: the 0.6B's name and shard. */
         private const val MODEL_NAME = "qwen3_0_6b"
 
         /** The qairt plugin discovers all shards from the directory of this file. */
