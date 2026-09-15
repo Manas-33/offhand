@@ -1,0 +1,2492 @@
+{
+  "label": "base_Qwen3-1.7B_w4a16_device",
+  "model": "models/Qwen3-1.7B-stock",
+  "quant": "W4A16",
+  "remedy": "device_default",
+  "recipe": "stock Qualcomm AI Hub bundle (catalog v0.62.2), W4A16; genie_config set to top-k 1 and bos-token -1",
+  "runtime": "GenieX 0.3.5 qairt plugin, QAIRT 2.45, Hexagon v79 NPU",
+  "device": "SM-S938U1",
+  "bundle_config": {
+    "context": {
+      "version": 1,
+      "size": 4096,
+      "n-vocab": 151936,
+      "bos-token": -1,
+      "eos-token": 151645
+    },
+    "sampler": {
+      "version": 1,
+      "seed": 42,
+      "temp": 0.8,
+      "top-k": 1,
+      "top-p": 0.95
+    }
+  },
+  "prompt_template": {
+    "asset": "app/android/app/src/main/assets/prompt_template.json",
+    "tools_sha256": "18d8a038aa3c8e0aea32f775102afa12693846864560ecad2af97154ff788b03"
+  },
+  "timing": {
+    "n": 48,
+    "errors": 0,
+    "median_ttft_ms": 409.0,
+    "median_decode_tps": 37.39,
+    "median_prefill_tps": 2841.77,
+    "median_prompt_tokens": 1165.0,
+    "median_generated_tokens": 30.0,
+    "wall_s_push_to_pull": 75.4
+  },
+  "prompt_token_check": {
+    "checked": 48,
+    "mismatched": []
+  },
+  "summary": {
+    "strict": {
+      "n_total": 48,
+      "n_call_items": 40,
+      "n_irrelevance_items": 8,
+      "schema_valid_rate": 1.0,
+      "right_tool_rate": 0.975,
+      "call_accuracy": 0.925,
+      "irrelevance_accuracy": 0.875
+    },
+    "lenient": {
+      "n_total": 48,
+      "n_call_items": 40,
+      "n_irrelevance_items": 8,
+      "schema_valid_rate": 1.0,
+      "right_tool_rate": 0.975,
+      "call_accuracy": 0.925,
+      "irrelevance_accuracy": 0.875
+    },
+    "format_recoverable": 0.0
+  },
+  "results": [
+    {
+      "id": "alarm_01",
+      "query": "Set an alarm for 7am tomorrow.",
+      "raw": "<tool_call>\n{\"name\": \"set_alarm\", \"arguments\": {\"time\": \"07:00\", \"label\": \"Morning Alarm\"}}\n</tool_call>",
+      "strict_calls": [
+        {
+          "name": "set_alarm",
+          "arguments": {
+            "time": "07:00",
+            "label": "Morning Alarm"
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "set_alarm",
+          "arguments": {
+            "time": "07:00",
+            "label": "Morning Alarm"
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "alarm_01",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "alarm_01",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "device": {
+        "ttft_ms": 385,
+        "prompt_tokens": 1165,
+        "generated_tokens": 31,
+        "prefill_tps": 3019.589750501537,
+        "decode_tps": 39.284614497543444,
+        "stop_reason": "eos"
+      }
+    },
+    {
+      "id": "alarm_02",
+      "query": "Wake me up at 6:30 in the morning.",
+      "raw": "<tool_call>\n{\"name\": \"set_alarm\", \"arguments\": {\"time\": \"06:30\", \"label\": \"Morning Wakeup\"}}\n</tool_call>",
+      "strict_calls": [
+        {
+          "name": "set_alarm",
+          "arguments": {
+            "time": "06:30",
+            "label": "Morning Wakeup"
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "set_alarm",
+          "arguments": {
+            "time": "06:30",
+            "label": "Morning Wakeup"
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "alarm_02",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "alarm_02",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "device": {
+        "ttft_ms": 373,
+        "prompt_tokens": 1169,
+        "generated_tokens": 32,
+        "prefill_tps": 3128.236279512862,
+        "decode_tps": 38.95270776096184,
+        "stop_reason": "eos"
+      }
+    },
+    {
+      "id": "alarm_03",
+      "query": "Can you set an alarm for 5 PM?",
+      "raw": "<tool_call>\n{\"name\": \"set_alarm\", \"arguments\": {\"time\": \"17:00\", \"label\": \"5 PM\"}}\n</tool_call>",
+      "strict_calls": [
+        {
+          "name": "set_alarm",
+          "arguments": {
+            "time": "17:00",
+            "label": "5 PM"
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "set_alarm",
+          "arguments": {
+            "time": "17:00",
+            "label": "5 PM"
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "alarm_03",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "alarm_03",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "device": {
+        "ttft_ms": 389,
+        "prompt_tokens": 1166,
+        "generated_tokens": 31,
+        "prefill_tps": 2996.6897629376813,
+        "decode_tps": 38.02155454191999,
+        "stop_reason": "eos"
+      }
+    },
+    {
+      "id": "alarm_04",
+      "query": "Set an alarm for quarter past eight tonight.",
+      "raw": "<tool_call>\n{\"name\": \"set_alarm\", \"arguments\": {\"time\": \"20:40\", \"label\": \"Nighttime Alarm\"}}\n</tool_call>",
+      "strict_calls": [
+        {
+          "name": "set_alarm",
+          "arguments": {
+            "time": "20:40",
+            "label": "Nighttime Alarm"
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "set_alarm",
+          "arguments": {
+            "time": "20:40",
+            "label": "Nighttime Alarm"
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "alarm_04",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": false,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "alarm_04",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": false,
+        "no_call_correct": null
+      },
+      "device": {
+        "ttft_ms": 375,
+        "prompt_tokens": 1165,
+        "generated_tokens": 32,
+        "prefill_tps": 3099.1130950164134,
+        "decode_tps": 40.50268899883682,
+        "stop_reason": "eos"
+      }
+    },
+    {
+      "id": "timer_01",
+      "query": "Start a 10 minute timer.",
+      "raw": "<tool_call>\n{\"name\": \"set_timer\", \"arguments\": {\"duration_minutes\": 10}}\n</tool_call>",
+      "strict_calls": [
+        {
+          "name": "set_timer",
+          "arguments": {
+            "duration_minutes": 10
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "set_timer",
+          "arguments": {
+            "duration_minutes": 10
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "timer_01",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "timer_01",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "device": {
+        "ttft_ms": 393,
+        "prompt_tokens": 1164,
+        "generated_tokens": 22,
+        "prefill_tps": 2954.809688932664,
+        "decode_tps": 39.597188599609424,
+        "stop_reason": "eos"
+      }
+    },
+    {
+      "id": "timer_02",
+      "query": "Set a timer for half an hour.",
+      "raw": "<tool_call>\n{\"name\": \"set_timer\", \"arguments\": {\"duration_minutes\": 30, \"label\": \"Half Hour Timer\"}}\n</tool_call>",
+      "strict_calls": [
+        {
+          "name": "set_timer",
+          "arguments": {
+            "duration_minutes": 30,
+            "label": "Half Hour Timer"
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "set_timer",
+          "arguments": {
+            "duration_minutes": 30,
+            "label": "Half Hour Timer"
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "timer_02",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "timer_02",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "device": {
+        "ttft_ms": 376,
+        "prompt_tokens": 1164,
+        "generated_tokens": 30,
+        "prefill_tps": 3093.753488446266,
+        "decode_tps": 38.621023482869646,
+        "stop_reason": "eos"
+      }
+    },
+    {
+      "id": "timer_03",
+      "query": "Give me a timer for 45 minutes.",
+      "raw": "<tool_call>\n{\"name\": \"set_timer\", \"arguments\": {\"duration_minutes\": 45, \"label\": \"45-minute timer\"}}\n</tool_call>",
+      "strict_calls": [
+        {
+          "name": "set_timer",
+          "arguments": {
+            "duration_minutes": 45,
+            "label": "45-minute timer"
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "set_timer",
+          "arguments": {
+            "duration_minutes": 45,
+            "label": "45-minute timer"
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "timer_03",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "timer_03",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "device": {
+        "ttft_ms": 382,
+        "prompt_tokens": 1166,
+        "generated_tokens": 31,
+        "prefill_tps": 3049.9607637980644,
+        "decode_tps": 39.06806286681445,
+        "stop_reason": "eos"
+      }
+    },
+    {
+      "id": "timer_04",
+      "query": "I need a two hour timer.",
+      "raw": "<tool_call>\n{\"name\": \"set_timer\", \"arguments\": {\"duration_minutes\": 120, \"label\": \"Two hour timer\"}}\n</tool_call>",
+      "strict_calls": [
+        {
+          "name": "set_timer",
+          "arguments": {
+            "duration_minutes": 120,
+            "label": "Two hour timer"
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "set_timer",
+          "arguments": {
+            "duration_minutes": 120,
+            "label": "Two hour timer"
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "timer_04",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "timer_04",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "device": {
+        "ttft_ms": 381,
+        "prompt_tokens": 1163,
+        "generated_tokens": 31,
+        "prefill_tps": 3049.132190236485,
+        "decode_tps": 38.67593558335787,
+        "stop_reason": "eos"
+      }
+    },
+    {
+      "id": "cal_01",
+      "query": "Add a dentist appointment to my calendar for Friday at 2pm.",
+      "raw": "<tool_call>\n{\"name\": \"create_calendar_event\", \"arguments\": {\"title\": \"Dentist Appointment\", \"start_datetime\": \"2023-10-15T14:00:00\", \"end_datetime\": \"2023-10-15T17:00:00\", \"location\": \"Dentist's Office\"}}\n</tool_call>",
+      "strict_calls": [
+        {
+          "name": "create_calendar_event",
+          "arguments": {
+            "title": "Dentist Appointment",
+            "start_datetime": "2023-10-15T14:00:00",
+            "end_datetime": "2023-10-15T17:00:00",
+            "location": "Dentist's Office"
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "create_calendar_event",
+          "arguments": {
+            "title": "Dentist Appointment",
+            "start_datetime": "2023-10-15T14:00:00",
+            "end_datetime": "2023-10-15T17:00:00",
+            "location": "Dentist's Office"
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "cal_01",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "cal_01",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "device": {
+        "ttft_ms": 382,
+        "prompt_tokens": 1170,
+        "generated_tokens": 84,
+        "prefill_tps": 3056.1069898652177,
+        "decode_tps": 37.97149064319185,
+        "stop_reason": "eos"
+      }
+    },
+    {
+      "id": "cal_02",
+      "query": "Schedule a team meeting tomorrow at 10am.",
+      "raw": "<tool_call>\n{\"name\": \"create_calendar_event\", \"arguments\": {\"title\": \"Team Meeting\", \"start_datetime\": \"2023-10-05T10:00:00\", \"end_datetime\": \"2023-10-05T11:00:00\", \"location\": \"Conference Room 1\"}}\n</tool_call>",
+      "strict_calls": [
+        {
+          "name": "create_calendar_event",
+          "arguments": {
+            "title": "Team Meeting",
+            "start_datetime": "2023-10-05T10:00:00",
+            "end_datetime": "2023-10-05T11:00:00",
+            "location": "Conference Room 1"
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "create_calendar_event",
+          "arguments": {
+            "title": "Team Meeting",
+            "start_datetime": "2023-10-05T10:00:00",
+            "end_datetime": "2023-10-05T11:00:00",
+            "location": "Conference Room 1"
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "cal_02",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "cal_02",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "device": {
+        "ttft_ms": 392,
+        "prompt_tokens": 1167,
+        "generated_tokens": 81,
+        "prefill_tps": 2971.144005010464,
+        "decode_tps": 36.89840229918045,
+        "stop_reason": "eos"
+      }
+    },
+    {
+      "id": "cal_03",
+      "query": "Put 'Lunch with Sam' on my calendar for noon today.",
+      "raw": "<tool_call>\n{\"name\": \"create_calendar_event\", \"arguments\": {\"title\": \"Lunch with Sam\", \"start_datetime\": \"2023-10-05T12:00:00\", \"end_datetime\": \"2023-10-05T13:00:00\", \"location\": \"Kitchen\"}}\n</tool_call>",
+      "strict_calls": [
+        {
+          "name": "create_calendar_event",
+          "arguments": {
+            "title": "Lunch with Sam",
+            "start_datetime": "2023-10-05T12:00:00",
+            "end_datetime": "2023-10-05T13:00:00",
+            "location": "Kitchen"
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "create_calendar_event",
+          "arguments": {
+            "title": "Lunch with Sam",
+            "start_datetime": "2023-10-05T12:00:00",
+            "end_datetime": "2023-10-05T13:00:00",
+            "location": "Kitchen"
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "cal_03",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "cal_03",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "device": {
+        "ttft_ms": 394,
+        "prompt_tokens": 1170,
+        "generated_tokens": 80,
+        "prefill_tps": 2966.5088754395883,
+        "decode_tps": 36.814378223559,
+        "stop_reason": "eos"
+      }
+    },
+    {
+      "id": "cal_04",
+      "query": "Create a calendar event called Project Review next Monday at 9am.",
+      "raw": "<tool_call>\n{\"name\": \"create_calendar_event\", \"arguments\": {\"title\": \"Project Review\", \"start_datetime\": \"2023-10-05T09:00:00\", \"location\": \"Conference Room 1\"}}\n</tool_call>",
+      "strict_calls": [
+        {
+          "name": "create_calendar_event",
+          "arguments": {
+            "title": "Project Review",
+            "start_datetime": "2023-10-05T09:00:00",
+            "location": "Conference Room 1"
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "create_calendar_event",
+          "arguments": {
+            "title": "Project Review",
+            "start_datetime": "2023-10-05T09:00:00",
+            "location": "Conference Room 1"
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "cal_04",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "cal_04",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "device": {
+        "ttft_ms": 412,
+        "prompt_tokens": 1170,
+        "generated_tokens": 56,
+        "prefill_tps": 2835.72430942842,
+        "decode_tps": 37.111333337309546,
+        "stop_reason": "eos"
+      }
+    },
+    {
+      "id": "settings_01",
+      "query": "Open wifi settings.",
+      "raw": "<tool_call>\n{\"name\": \"open_settings\", \"arguments\": {\"panel\": \"wifi\"}}\n</tool_call>",
+      "strict_calls": [
+        {
+          "name": "open_settings",
+          "arguments": {
+            "panel": "wifi"
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "open_settings",
+          "arguments": {
+            "panel": "wifi"
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "settings_01",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "settings_01",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "device": {
+        "ttft_ms": 413,
+        "prompt_tokens": 1160,
+        "generated_tokens": 20,
+        "prefill_tps": 2805.768272565875,
+        "decode_tps": 38.1755157512178,
+        "stop_reason": "eos"
+      }
+    },
+    {
+      "id": "settings_02",
+      "query": "Open the bluetooth settings for me.",
+      "raw": "<tool_call>\n{\"name\": \"open_settings\", \"arguments\": {\"panel\": \"bluetooth\"}}\n</tool_call>",
+      "strict_calls": [
+        {
+          "name": "open_settings",
+          "arguments": {
+            "panel": "bluetooth"
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "open_settings",
+          "arguments": {
+            "panel": "bluetooth"
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "settings_02",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "settings_02",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "device": {
+        "ttft_ms": 390,
+        "prompt_tokens": 1163,
+        "generated_tokens": 21,
+        "prefill_tps": 2974.7973531209796,
+        "decode_tps": 37.9457953348355,
+        "stop_reason": "eos"
+      }
+    },
+    {
+      "id": "settings_03",
+      "query": "I need to adjust the screen brightness.",
+      "raw": "<tool_call>\n{\"name\": \"toggle_flashlight\", \"arguments\": {\"state\": \"on\"}}\n</tool_call>",
+      "strict_calls": [
+        {
+          "name": "toggle_flashlight",
+          "arguments": {
+            "state": "on"
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "toggle_flashlight",
+          "arguments": {
+            "state": "on"
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "settings_03",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": false,
+        "right_args": false,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "settings_03",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": false,
+        "right_args": false,
+        "no_call_correct": null
+      },
+      "device": {
+        "ttft_ms": 393,
+        "prompt_tokens": 1164,
+        "generated_tokens": 21,
+        "prefill_tps": 2957.655219727865,
+        "decode_tps": 37.92667509481669,
+        "stop_reason": "eos"
+      }
+    },
+    {
+      "id": "settings_04",
+      "query": "Take me to the sound settings.",
+      "raw": "<tool_call>\n{\"name\": \"open_settings\", \"arguments\": {\"panel\": \"sound\"}}\n</tool_call>",
+      "strict_calls": [
+        {
+          "name": "open_settings",
+          "arguments": {
+            "panel": "sound"
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "open_settings",
+          "arguments": {
+            "panel": "sound"
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "settings_04",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "settings_04",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "device": {
+        "ttft_ms": 396,
+        "prompt_tokens": 1163,
+        "generated_tokens": 20,
+        "prefill_tps": 2933.3501481808435,
+        "decode_tps": 38.488406329803304,
+        "stop_reason": "eos"
+      }
+    },
+    {
+      "id": "sms_01",
+      "query": "Text Mom that I'll be home late.",
+      "raw": "<tool_call>\n{\"name\": \"draft_sms\", \"arguments\": {\"recipient\": \"Mom\", \"body\": \"I'll be home late.\"}}\n</tool_call>",
+      "strict_calls": [
+        {
+          "name": "draft_sms",
+          "arguments": {
+            "recipient": "Mom",
+            "body": "I'll be home late."
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "draft_sms",
+          "arguments": {
+            "recipient": "Mom",
+            "body": "I'll be home late."
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "sms_01",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "sms_01",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "device": {
+        "ttft_ms": 393,
+        "prompt_tokens": 1165,
+        "generated_tokens": 31,
+        "prefill_tps": 2958.812817627921,
+        "decode_tps": 37.30975036166387,
+        "stop_reason": "eos"
+      }
+    },
+    {
+      "id": "sms_02",
+      "query": "Send a text to John saying happy birthday.",
+      "raw": "<tool_call>\n{\"name\": \"draft_sms\", \"arguments\": {\"recipient\": \"John\", \"body\": \"Happy birthday!\"}}\n</tool_call>",
+      "strict_calls": [
+        {
+          "name": "draft_sms",
+          "arguments": {
+            "recipient": "John",
+            "body": "Happy birthday!"
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "draft_sms",
+          "arguments": {
+            "recipient": "John",
+            "body": "Happy birthday!"
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "sms_02",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "sms_02",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "device": {
+        "ttft_ms": 399,
+        "prompt_tokens": 1165,
+        "generated_tokens": 28,
+        "prefill_tps": 2916.941042737568,
+        "decode_tps": 37.90042475547458,
+        "stop_reason": "eos"
+      }
+    },
+    {
+      "id": "sms_03",
+      "query": "Draft an SMS to Sarah: running five minutes behind.",
+      "raw": "<tool_call>\n{\"name\": \"draft_sms\", \"arguments\": {\"recipient\": \"Sarah\", \"body\": \"running five minutes behind.\"}}\n</tool_call>",
+      "strict_calls": [
+        {
+          "name": "draft_sms",
+          "arguments": {
+            "recipient": "Sarah",
+            "body": "running five minutes behind."
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "draft_sms",
+          "arguments": {
+            "recipient": "Sarah",
+            "body": "running five minutes behind."
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "sms_03",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "sms_03",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "device": {
+        "ttft_ms": 405,
+        "prompt_tokens": 1167,
+        "generated_tokens": 30,
+        "prefill_tps": 2878.4111762268394,
+        "decode_tps": 37.48313259033435,
+        "stop_reason": "eos"
+      }
+    },
+    {
+      "id": "sms_04",
+      "query": "Message Dad and tell him the flight landed.",
+      "raw": "<tool_call>\n{\"name\": \"draft_sms\", \"arguments\": {\"recipient\": \"Dad\", \"body\": \"The flight landed.\"}}\n</tool_call>",
+      "strict_calls": [
+        {
+          "name": "draft_sms",
+          "arguments": {
+            "recipient": "Dad",
+            "body": "The flight landed."
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "draft_sms",
+          "arguments": {
+            "recipient": "Dad",
+            "body": "The flight landed."
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "sms_04",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "sms_04",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "device": {
+        "ttft_ms": 393,
+        "prompt_tokens": 1165,
+        "generated_tokens": 30,
+        "prefill_tps": 2962.032589986042,
+        "decode_tps": 37.51725793865178,
+        "stop_reason": "eos"
+      }
+    },
+    {
+      "id": "email_01",
+      "query": "Draft an email to alex@work.com about the quarterly report.",
+      "raw": "<tool_call>\n{\"name\": \"draft_email\", \"arguments\": {\"to\": \"alex@work.com\", \"body\": \"Dear Alex, I hope this email finds you well. I wanted to remind you of the quarterly report that is due next week. Please make sure to review it and prepare any necessary actions. Looking forward to your response.\"}}\n</tool_call>",
+      "strict_calls": [
+        {
+          "name": "draft_email",
+          "arguments": {
+            "to": "alex@work.com",
+            "body": "Dear Alex, I hope this email finds you well. I wanted to remind you of the quarterly report that is due next week. Please make sure to review it and prepare any necessary actions. Looking forward to your response."
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "draft_email",
+          "arguments": {
+            "to": "alex@work.com",
+            "body": "Dear Alex, I hope this email finds you well. I wanted to remind you of the quarterly report that is due next week. Please make sure to review it and prepare any necessary actions. Looking forward to your response."
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "email_01",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "email_01",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "device": {
+        "ttft_ms": 398,
+        "prompt_tokens": 1169,
+        "generated_tokens": 72,
+        "prefill_tps": 2930.1403409389986,
+        "decode_tps": 36.67864665982338,
+        "stop_reason": "eos"
+      }
+    },
+    {
+      "id": "email_02",
+      "query": "Write an email to my boss asking for tomorrow off.",
+      "raw": "<tool_call>\n{\"name\": \"draft_email\", \"arguments\": {\"to\": \"boss@company.com\", \"subject\": \"Request for Tomorrow Off\", \"body\": \"Dear Boss, I would like to request tomorrow off. I am currently working on a project that I need to complete by Friday. I would appreciate it if I could take the day off tomorrow. Thank you for your understanding. Sincerely, Your Name\"}}\n</tool_call>",
+      "strict_calls": [
+        {
+          "name": "draft_email",
+          "arguments": {
+            "to": "boss@company.com",
+            "subject": "Request for Tomorrow Off",
+            "body": "Dear Boss, I would like to request tomorrow off. I am currently working on a project that I need to complete by Friday. I would appreciate it if I could take the day off tomorrow. Thank you for your understanding. Sincerely, Your Name"
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "draft_email",
+          "arguments": {
+            "to": "boss@company.com",
+            "subject": "Request for Tomorrow Off",
+            "body": "Dear Boss, I would like to request tomorrow off. I am currently working on a project that I need to complete by Friday. I would appreciate it if I could take the day off tomorrow. Thank you for your understanding. Sincerely, Your Name"
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "email_02",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "email_02",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "device": {
+        "ttft_ms": 398,
+        "prompt_tokens": 1167,
+        "generated_tokens": 87,
+        "prefill_tps": 2928.298099240951,
+        "decode_tps": 36.70463275749249,
+        "stop_reason": "eos"
+      }
+    },
+    {
+      "id": "email_03",
+      "query": "Compose an email to the team with the subject Release Notes.",
+      "raw": "<tool_call>\n{\"name\": \"draft_email\", \"arguments\": {\"to\": \"team@company.com\", \"subject\": \"Release Notes\", \"body\": \"Please review the latest release notes for the new version.\"}}\n</tool_call>",
+      "strict_calls": [
+        {
+          "name": "draft_email",
+          "arguments": {
+            "to": "team@company.com",
+            "subject": "Release Notes",
+            "body": "Please review the latest release notes for the new version."
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "draft_email",
+          "arguments": {
+            "to": "team@company.com",
+            "subject": "Release Notes",
+            "body": "Please review the latest release notes for the new version."
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "email_03",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "email_03",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "device": {
+        "ttft_ms": 415,
+        "prompt_tokens": 1168,
+        "generated_tokens": 46,
+        "prefill_tps": 2811.2333805081403,
+        "decode_tps": 36.280091772858235,
+        "stop_reason": "eos"
+      }
+    },
+    {
+      "id": "email_04",
+      "query": "Email jane about the lunch plans.",
+      "raw": "<tool_call>\n{\"name\": \"draft_email\", \"arguments\": {\"to\": \"jane@example.com\", \"body\": \"Hi Jane, I'm sorry I'm late for lunch plans. I'll be there early. Thanks!\"}}\n</tool_call>",
+      "strict_calls": [
+        {
+          "name": "draft_email",
+          "arguments": {
+            "to": "jane@example.com",
+            "body": "Hi Jane, I'm sorry I'm late for lunch plans. I'll be there early. Thanks!"
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "draft_email",
+          "arguments": {
+            "to": "jane@example.com",
+            "body": "Hi Jane, I'm sorry I'm late for lunch plans. I'll be there early. Thanks!"
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "email_04",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "email_04",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "device": {
+        "ttft_ms": 415,
+        "prompt_tokens": 1163,
+        "generated_tokens": 49,
+        "prefill_tps": 2800.9585395517984,
+        "decode_tps": 36.503093078417585,
+        "stop_reason": "eos"
+      }
+    },
+    {
+      "id": "music_01",
+      "query": "Play some jazz.",
+      "raw": "<tool_call>\n{\"name\": \"play_music\", \"arguments\": {\"query\": \"jazz\"}}\n</tool_call>",
+      "strict_calls": [
+        {
+          "name": "play_music",
+          "arguments": {
+            "query": "jazz"
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "play_music",
+          "arguments": {
+            "query": "jazz"
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "music_01",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "music_01",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "device": {
+        "ttft_ms": 412,
+        "prompt_tokens": 1160,
+        "generated_tokens": 21,
+        "prefill_tps": 2815.3358137412656,
+        "decode_tps": 37.67978640943932,
+        "stop_reason": "eos"
+      }
+    },
+    {
+      "id": "music_02",
+      "query": "Play Bohemian Rhapsody.",
+      "raw": "<tool_call>\n{\"name\": \"play_music\", \"arguments\": {\"query\": \"Bohemian Rhapsody\"}}\n</tool_call>",
+      "strict_calls": [
+        {
+          "name": "play_music",
+          "arguments": {
+            "query": "Bohemian Rhapsody"
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "play_music",
+          "arguments": {
+            "query": "Bohemian Rhapsody"
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "music_02",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "music_02",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "device": {
+        "ttft_ms": 408,
+        "prompt_tokens": 1164,
+        "generated_tokens": 25,
+        "prefill_tps": 2848.4938955601183,
+        "decode_tps": 37.1126368528484,
+        "stop_reason": "eos"
+      }
+    },
+    {
+      "id": "music_03",
+      "query": "Pause the music.",
+      "raw": "<tool_call>\n{\"name\": \"play_music\", \"arguments\": {\"action\": \"pause\"}}\n</tool_call>",
+      "strict_calls": [
+        {
+          "name": "play_music",
+          "arguments": {
+            "action": "pause"
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "play_music",
+          "arguments": {
+            "action": "pause"
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "music_03",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "music_03",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "device": {
+        "ttft_ms": 410,
+        "prompt_tokens": 1160,
+        "generated_tokens": 20,
+        "prefill_tps": 2823.449232678991,
+        "decode_tps": 37.349946589576376,
+        "stop_reason": "eos"
+      }
+    },
+    {
+      "id": "music_04",
+      "query": "Skip to the next song.",
+      "raw": "{\"name\": \"play_music\", \"arguments\": {\"action\": \"next\"}}",
+      "strict_calls": [
+        {
+          "name": "play_music",
+          "arguments": {
+            "action": "next"
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "play_music",
+          "arguments": {
+            "action": "next"
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "music_04",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "music_04",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "device": {
+        "ttft_ms": 421,
+        "prompt_tokens": 1162,
+        "generated_tokens": 17,
+        "prefill_tps": 2754.057019882775,
+        "decode_tps": 37.593319888193044,
+        "stop_reason": "eos"
+      }
+    },
+    {
+      "id": "flash_01",
+      "query": "Turn on the flashlight.",
+      "raw": "<tool_call>\n{\"name\": \"toggle_flashlight\", \"arguments\": {\"state\": \"on\"}}\n</tool_call>",
+      "strict_calls": [
+        {
+          "name": "toggle_flashlight",
+          "arguments": {
+            "state": "on"
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "toggle_flashlight",
+          "arguments": {
+            "state": "on"
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "flash_01",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "flash_01",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "device": {
+        "ttft_ms": 410,
+        "prompt_tokens": 1161,
+        "generated_tokens": 21,
+        "prefill_tps": 2825.601261663819,
+        "decode_tps": 37.495045297585676,
+        "stop_reason": "eos"
+      }
+    },
+    {
+      "id": "flash_02",
+      "query": "Turn off the torch.",
+      "raw": "<tool_call>\n{\"name\": \"toggle_flashlight\", \"arguments\": {\"state\": \"off\"}}\n</tool_call>",
+      "strict_calls": [
+        {
+          "name": "toggle_flashlight",
+          "arguments": {
+            "state": "off"
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "toggle_flashlight",
+          "arguments": {
+            "state": "off"
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "flash_02",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "flash_02",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "device": {
+        "ttft_ms": 412,
+        "prompt_tokens": 1161,
+        "generated_tokens": 21,
+        "prefill_tps": 2817.585031124486,
+        "decode_tps": 37.380249700068,
+        "stop_reason": "eos"
+      }
+    },
+    {
+      "id": "flash_03",
+      "query": "Switch on my flashlight please.",
+      "raw": "<tool_call>\n{\"name\": \"toggle_flashlight\", \"arguments\": {\"state\": \"on\"}}\n</tool_call>",
+      "strict_calls": [
+        {
+          "name": "toggle_flashlight",
+          "arguments": {
+            "state": "on"
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "toggle_flashlight",
+          "arguments": {
+            "state": "on"
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "flash_03",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "flash_03",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "device": {
+        "ttft_ms": 408,
+        "prompt_tokens": 1162,
+        "generated_tokens": 21,
+        "prefill_tps": 2845.0546975231864,
+        "decode_tps": 37.40781645231394,
+        "stop_reason": "eos"
+      }
+    },
+    {
+      "id": "flash_04",
+      "query": "Kill the flashlight.",
+      "raw": "<tool_call>\n{\"name\": \"toggle_flashlight\", \"arguments\": {\"state\": \"on\"}}\n</tool_call>",
+      "strict_calls": [
+        {
+          "name": "toggle_flashlight",
+          "arguments": {
+            "state": "on"
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "toggle_flashlight",
+          "arguments": {
+            "state": "on"
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "flash_04",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": false,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "flash_04",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": false,
+        "no_call_correct": null
+      },
+      "device": {
+        "ttft_ms": 412,
+        "prompt_tokens": 1160,
+        "generated_tokens": 21,
+        "prefill_tps": 2812.864490253182,
+        "decode_tps": 37.442432260399634,
+        "stop_reason": "eos"
+      }
+    },
+    {
+      "id": "note_01",
+      "query": "Make a note to buy milk.",
+      "raw": "<tool_call>\n{\"name\": \"create_note\", \"arguments\": {\"content\": \"Buy milk.\", \"title\": \"Buy Milk\"}}\n</tool_call>",
+      "strict_calls": [
+        {
+          "name": "create_note",
+          "arguments": {
+            "content": "Buy milk.",
+            "title": "Buy Milk"
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "create_note",
+          "arguments": {
+            "content": "Buy milk.",
+            "title": "Buy Milk"
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "note_01",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "note_01",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "device": {
+        "ttft_ms": 406,
+        "prompt_tokens": 1163,
+        "generated_tokens": 28,
+        "prefill_tps": 2858.3787609923465,
+        "decode_tps": 36.839681599894746,
+        "stop_reason": "eos"
+      }
+    },
+    {
+      "id": "note_02",
+      "query": "Note down: call the plumber.",
+      "raw": "<tool_call>\n{\"name\": \"create_note\", \"arguments\": {\"content\": \"call the plumber\"}}\n</tool_call>",
+      "strict_calls": [
+        {
+          "name": "create_note",
+          "arguments": {
+            "content": "call the plumber"
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "create_note",
+          "arguments": {
+            "content": "call the plumber"
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "note_02",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "note_02",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "device": {
+        "ttft_ms": 411,
+        "prompt_tokens": 1163,
+        "generated_tokens": 22,
+        "prefill_tps": 2828.513753435319,
+        "decode_tps": 37.259275442580915,
+        "stop_reason": "eos"
+      }
+    },
+    {
+      "id": "note_03",
+      "query": "Take a note that the spare key is under the mat.",
+      "raw": "<tool_call>\n{\"name\": \"create_note\", \"arguments\": {\"content\": \"The spare key is under the mat.\"}}\n</tool_call>",
+      "strict_calls": [
+        {
+          "name": "create_note",
+          "arguments": {
+            "content": "The spare key is under the mat."
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "create_note",
+          "arguments": {
+            "content": "The spare key is under the mat."
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "note_03",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "note_03",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "device": {
+        "ttft_ms": 409,
+        "prompt_tokens": 1168,
+        "generated_tokens": 27,
+        "prefill_tps": 2849.9621794402556,
+        "decode_tps": 36.94389180639212,
+        "stop_reason": "eos"
+      }
+    },
+    {
+      "id": "note_04",
+      "query": "Jot down the meeting notes: ship the beta on Thursday.",
+      "raw": "<tool_call>\n{\"name\": \"create_note\", \"arguments\": {\"content\": \"ship the beta on Thursday.\", \"title\": \"meeting notes\"}}\n</tool_call>",
+      "strict_calls": [
+        {
+          "name": "create_note",
+          "arguments": {
+            "content": "ship the beta on Thursday.",
+            "title": "meeting notes"
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "create_note",
+          "arguments": {
+            "content": "ship the beta on Thursday.",
+            "title": "meeting notes"
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "note_04",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "note_04",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "device": {
+        "ttft_ms": 433,
+        "prompt_tokens": 1169,
+        "generated_tokens": 31,
+        "prefill_tps": 2696.4560862865947,
+        "decode_tps": 36.7219826079952,
+        "stop_reason": "eos"
+      }
+    },
+    {
+      "id": "remind_01",
+      "query": "Remind me to take out the trash at 8pm.",
+      "raw": "<tool_call>\n{\"name\": \"set_reminder\", \"arguments\": {\"text\": \"Take out the trash\", \"time\": \"20:00\"}}\n</tool_call>",
+      "strict_calls": [
+        {
+          "name": "set_reminder",
+          "arguments": {
+            "text": "Take out the trash",
+            "time": "20:00"
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "set_reminder",
+          "arguments": {
+            "text": "Take out the trash",
+            "time": "20:00"
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "remind_01",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "remind_01",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "device": {
+        "ttft_ms": 413,
+        "prompt_tokens": 1169,
+        "generated_tokens": 34,
+        "prefill_tps": 2827.2225984328143,
+        "decode_tps": 36.930269134767244,
+        "stop_reason": "eos"
+      }
+    },
+    {
+      "id": "remind_02",
+      "query": "Set a reminder to call the dentist tomorrow.",
+      "raw": "<tool_call>\n{\"name\": \"set_reminder\", \"arguments\": {\"text\": \"Call the dentist tomorrow\", \"time\": \"tomorrow\"}}\n</tool_call>",
+      "strict_calls": [
+        {
+          "name": "set_reminder",
+          "arguments": {
+            "text": "Call the dentist tomorrow",
+            "time": "tomorrow"
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "set_reminder",
+          "arguments": {
+            "text": "Call the dentist tomorrow",
+            "time": "tomorrow"
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "remind_02",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "remind_02",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "device": {
+        "ttft_ms": 416,
+        "prompt_tokens": 1165,
+        "generated_tokens": 31,
+        "prefill_tps": 2800.117292466843,
+        "decode_tps": 36.868507872021084,
+        "stop_reason": "eos"
+      }
+    },
+    {
+      "id": "remind_03",
+      "query": "Remind me to water the plants this evening.",
+      "raw": "<tool_call>\n{\"name\": \"set_reminder\", \"arguments\": {\"text\": \"water the plants\", \"time\": \"18:00\"}}\n</tool_call>",
+      "strict_calls": [
+        {
+          "name": "set_reminder",
+          "arguments": {
+            "text": "water the plants",
+            "time": "18:00"
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "set_reminder",
+          "arguments": {
+            "text": "water the plants",
+            "time": "18:00"
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "remind_03",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "remind_03",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "device": {
+        "ttft_ms": 414,
+        "prompt_tokens": 1166,
+        "generated_tokens": 33,
+        "prefill_tps": 2812.776664085474,
+        "decode_tps": 36.68076838428996,
+        "stop_reason": "eos"
+      }
+    },
+    {
+      "id": "remind_04",
+      "query": "Can you remind me about the meeting in an hour?",
+      "raw": "<tool_call>\n{\"name\": \"set_reminder\", \"arguments\": {\"text\": \"meeting\", \"time\": \"01:00\"}}\n</tool_call>",
+      "strict_calls": [
+        {
+          "name": "set_reminder",
+          "arguments": {
+            "text": "meeting",
+            "time": "01:00"
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "set_reminder",
+          "arguments": {
+            "text": "meeting",
+            "time": "01:00"
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "remind_04",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "lenient_score": {
+        "id": "remind_04",
+        "category": "single",
+        "expected_call": true,
+        "made_call": true,
+        "schema_valid": true,
+        "right_tool": true,
+        "right_args": true,
+        "no_call_correct": null
+      },
+      "device": {
+        "ttft_ms": 431,
+        "prompt_tokens": 1167,
+        "generated_tokens": 31,
+        "prefill_tps": 2702.164510183479,
+        "decode_tps": 36.25887903920989,
+        "stop_reason": "eos"
+      }
+    },
+    {
+      "id": "irr_01",
+      "query": "What's the capital of France?",
+      "raw": "The capital of France is Paris.",
+      "strict_calls": [],
+      "lenient_calls": [],
+      "strict_score": {
+        "id": "irr_01",
+        "category": "irrelevance",
+        "expected_call": false,
+        "made_call": false,
+        "schema_valid": false,
+        "right_tool": false,
+        "right_args": false,
+        "no_call_correct": true
+      },
+      "lenient_score": {
+        "id": "irr_01",
+        "category": "irrelevance",
+        "expected_call": false,
+        "made_call": false,
+        "schema_valid": false,
+        "right_tool": false,
+        "right_args": false,
+        "no_call_correct": true
+      },
+      "device": {
+        "ttft_ms": 438,
+        "prompt_tokens": 1163,
+        "generated_tokens": 8,
+        "prefill_tps": 2653.5608596350726,
+        "decode_tps": 38.73998208275829,
+        "stop_reason": "eos"
+      }
+    },
+    {
+      "id": "irr_02",
+      "query": "Tell me a joke.",
+      "raw": "Sure! Here's a joke for you:\n\nWhy don't scientists trust atoms? Because they're always trying to figure things out.",
+      "strict_calls": [],
+      "lenient_calls": [],
+      "strict_score": {
+        "id": "irr_02",
+        "category": "irrelevance",
+        "expected_call": false,
+        "made_call": false,
+        "schema_valid": false,
+        "right_tool": false,
+        "right_args": false,
+        "no_call_correct": true
+      },
+      "lenient_score": {
+        "id": "irr_02",
+        "category": "irrelevance",
+        "expected_call": false,
+        "made_call": false,
+        "schema_valid": false,
+        "right_tool": false,
+        "right_args": false,
+        "no_call_correct": true
+      },
+      "device": {
+        "ttft_ms": 411,
+        "prompt_tokens": 1161,
+        "generated_tokens": 27,
+        "prefill_tps": 2821.90635451505,
+        "decode_tps": 37.59419434249146,
+        "stop_reason": "eos"
+      }
+    },
+    {
+      "id": "irr_03",
+      "query": "How tall is Mount Everest?",
+      "raw": "The height of Mount Everest is approximately 8,848 meters (29,029 feet).",
+      "strict_calls": [],
+      "lenient_calls": [],
+      "strict_score": {
+        "id": "irr_03",
+        "category": "irrelevance",
+        "expected_call": false,
+        "made_call": false,
+        "schema_valid": false,
+        "right_tool": false,
+        "right_args": false,
+        "no_call_correct": true
+      },
+      "lenient_score": {
+        "id": "irr_03",
+        "category": "irrelevance",
+        "expected_call": false,
+        "made_call": false,
+        "schema_valid": false,
+        "right_tool": false,
+        "right_args": false,
+        "no_call_correct": true
+      },
+      "device": {
+        "ttft_ms": 410,
+        "prompt_tokens": 1162,
+        "generated_tokens": 24,
+        "prefill_tps": 2832.764505119454,
+        "decode_tps": 37.155901518283024,
+        "stop_reason": "eos"
+      }
+    },
+    {
+      "id": "irr_04",
+      "query": "What is 15 percent of 240?",
+      "raw": "<tool_call>\n{\"name\": \"calculate\", \"arguments\": {\"value1\": 240, \"value2\": 15}}\n</tool_call>",
+      "strict_calls": [
+        {
+          "name": "calculate",
+          "arguments": {
+            "value1": 240,
+            "value2": 15
+          }
+        }
+      ],
+      "lenient_calls": [
+        {
+          "name": "calculate",
+          "arguments": {
+            "value1": 240,
+            "value2": 15
+          }
+        }
+      ],
+      "strict_score": {
+        "id": "irr_04",
+        "category": "irrelevance",
+        "expected_call": false,
+        "made_call": true,
+        "schema_valid": false,
+        "right_tool": false,
+        "right_args": false,
+        "no_call_correct": false
+      },
+      "lenient_score": {
+        "id": "irr_04",
+        "category": "irrelevance",
+        "expected_call": false,
+        "made_call": true,
+        "schema_valid": false,
+        "right_tool": false,
+        "right_args": false,
+        "no_call_correct": false
+      },
+      "device": {
+        "ttft_ms": 413,
+        "prompt_tokens": 1168,
+        "generated_tokens": 30,
+        "prefill_tps": 2823.349682010573,
+        "decode_tps": 37.215533763793005,
+        "stop_reason": "eos"
+      }
+    },
+    {
+      "id": "irr_05",
+      "query": "Who won the World Cup in 2018?",
+      "raw": "The World Cup in 2018 was won by France.",
+      "strict_calls": [],
+      "lenient_calls": [],
+      "strict_score": {
+        "id": "irr_05",
+        "category": "irrelevance",
+        "expected_call": false,
+        "made_call": false,
+        "schema_valid": false,
+        "right_tool": false,
+        "right_args": false,
+        "no_call_correct": true
+      },
+      "lenient_score": {
+        "id": "irr_05",
+        "category": "irrelevance",
+        "expected_call": false,
+        "made_call": false,
+        "schema_valid": false,
+        "right_tool": false,
+        "right_args": false,
+        "no_call_correct": true
+      },
+      "device": {
+        "ttft_ms": 415,
+        "prompt_tokens": 1168,
+        "generated_tokens": 15,
+        "prefill_tps": 2808.53621881575,
+        "decode_tps": 38.20410159234695,
+        "stop_reason": "eos"
+      }
+    },
+    {
+      "id": "irr_06",
+      "query": "Explain how photosynthesis works.",
+      "raw": "Photosynthesis is the process by which green plants and some other organisms convert light energy into chemical energy. This process occurs in the chloroplasts of plant cells, which contain chlorophyll, a pigment that absorbs light energy from the sun. The light energy is used to convert carbon dioxide (CO\u2082) and water (H\u2082O) into glucose (C\u2086H\u2081\u2082O\u2086) and oxygen (O\u2082). The overall chemical equation for photosynthesis is:\n\n6CO\u2082 + 6H\u2082O + light energy \u2192 C\u2086H\u2081\u2082O\u2086 + 6O\u2082\n\nThis process is essential for life on Earth as it provides the energy needed for plants to grow and supports the food chain.",
+      "strict_calls": [],
+      "lenient_calls": [],
+      "strict_score": {
+        "id": "irr_06",
+        "category": "irrelevance",
+        "expected_call": false,
+        "made_call": false,
+        "schema_valid": false,
+        "right_tool": false,
+        "right_args": false,
+        "no_call_correct": true
+      },
+      "lenient_score": {
+        "id": "irr_06",
+        "category": "irrelevance",
+        "expected_call": false,
+        "made_call": false,
+        "schema_valid": false,
+        "right_tool": false,
+        "right_args": false,
+        "no_call_correct": true
+      },
+      "device": {
+        "ttft_ms": 412,
+        "prompt_tokens": 1163,
+        "generated_tokens": 149,
+        "prefill_tps": 2822.1305508371756,
+        "decode_tps": 36.08609706821047,
+        "stop_reason": "eos"
+      }
+    },
+    {
+      "id": "irr_07",
+      "query": "What's the weather going to be like this weekend?",
+      "raw": "The weather information is not available through this device. Please check a weather website or app for the latest updates.",
+      "strict_calls": [],
+      "lenient_calls": [],
+      "strict_score": {
+        "id": "irr_07",
+        "category": "irrelevance",
+        "expected_call": false,
+        "made_call": false,
+        "schema_valid": false,
+        "right_tool": false,
+        "right_args": false,
+        "no_call_correct": true
+      },
+      "lenient_score": {
+        "id": "irr_07",
+        "category": "irrelevance",
+        "expected_call": false,
+        "made_call": false,
+        "schema_valid": false,
+        "right_tool": false,
+        "right_args": false,
+        "no_call_correct": true
+      },
+      "device": {
+        "ttft_ms": 417,
+        "prompt_tokens": 1167,
+        "generated_tokens": 23,
+        "prefill_tps": 2797.9170262961043,
+        "decode_tps": 36.97826481903962,
+        "stop_reason": "eos"
+      }
+    },
+    {
+      "id": "irr_08",
+      "query": "Translate 'hello' into Spanish.",
+      "raw": "The request is to translate 'hello' into Spanish. However, none of the provided functions can perform translations. Therefore, I will respond directly in plain text.",
+      "strict_calls": [],
+      "lenient_calls": [],
+      "strict_score": {
+        "id": "irr_08",
+        "category": "irrelevance",
+        "expected_call": false,
+        "made_call": false,
+        "schema_valid": false,
+        "right_tool": false,
+        "right_args": false,
+        "no_call_correct": true
+      },
+      "lenient_score": {
+        "id": "irr_08",
+        "category": "irrelevance",
+        "expected_call": false,
+        "made_call": false,
+        "schema_valid": false,
+        "right_tool": false,
+        "right_args": false,
+        "no_call_correct": true
+      },
+      "device": {
+        "ttft_ms": 409,
+        "prompt_tokens": 1163,
+        "generated_tokens": 33,
+        "prefill_tps": 2838.475375066813,
+        "decode_tps": 36.8069830654417,
+        "stop_reason": "eos"
+      }
+    }
+  ],
+  "loto": {
+    "strict": {
+      "which": "strict",
+      "held_out": [
+        "create_calendar_event",
+        "draft_sms",
+        "toggle_flashlight"
+      ],
+      "per_tool": {
+        "create_note": {
+          "n": 4,
+          "right_tool": 1.0,
+          "call_accuracy": 1.0,
+          "schema_valid": 1.0
+        },
+        "draft_email": {
+          "n": 4,
+          "right_tool": 1.0,
+          "call_accuracy": 1.0,
+          "schema_valid": 1.0
+        },
+        "open_settings": {
+          "n": 4,
+          "right_tool": 0.75,
+          "call_accuracy": 0.75,
+          "schema_valid": 1.0
+        },
+        "play_music": {
+          "n": 4,
+          "right_tool": 1.0,
+          "call_accuracy": 1.0,
+          "schema_valid": 1.0
+        },
+        "set_alarm": {
+          "n": 4,
+          "right_tool": 1.0,
+          "call_accuracy": 0.75,
+          "schema_valid": 1.0
+        },
+        "set_reminder": {
+          "n": 4,
+          "right_tool": 1.0,
+          "call_accuracy": 1.0,
+          "schema_valid": 1.0
+        },
+        "set_timer": {
+          "n": 4,
+          "right_tool": 1.0,
+          "call_accuracy": 1.0,
+          "schema_valid": 1.0
+        },
+        "create_calendar_event": {
+          "n": 4,
+          "right_tool": 1.0,
+          "call_accuracy": 1.0,
+          "schema_valid": 1.0
+        },
+        "draft_sms": {
+          "n": 4,
+          "right_tool": 1.0,
+          "call_accuracy": 1.0,
+          "schema_valid": 1.0
+        },
+        "toggle_flashlight": {
+          "n": 4,
+          "right_tool": 1.0,
+          "call_accuracy": 0.75,
+          "schema_valid": 1.0
+        }
+      },
+      "seen": {
+        "tools": [
+          "create_note",
+          "draft_email",
+          "open_settings",
+          "play_music",
+          "set_alarm",
+          "set_reminder",
+          "set_timer"
+        ],
+        "n": 28,
+        "right_tool": 0.9643,
+        "call_accuracy": 0.9286,
+        "schema_valid": 1.0
+      },
+      "unseen": {
+        "tools": [
+          "create_calendar_event",
+          "draft_sms",
+          "toggle_flashlight"
+        ],
+        "n": 12,
+        "right_tool": 1.0,
+        "call_accuracy": 0.9167,
+        "schema_valid": 1.0
+      },
+      "no_call": {
+        "n": 8,
+        "accuracy": 0.875
+      }
+    }
+  }
+}
