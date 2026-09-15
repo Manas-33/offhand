@@ -38,15 +38,15 @@ def _trigrams(words: list[str]) -> set[tuple[str, ...]]:
     return {tuple(words[i:i + 3]) for i in range(len(words) - 2)}
 
 
-def query_overlaps(train_items: list[dict], bfcl_queries: list[str],
+def query_overlaps(train_items: list[dict], queries: list[str],
                    min_shared: int = 3, min_frac: float = 0.6) -> list[tuple[dict, str]]:
-    """Training items whose query duplicates a BFCL question, with the reason.
+    """Items whose query duplicates one of ``queries`` (BFCL's, here), with the reason.
 
     Short queries are only checked for exact matches and, from six words up,
     containment: a pair of shared trigrams in a short query is ordinary phrasing
     ("what is the"), not a copied question.
     """
-    norm_b = [normalize(q) for q in bfcl_queries]
+    norm_b = [normalize(q) for q in queries]
     exact = set(norm_b)
     index: dict[tuple[str, ...], set[int]] = defaultdict(set)
     for j, text in enumerate(norm_b):
@@ -60,15 +60,15 @@ def query_overlaps(train_items: list[dict], bfcl_queries: list[str],
         reason = None
         if query in exact:
             reason = "exact match"
-        elif len(words) >= 6 and any(query in b for b in norm_b):
-            reason = "contained in a BFCL question"
+        elif len(words) >= 6 and (j := next((k for k, b in enumerate(norm_b) if query in b), None)) is not None:
+            reason = f"contained in: {queries[j][:80]}"
         else:
             grams = _trigrams(words)
             if len(grams) >= min_shared:
                 shared = Counter(j for g in grams for j in index.get(g, ()))
                 for j, n in shared.most_common(1):
                     if n >= min_shared and n / len(grams) >= min_frac:
-                        reason = f"{n}/{len(grams)} trigrams shared with: {bfcl_queries[j][:80]}"
+                        reason = f"{n}/{len(grams)} trigrams shared with: {queries[j][:80]}"
         if reason:
             flagged.append((item, reason))
     return flagged
