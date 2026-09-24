@@ -2,13 +2,7 @@
 
 Offhand is an Android assistant for small everyday tasks. Say "text Mom I'm on my way" or "set a timer for ten minutes" and it turns the request into a real phone action. The language model runs on the phone's own NPU, so it keeps working in airplane mode, and nothing happens until you approve it.
 
-<p align="center">
-  <a href="media/offhand-demo.mp4">
-    <img src="media/offhand-demo-poster.jpg" width="760" alt="Offhand demo: a spoken request becomes a draft text message, worked out on the phone">
-  </a>
-  <br>
-  <sub>Watch the 24 second demo (with sound).</sub>
-</p>
+https://github.com/user-attachments/assets/e17c7c8f-8bfa-4691-a8bc-05cb63141bc1
 
 ## What it does
 
