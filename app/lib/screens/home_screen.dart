@@ -326,43 +326,15 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                   const SizedBox(height: 28),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: Text.rich(
-                          TextSpan(
-                            children: [
-                              const TextSpan(text: 'Life, a little\n'),
-                              TextSpan(
-                                text: 'lighter.',
-                                style: TextStyle(color: colors.primary),
-                              ),
-                            ],
-                          ),
-                          style: TextStyle(
-                            fontFamily: 'InstrumentSerif',
-                            fontSize: 58,
-                            height: .96,
-                            letterSpacing: -1.3,
-                            color: colors.onSurface,
-                          ),
-                        ),
-                      ),
-                      if (MediaQuery.textScalerOf(context).scale(14) < 22)
-                        Padding(
-                          padding: const EdgeInsets.only(top: 32, right: 10),
-                          child: Transform.rotate(
-                            angle: -.2,
-                            child: OffhandMark(
-                              size: 52,
-                              color: colors.primary.withValues(alpha: .7),
-                            ),
-                          ),
-                        ),
-                    ],
+                  Text(
+                    'What do you need?',
+                    style: theme.textTheme.headlineSmall?.copyWith(
+                      fontSize: 28,
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: -.8,
+                    ),
                   ),
-                  const SizedBox(height: 18),
+                  const SizedBox(height: 12),
                   Semantics(
                     liveRegion: true,
                     child: Wrap(
@@ -385,7 +357,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ? (_generating
                                     ? 'On-device assistant · Working'
                                     : 'On-device assistant · Ready')
-                              : 'Small tasks. A little more headspace.',
+                              : 'Your on-device assistant',
                           style: TextStyle(
                             fontSize: 11,
                             color: colors.onSurfaceVariant,
