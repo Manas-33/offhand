@@ -31,3 +31,6 @@ __pycache__/
 .vscode/
 
 *.local.md
+# generated training data
+train/data/
+eval/offhand_eval/data/
